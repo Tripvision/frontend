@@ -4,9 +4,6 @@ import { API_BASE_URL } from '~constants/index.js';
 import { GOOGLE_AUTH_URL, ACCESS_TOKEN } from "~constants/index.js";
 import { getAccessToken, setAccessToken } from "~utils/local-storage";
 
-
-
-
 export function addAuthHeader() {
   
   const accessToken = localStorage.getItem(ACCESS_TOKEN)

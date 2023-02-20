@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, useParams } from 'react-router-dom';
 
 // Material ui 
 import Box from '@mui/material/Box';
@@ -7,6 +7,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
 import UserSearch from './user-search';
+
+// Component
+import NewModal from '~component/my-project/new-modal';
 
 
 function a11yProps(index) {
@@ -19,11 +22,17 @@ function a11yProps(index) {
 
 export function BasicCard() {
     const location = useLocation();
+    const { id } = useParams();
     const navigate = useNavigate();
     const [value, setValue] = useState(0);
     const [activateTab, setActivateTab] = useState(false);
     const label = ['Overview', 'Tasks', 'Budgets', 'Members', 'Files', 'Activities', 'Settings'];
 
+    const [open, setOpen] = useState(false);
+    
+    const handleOpen = () => {
+        setOpen(true);
+    }
 
     setTimeout(() => {
         setActivateTab(true)
@@ -33,12 +42,18 @@ export function BasicCard() {
         setValue(newValue);
     };
 
+    React.useEffect(() => {
+        // 파람이 바뀌면 
+        console.log(id);
+    },[useParams]);
+
     return (
         <Box
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                paddingLeft : '24px',
             }}
             mb={3}
         >
@@ -60,14 +75,19 @@ export function BasicCard() {
             </Tabs>
             {/* 하이드 처리 해야합니다. */}
             <Box sx={{ marginLeft: 'auto', display: 'flex' }}>
-                <Button onClick={() => navigate('/projects/new')} variant='text'>
+                <Button onClick={handleOpen} variant='text'>
                     Add Task
                 </Button>
                 <UserSearch />
                 <Button onClick={() => navigate('/projects/new')} variant='text'>
                     Add Project
                 </Button>
-                <Button variant='text'>...</Button>
+                <NewModal
+                    open={open} 
+                    setOpen={setOpen}
+                    sx={{display : 'none'}}
+                />
+
             </Box>
         </Box>
     );

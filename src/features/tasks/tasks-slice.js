@@ -1,17 +1,17 @@
-import { createSlice,createAsyncThunk } from '@reduxjs/toolkit'
-import { getTaskList, getTask, createTask, updateTask, deleteTask  } from '~services/task-service';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { getTaskListByMemberId, getTask, createTask, updateTask, deleteTask, getTaskListByProjectId } from '~services/task-service';
 
 export const fetchTaskListByMemberId = createAsyncThunk(
-  'tasks/member/list/fetch',
-  async (_, thunkAPI) => {
+  'tasks/list/fetch',
+  async (memberId, thunkAPI) => {
     try {
-      const response = await getTaskList();
-      return response.data;  
-    } catch(err){
+      const response = await getTaskListByMemberId(memberId);
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -19,15 +19,15 @@ export const fetchTaskListByMemberId = createAsyncThunk(
 
 export const fetchTaskListByProjectId = createAsyncThunk(
   'tasks/list/fetch',
-  async (_, thunkAPI) => {
+  async (projectId, thunkAPI) => {
     try {
-      const response = await getTaskList();
-      return response.data;  
-    } catch(err){
+      const response = await getTaskListByProjectId(projectId);
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -38,12 +38,12 @@ export const fetchTaskByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getTask();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -54,10 +54,10 @@ export const createTaskByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await createTask();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -71,10 +71,10 @@ export const UpdateTaskByProjectId = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await updateTask();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -87,10 +87,10 @@ export const DeleteTaskByProjectId = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await deleteTask();
-      return id; 
-    } catch(err){
+      return id;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -99,9 +99,92 @@ export const DeleteTaskByProjectId = createAsyncThunk(
 );
 
 const initialState = {
-    entities: [],
-    loading: 'idle',
-    error: null,
+  entities: [
+    {
+      id: 1,
+      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+      title: 'good',
+      content: 'dasdasdsadasd',
+      status: 'yet',
+      fileList: [
+        {
+          id: '1',
+          fileName: 'pexels-photo-15579683.jpeg',
+          fileSize: '',
+          fileUploader: '1', // member Id 입니다.
+        },
+        {
+          id: '2',
+          fileName: 'pexels-photo-123132.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '2', // member Id 입니다.
+        },
+        {
+          id: '3',
+          fileName: 'pexels-bike-1222.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '1', // member Id 입니다.
+        },
+      ]
+    },
+    {
+      id: 2,
+      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+      title: 'good',
+      content: 'dasdasdsadasd',
+      status: 'progress',
+      fileList: [
+        {
+          id: '4',
+          fileName: 'pexels-photo-15579683.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '1', // member Id 입니다.
+        },
+        {
+          id: '5',
+          fileName: 'pexels-photo-123132.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '2', // member Id 입니다.
+        },
+        {
+          id: '6',
+          fileName: 'pexels-bike-1222.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '1', // member Id 입니다.
+        },
+      ]
+    },
+    {
+      id: 3,
+      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+      title: 'good',
+      content: 'dasdasdsadasd',
+      status: 'completed',
+      fileList: [
+        {
+          id: '7',
+          fileName: 'pexels-photo-15579683.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '1', // member Id 입니다.
+        },
+        {
+          id: '8',
+          fileName: 'pexels-photo-123132.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '2', // member Id 입니다.
+        },
+        {
+          id: '9',
+          fileName: 'pexels-bike-1222.jpeg',
+          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+          fileUploader: '1', // member Id 입니다.
+        },
+      ]
+    },
+
+  ],
+  loading: 'idle',
+  error: null,
 }
 
 
@@ -111,7 +194,7 @@ export const tasksSlice = createSlice({
   reducers: {},
   extraReducers: {
 
-    [fetchTaskListByProjectId.fulfilled] : (state, action) => {
+    [fetchTaskListByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
       state.entities.push(action.payload)
     },
@@ -123,7 +206,7 @@ export const tasksSlice = createSlice({
       }
     },
 
-    [fetchTaskListByMemberId.fulfilled] : (state, action) => {
+    [fetchTaskListByMemberId.fulfilled]: (state, action) => {
       state.loading = 'idle'
       state.entities.push(action.payload)
     },
@@ -165,8 +248,8 @@ export const tasksSlice = createSlice({
     [UpdateTaskByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
       const newProject = action.payload;
-      return state.project.map((item) => item.id === action.payload.id ? 
-      { ...item, newProject }  : item )
+      return state.project.map((item) => item.id === action.payload.id ?
+        { ...item, newProject } : item)
     },
     [UpdateTaskByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -181,7 +264,7 @@ export const tasksSlice = createSlice({
       return state.project.filter((project) => project.id !== action.payload);
     },
     [DeleteTaskByProjectId.rejected]: (state, action) => {
-     if (state.loading === 'pending') {
+      if (state.loading === 'pending') {
         state.loading = 'idle'
         state.error = action.error
       }

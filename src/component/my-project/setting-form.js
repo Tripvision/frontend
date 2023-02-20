@@ -68,7 +68,9 @@ export function SettingForm() {
 
 
     return (
-        <div>
+        <Box
+            sx={{ mt : 3 }}
+        >
             {setting && (
                 <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                     <Stack spacing={4}>
@@ -225,7 +227,7 @@ export function SettingForm() {
                     <ToastContainer />
                 </Box>
             )}
-        </div>
+        </Box>
     );
 
 }

@@ -15,17 +15,25 @@ import { useTheme } from '@mui/material/styles';
 import CardActions from '@mui/material/CardActions';
 import { CardActionArea } from '@mui/material'
 
-
 import TaskCard from '~component/core/task-card'
+import { useDispatch, useSelector } from 'react-redux'
+import taskService from '~services/task-service'
+import { useParams } from 'react-router-dom'
 
 
 export function MyProjectTarget() {
 
+    const dispatch = useDispatch();
+
+    const { id } = useParams();
     
+    // const statusTaskList = taskService.getTaskListStatus(id);
 
     useEffect(() => {
-        // 통신 로직 정의
-    },[]);
+        // 통신 로직 정의 
+        // dispatch(); 
+        console.log(taskList);
+    }, []);
 
     return (
         <Container fixed >
@@ -40,7 +48,9 @@ export function MyProjectTarget() {
                     <Box sx={{ display: 'flex' }}><Typography mr={1} >Yet to Start</Typography><Typography color="text.secondary">6</Typography></Box>
                     <Divider sx={{ borderColor: '#A1E3CB', borderBottomWidth: 5, mb: 3, borderRadius: 3 }}></Divider>
                     <Stack spacing={3}>
-                        <TaskCard />
+                        <TaskCard 
+                            
+                        />
                         <TaskCard />
                         <TaskCard />
                         <TaskCard />

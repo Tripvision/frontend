@@ -7,13 +7,8 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
-import CardActions from '@mui/material/CardActions';
-import { CardActionArea } from '@mui/material'
+import Button from '@mui/material/Button'
 
 import BasicModal from '~pages/modal'
 
@@ -26,16 +21,26 @@ const TaskCard = () => {
       console.log("TaskCard open " + open);
     });
 
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
 
     return (
         <Card >
-            <CardActionArea onClick={() => {setOpen(true)}}>
             <CardContent>
                 <BasicModal
                     open={open} 
                     setOpen={setOpen}
                 />
-                <Chip color="secondary" label="Chip Filled" size="small" sx={{ borderRadius: '5px', mb: 1.5 }} />
+                <Box sx={{display : 'flex', width: '100%'}}>
+                    <Chip sx={{ marginRight : 'auto', borderRadius: '5px', mb: 1.5 }} color="secondary" label="Chip Filled" size="small" />
+                    <Button sx={{ marginLeft : 'auto' }} onClick={handleOpen}> SHOW </Button>
+                </Box>
                 <Typography noWrap={true} >
                     Meeting with customer
                 </Typography>
@@ -49,7 +54,7 @@ const TaskCard = () => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Avatar src='' alt='' sx={{ width: 25, height: 25 }} />
                 <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }} mr={1}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}} mr={1}>
                         {theme.palette.mode === 'dark' ? (
                             <img width='12px' height='12px' src="/card/black-clip.svg" />
                         ) : (
@@ -57,7 +62,7 @@ const TaskCard = () => {
                         )}
                         <Typography ml={0.5} variant='body2' color='text.secondary'>6</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }} >
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                         {theme.palette.mode === 'dark' ? (
                             <img width='12px' height='12px' src="/card/black-chat-text.svg" />
                         ) : (
@@ -68,7 +73,6 @@ const TaskCard = () => {
                 </Box>
             </Box>
         </CardContent>
-        </CardActionArea>
         </Card >
     )
 };

@@ -26,7 +26,7 @@ const style = {
 
 export default function UserSearch() {
 
-  
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -46,11 +46,7 @@ export default function UserSearch() {
       console.error(error);
     }
   };
-
-  React.useEffect(() => {
-    
-  });
-
+  
   const handleSubmit = e => {
     console.log(value);
   }
@@ -91,8 +87,8 @@ export default function UserSearch() {
   return (
     <div>
       <Button color='primary' onClick={handleOpen}>
-          Add User
-        </Button>
+        Add User
+      </Button>
       <Modal
         hideBackdrop
         open={open}
@@ -100,7 +96,7 @@ export default function UserSearch() {
         aria-labelledby='child-modal-title'
         aria-describedby='child-modal-description'
       >
-        <Box sx={{ ...style}}>
+        <Box sx={{ ...style }}>
           <Autocomplete
             disablePortal
             id='combo-box-demo'
@@ -139,8 +135,8 @@ export default function UserSearch() {
               );
             }}
           />
-        <Button onClick={onsubmit}>invite</Button>
-        <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleSubmit}>invite</Button>
+          <Button onClick={handleClose}>Close</Button>
         </Box>
       </Modal>
     </div>
