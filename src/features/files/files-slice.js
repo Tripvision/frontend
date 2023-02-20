@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import fileService from '~services/file-service';
 
 export const fetchfileListByProjectId = createAsyncThunk(
-  'files/list/fetch',
-  async (_, thunkAPI) => {
+  'fileList/fetch',
+  async (projectId, thunkAPI) => {
     try {
-      const response = await fileService.getProjectFileList();
-      return response.data;  
-    } catch(err){
+      const response = await fileService.getProjectFileList(projectId);
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -22,12 +22,12 @@ export const fetchFileByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await fileService.getProjectFile();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -38,10 +38,10 @@ export const createFileByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await fileService.createProjectFile();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -55,10 +55,10 @@ export const UpdateFileByProjectId = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await fileService.updateProjectFile();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -71,10 +71,10 @@ export const DeleteFileByProjectId = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await fileService.deleteProjectFile();
-      return id; 
-    } catch(err){
+      return id;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -83,10 +83,65 @@ export const DeleteFileByProjectId = createAsyncThunk(
 );
 
 const initialState = {
-    files: [],
-    loading: 'idle',
-    currentProjectId: undefined,
-    error: null,
+  files: [
+    {
+      id: '1',
+      type: 'jpg',
+      img: 'asda',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+      id: '2',
+      type: 'pdf',
+      img: 'https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+      id: '3',
+      type: 'xls',
+      img: '',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+      id: '4',
+      type: 'zip',
+      img: '',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+      id: '5',
+      type: 'jpg',
+      img: '',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+      id: '6',
+      type: 'jpg',
+      img: '',
+      name: 'Project tech requirements.pdf',
+      size: '5.6',
+      uploader: 'Karina Clark',
+      uploadTime: 'Mon Nov 22 2022',
+    },
+  ],
+  loading: 'idle',
+  currentProjectId: undefined,
+  error: null,
 }
 
 
@@ -95,62 +150,6 @@ export const filesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchfileListByProjectId.fulfilled] : (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [fetchfileListByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-    [fetchFileByProjectId.fulfilled] : (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [fetchFileByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-    [createFileByProjectId.fulfilled] : (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [createFileByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-    [UpdateFileByProjectId.fulfilled] : (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [UpdateFileByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-    [DeleteFileByProjectId.fulfilled] : (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [DeleteFileByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
   },
 })
 

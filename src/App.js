@@ -101,9 +101,11 @@ const App = () => {
               <Route path='/login' element={<LoginScreen />} />
               <Route path='/register' element={<LoginScreen />} />
 
-              <Route element={<PrivateRoute />}>
-                <Route path='projects/dash-board' element={<Project />} />
-              </Route>
+              {/* <Route element={<PrivateRoute />}>
+              // 해당 경로에 라우팅 패스 작성해주기
+              </Route> */}
+
+              <Route path='projects/dash-board' element={<Project />} />
 
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}></Route>
               {/* <Route path="/projects/dash-board" element={<Project />}></Route> */}

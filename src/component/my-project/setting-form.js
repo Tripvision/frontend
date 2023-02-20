@@ -21,6 +21,7 @@ import { fetchSettingsByProjectId, createSettingsByProjectId, UpdateSettingsByPr
 import { useDispatch, useSelector } from 'react-redux';
 import NotifiType from './NotifiType';
 import DatePicker from './date-picker';
+import { Avatar } from '@mui/material';
 
 export function SettingForm() {
     const { id } = useParams();
@@ -36,7 +37,7 @@ export function SettingForm() {
     }, [])
 
     const submit = () => {
-        if (setting.id) {
+        if (id) {
             dispatch(UpdateSettingsByProjectId({ id, state, checkedItems }));
         }
         else {
@@ -46,25 +47,28 @@ export function SettingForm() {
 
 
 
-    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler, 
+    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
         state, checkedItems, errors, isSubmited } =
         useForm({
             initState: setting,
             callback: submit,
             validator,
-            checkBox : true,
+            checkBox: true,
         });
+
+    useEffect(() => {
+        console.log(state)
+    })
 
 
     let isValidForm =
         Object.values(errors).filter(error => typeof error !== 'undefined')
             .length === 0;
-    
-            
+
+
 
     return (
         <div>
-            <Button onClick={() => dispatch(fetchSettingsByProjectId(id))}> Refresh </Button>
             {setting && (
                 <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                     <Stack spacing={4}>
@@ -87,9 +91,17 @@ export function SettingForm() {
                                     error={errors.logo ? true : false}
                                     variant='standard'
                                 />
-                                <Box>
-                                    {state.logo && <img src={state.logo} alt='preview-img' />}
-                                </Box>
+                                {
+                                    state.logo && <Box>
+                                        <Avatar
+                                            sx={{ width: 200, height: 150 }}
+                                            src={state.logo}
+                                            alt='preview-img'
+
+                                        />
+                                    </Box>
+                                }
+
                                 <Typography> Allow Types : png, jpg, jpeg. </Typography>
                             </CardContent>
                         </Card>
@@ -121,7 +133,7 @@ export function SettingForm() {
                                     type='text'
                                     fullWidth
                                     name='type'
-                                    value={state.type || '' }
+                                    value={state.type || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     error={errors.type ? true : false}
@@ -141,7 +153,7 @@ export function SettingForm() {
                                     fullWidth
                                     type='text'
                                     name='description'
-                                    value={state.description || '' }
+                                    value={state.description || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     error={errors.description ? true : false}
@@ -156,7 +168,7 @@ export function SettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Due Date </Typography>
-                                { handleChange ? <DatePicker state={state} handleChange={handleChange}/> : null }
+                                {handleChange ? <DatePicker state={state} handleChange={handleChange} /> : null}
                             </CardContent>
                         </Card>
 
@@ -164,7 +176,7 @@ export function SettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Notifications </Typography>
-                                <Box sx={{display : 'flex'}}>
+                                <Box sx={{ display: 'flex' }}>
                                     <NotifiType name='email' handleCheckedItemHandler={handleCheckedItemHandler} />
                                     <NotifiType name='phone' handleCheckedItemHandler={handleCheckedItemHandler} />
                                 </Box>
@@ -174,30 +186,41 @@ export function SettingForm() {
                             <CardContent>
                                 <Typography> Status </Typography>
                                 <IosSwitch
-                                    checked={state.status || false }
+                                    checked={state.status || false}
                                     name='status'
                                     onChange={handleStatus}
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 />
                             </CardContent>
                         </Card>
+                        <Box
+                            sx={{
+                                display: 'flex'
 
-                        <Button
-                            onClick={handleClear}
-                            type='submit'
-                            variant='contained'
-                            color='primary'
-                        >
-                            Discard
-                        </Button>
-                        <Button
-                            disabled={!isValidForm && isSubmited}
-                            type='submit'
-                            variant='contained'
-                            color='primary'
-                        >
-                            Save on Changes
-                        </Button>
+                            }}>
+                            <Box
+                                sx={{
+                                    marginLeft: 'auto',
+                                }}>
+                                <Button
+                                    sx={{ mr: 3 }}
+                                    onClick={handleClear}
+                                    type='submit'
+                                    variant='contained'
+                                    color='primary'
+                                >
+                                    Discard
+                                </Button>
+                                <Button
+                                    disabled={!isValidForm && isSubmited}
+                                    type='submit'
+                                    variant='contained'
+                                    color='primary'
+                                >
+                                    Save
+                                </Button>
+                            </Box>
+                        </Box>
                     </Stack>
                     <ToastContainer />
                 </Box>

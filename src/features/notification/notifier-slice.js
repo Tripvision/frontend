@@ -16,7 +16,6 @@ const initialState = {
       data: null,
       creadtedAt: null,
       read_at: null,
-      sibar : "왜 적용안돼냐",
     },
     {
       id : '2',

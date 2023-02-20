@@ -18,6 +18,7 @@ import projectsReducer from '~features/projects/projects-slice';
 import settingsReducer from '~features/settings/settings-slice';
 import tasksReducer from '~features/tasks/tasks-slice';
 import routerReducer from '~features/route/route-slice';
+import projectMemberReducer from '~features/project-members/project-members-slice';
 
 import teamReducer from '~features/team/team-slice';
 import teamActivitiesReducer from '~features/team-activities/team-activities-slice';
@@ -47,6 +48,7 @@ export const rootReducer = combineReducers({
   team : teamReducer,
   teamActivities : teamActivitiesReducer,
   routes : routerReducer,
+  projectMember : projectMemberReducer,
 })
 
 

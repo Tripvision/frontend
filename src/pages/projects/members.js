@@ -22,6 +22,8 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { styled } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProjectMembers } from '~features/project-members/project-members-slice';
 
 
 // Refactor : Avatar 정보 Redux 에서 가져오기 memberRows
@@ -168,71 +170,19 @@ const memberColumn = [
     },
 ];
 
-const memberRows = [
-    {
-        id: '1',
-        avatar: 'Sindy',
-        name: 'Lee Sang Min',
-        address: '대구광역시 동구 큰고개로 35-2',
-        email: 'ehdqn119@gmail.com',
-        isAdmin: 'true',
-        phone: '010-9830-5559',
-        lastUpdated: 'Tue Nov 22 2022',
-    },
-    {
-        id: '2',
-        avatar: 'Yura',
-        name: 'Lee Sang Hyup',
-        address: '서울특별시 은마',
-        email: 'ehdqn118@naver.com',
-        isAdmin: 'false',
-        phone: '010-2433-3579',
-        lastUpdated: 'Mon Nov 22 2022',
-    },
-    {
-        id: '3',
-        avatar: 'Aliah Lane',
-        name: 'Go seung Bum',
-        address: '대구광역시 동구 큰고개로 35-2',
-        email: 'ehdqn119@gmail.com',
-        isAdmin: false,
-        phone: '010-9830-5559',
-        lastUpdated: new Date(),
-    },
-    {
-        id: '4',
-        avatar: 'Sindy',
-        name: 'Lee Yu ra',
-        address: '대구광역시 동구 큰고개로 35-2',
-        email: 'ehdqn119@gmail.com',
-        isAdmin: false,
-        phone: '010-9830-5559',
-        lastUpdated: new Date(),
-    },
-    {
-        id: '5',
-        avatar: 'Yura',
-        name: 'Sin su cheol',
-        address: '대구광역시 동구 큰고개로 35-2',
-        email: 'ehdqn119@gmail.com',
-        isAdmin: true,
-        phone: '010-9830-5559',
-        lastUpdated: new Date(),
-    },
-    {
-        id: '6',
-        avatar: 'Yura',
-        name: 'Lee da won',
-        address: '대구광역시 동구 큰고개로 35-2',
-        email: 'ehdqn119@gmail.com',
-        isAdmin: false,
-        phone: '010-9830-5559',
-        lastUpdated: new Date(),
-    },
-];
+
 
 
 const Members = () => {
+
+    const dispatch = useDispatch();
+    const projectMemberList = useSelector(state => state.projectMember.entities);
+
+    React.useEffect(() => {
+        //dispatch(fetchProjectMembers(1));
+        console.log(projectMemberList)
+    },[]);
+
     return (
         <div style={{ height: 700, width: '100%' }}>
             <DataGrid
@@ -242,7 +192,7 @@ const Members = () => {
                     Toolbar: GridToolbar,
                 }}
                 columns={memberColumn}
-                rows={memberRows}
+                rows={projectMemberList}
                 componentsProps={{
                     toolbar: {
                         showQuickFilter: true,

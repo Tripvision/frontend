@@ -34,7 +34,7 @@ import { fetchBudgetByProjectId, createBudgetByProjectId, UpdateBudgetByProjectI
 // Refactor : props 전체를 받아오는 행위
 export function TwoLineCard(props) {
     const { data } = props;
-    
+
     return (
         <Card sx={{ width: '100%', mb: 3 }}>
             <CardContent>
@@ -77,138 +77,161 @@ const MyProjectBudget = () => {
         }
     };
 
-    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler, 
+    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
         state, checkedItems, errors, isSubmited } =
         useForm({
             initState: budget,
             callback: submit,
             validator,
-            checkBox : true,
+            checkBox: true,
         });
+
+    useEffect(() => {
+        const newState = {
+            ...state,
+            ...checkedItems
+        }
+        console.log(newState);
+        console.log(checkedItems)
+    })
 
 
     let isValidForm =
         Object.values(errors).filter(error => typeof error !== 'undefined')
             .length === 0;
-    
-    
-            useEffect(() => {
-                console.log(checkedItems)   
-            });
 
     return (
         <Container>
-            <LineProgressBar/>
-            
+            <LineProgressBar />
+
 
             <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
-                    <Stack spacing={4}>
+                <Stack spacing={4}>
 
-                        { /*  useSage Character */}
-                        <Card>
-                            <Grid
-                                container  
-                                justifyContent="space-evenly"
-                                alignItems="center"
-                                direction="row"
-                                spacing={5} mb={3}>
-                                {
-                                    Array.from([1, 2, 3]).map((item, index) => (
-                                        <Grid item
-                                            xs={12}
-                                            sm={6}
-                                            md={4}
-                                            lg={4}
-                                            xl={4}
-                                        >
-                                            <CheckBoxCard />
-                                        </Grid>
-                                    ))
-                                }
-                            </Grid>
-                        </Card>
+                    { /*  useSage Character */}
+                    <Box
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <Grid
+                            container
+                            justifyContent="space-evenly"
+                            alignItems="center"
+                            direction="row"
+                            spacing={5} mb={3}>
+                            {
+                                Array.from([1, 2, 3]).map((item, index) => (
+                                    <Grid item
+                                        xs={12}
+                                        sm={6}
+                                        md={4}
+                                        lg={4}
+                                        xl={4}
+                                    >
+                                        <CheckBoxCard />
+                                    </Grid>
+                                ))
+                            }
+                        </Grid>
+                    </Box>
 
 
-                        <Card>
-                            <CardContent>
-                                <Typography> Budget Notes </Typography>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    type='text'
-                                    name='notes'
-                                    value={state.notes || ''}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    error={errors.name ? true : false}
-                                    helperText={errors.name}
-                                    variant='standard'
-                                    InputProps={{ disableUnderline: true }}
-                                />
-                            </CardContent>
-                        </Card>
+                    <Card
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <CardContent>
+                            <Typography> Budget Notes </Typography>
+                            <TextField
+                                required
+                                fullWidth
+                                type='text'
+                                name='notes'
+                                value={state.notes || ''}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.name ? true : false}
+                                helperText={errors.name}
+                                variant='standard'
+                                InputProps={{ disableUnderline: true }}
+                            />
+                        </CardContent>
+                    </Card>
 
-                        <Card>
-                            <CardContent>
-                                <Typography> Manage Budget </Typography>
-                                <TextField
-                                    required
-                                    type='text'
-                                    fullWidth
-                                    name='manageBudget'
-                                    value={state.manageBudget || '' }
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    error={errors.type ? true : false}
-                                    helperText={errors.type}
-                                    variant='standard'
-                                    margin='dense'
-                                    InputProps={{ disableUnderline: true }}
-                                />
-                            </CardContent>
-                        </Card>
+                    <Card
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <CardContent>
+                            <Typography> Manage Budget </Typography>
+                            <TextField
+                                required
+                                type='text'
+                                fullWidth
+                                name='manageBudget'
+                                value={state.manageBudget || ''}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.type ? true : false}
+                                helperText={errors.type}
+                                variant='standard'
+                                margin='dense'
+                                InputProps={{ disableUnderline: true }}
+                            />
+                        </CardContent>
+                    </Card>
 
-                        { /* Checkbox State */}
-                        <Card>
-                            <CardContent>
-                                <Typography> Overuse Notifications </Typography>
-                                <Box sx={{display : 'flex'}}>
-                                    <NotifiType name='email' handleCheckedItemHandler={handleCheckedItemHandler} />
-                                    <NotifiType name='phone' handleCheckedItemHandler={handleCheckedItemHandler} />
-                                </Box>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardContent>
-                                <Typography> Allow Changes </Typography>
-                                <IosSwitch
-                                    checked={state.status || false }
-                                    name='status'
-                                    onChange={handleStatus}
-                                    inputProps={{ 'aria-label': 'controlled' }}
-                                />
-                            </CardContent>
-                        </Card>
+                    { /* Checkbox State */}
+                    <Card
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <CardContent>
+                            <Typography> Overuse Notifications </Typography>
+                            <Box sx={{ display: 'flex' }}>
+                                <NotifiType name='email' handleCheckedItemHandler={handleCheckedItemHandler} />
+                                <NotifiType name='phone' handleCheckedItemHandler={handleCheckedItemHandler} />
+                            </Box>
+                        </CardContent>
+                    </Card>
+                    <Card
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <CardContent>
+                            <Typography> Allow Changes </Typography>
+                            <IosSwitch
+                                checked={state.status || false}
+                                name='status'
+                                onChange={handleStatus}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                        </CardContent>
+                    </Card>
 
-                        <Button
-                            onClick={handleClear}
-                            type='submit'
-                            variant='contained'
-                            color='primary'
-                        >
-                            Discard
-                        </Button>
-                        <Button
-                            disabled={!isValidForm && isSubmited}
-                            type='submit'
-                            variant='contained'
-                            color='primary'
-                        >
-                            Save on Changes
-                        </Button>
-                    </Stack>
-                    <ToastContainer />
-                </Box>
+                    <Box
+                        sx={{ display: 'flex' }}
+                    >
+                        <Box sx={{ marginLeft: 'auto' }}>
+                            <Button
+                                sx={{ mr: 3 }}
+                                onClick={handleClear}
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                            >
+                                Discard
+                            </Button>
+                            <Button
+                                disabled={!isValidForm && isSubmited}
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                                onClick={handleSubmit}
+                            >
+                                Save
+                            </Button>
+                        </Box>
+                    </Box>
+                </Stack>
+                <ToastContainer />
+            </Box>
+        
         </Container>
     );
 };

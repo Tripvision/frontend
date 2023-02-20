@@ -25,9 +25,9 @@ export function BasicCard() {
     const label = ['Overview', 'Tasks', 'Budgets', 'Members', 'Files', 'Activities', 'Settings'];
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
         setActivateTab(true)
-    },100)
+    }, 100)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -59,8 +59,11 @@ export function BasicCard() {
                 }
             </Tabs>
             {/* 하이드 처리 해야합니다. */}
-            <Box sx={{ marginLeft: 'auto', display : 'flex'}}>
-                <UserSearch/>
+            <Box sx={{ marginLeft: 'auto', display: 'flex' }}>
+                <Button onClick={() => navigate('/projects/new')} variant='text'>
+                    Add Task
+                </Button>
+                <UserSearch />
                 <Button onClick={() => navigate('/projects/new')} variant='text'>
                     Add Project
                 </Button>
@@ -75,7 +78,7 @@ export default function VisualTab() {
     return (
         <div >
             <BasicCard />
-            <Outlet />  
+            <Outlet />
         </div>
     );
 }

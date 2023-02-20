@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 
 // component 
 import { GridPurpleButton } from '~component/core/mui-button';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 // Refactor : fileRows 
@@ -45,68 +46,20 @@ const fileColumn = [
     }
 ];
 
-const fileRows = [
-    {
-        id: '1',
-        type: 'jpg',
-        img: 'asda',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-    {
-        id: '2',
-        type: 'pdf',
-        img: 'https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-    {
-        id: '3',
-        type: 'xls',
-        img: '',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-    {
-        id: '4',
-        type: 'zip',
-        img: '',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-    {
-        id: '5',
-        type: 'jpg',
-        img: '',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-    {
-        id: '6',
-        type: 'jpg',
-        img: '',
-        name: 'Project tech requirements.pdf',
-        size: '5.6',
-        uploader: 'Karina Clark',
-        uploadTime: new Date(),
-    },
-];
-
 export default function Files() {
+
+    const dispatch = useDispatch();
+    const fileList = useSelector(state => state.files.files);
+    
+    React.useEffect(() => {
+        // dispatch(fetchfileListByProjectId(1));
+    },[]);
+
+
     return (
         <div className='App'>
             <div style={{ height: 400, width: '100%' }}>
-                <DataGrid columns={fileColumn} rows={fileRows} components={{ Toolbar: GridToolbar }}
+                <DataGrid columns={fileColumn} rows={fileList} components={{ Toolbar: GridToolbar }}
 
                     componentsProps={{
                         toolbar: {

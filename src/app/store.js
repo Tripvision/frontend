@@ -10,7 +10,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 
-import { errorToast, promiseToast } from '~component/core/toasts';
+import { errorToast } from '~component/core/toasts';
 import persistedReducer from './rootReducer';
 
 export const store = configureStore({
@@ -21,7 +21,6 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-    .concat(promiseToast)
     .concat(errorToast)
     .concat(logger),
   devTools: process.env.NODE_ENV !== 'production',

@@ -26,6 +26,8 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTeamActiveListByProjectId } from '~features/team-activities/team-activities-slice';
 
 
 function isOverflown(element) {
@@ -178,72 +180,16 @@ const memberColumn = [
     }
 ];
 
-const memberRows = [
-    {
-        id: '1',
-        type: 'jpg',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Yura',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-    {
-        id: '2',
-        type: 'zip',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Sindy',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-    {
-        id: '3',
-        type: 'jpg',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Sindy',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-    {
-        id: '4',
-        type: 'jpg',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Sindy',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-    {
-        id: '5',
-        type: 'jpg',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Aliah Lane',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-    {
-        id: '6',
-        type: 'jpg',
-        fileImg: 'cocd',
-        fileName: 'Project tech requirements.pdf',
-        userName: 'Lee Sang Min',
-        userAvatar: 'Aliah Lane',
-        fileSize: '5.6',
-        uploadTime: new Date(),
-    },
-];
+
 
 const Activity = () => {
 
+    const dispatch = useDispatch();
+    const activityList = useSelector(state => state.teamActivities.entities);
 
+    // React.useEffect(() => {
+    //     dispatch(fetchTeamActiveListByProjectId(1))
+    // },[]);
 
     return (
         <div style={{ height: 700, width: '100%' }}>
@@ -254,7 +200,7 @@ const Activity = () => {
                     Toolbar: GridToolbar,
                 }}
                 columns={memberColumn}
-                rows={memberRows}
+                rows={activityList}
                 componentsProps={{
                     toolbar: {
                         showQuickFilter: true,

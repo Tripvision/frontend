@@ -20,7 +20,10 @@ const CheckBoxCard = () => {
 
     return (
         <div>
-            <Card sx={{ minWidth: 200, minHeight: 135 }}>
+            <Card sx={{
+                minWidth: 200, minHeight: 135,
+                borderRadius: '12px'
+            }}>
                 <CardActionArea onClick={handleChange} >
                     <CardContent>
                         <Box sx={{ display: 'flex' }}>

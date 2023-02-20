@@ -1,49 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import teamActiveService from '~services/team-active-service';
 
-export const fetchTeamActiveListByTeamId = createAsyncThunk(
-  'tasks/fetch',
-  async (_, thunkAPI) => {
+export const fetchTeamActiveListByProjectId = createAsyncThunk(
+  'activities/fetch',
+  async (projectId, thunkAPI) => {
     try {
-      const response = await teamActiveService.getTeamActiveList();
-      return response.data;  
-    } catch(err){
+      const response = await teamActiveService.getTeamActiveList(projectId);
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const fetchTeamActivityByProjectId = createAsyncThunk(
-  'tasks/fetch',
-  async (_, thunkAPI) => {
-    try {
-      const response = await teamActiveService.getTeamActive();
-      return response.data;  
-    } catch(err){
-      let error = err;
-      if(!error.response){
-        throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
 
 export const createTeamActiveByProjectId = createAsyncThunk(
-  'tasks/fetch',
+  'activities/create',
   async (_, thunkAPI) => {
     try {
       const response = await teamActiveService.createTeamActive();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -54,12 +38,12 @@ export const updateTeamActiveByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await teamActiveService.updateTeamActive;
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -70,12 +54,12 @@ export const deleteTeamActiveByProjectId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await teamActiveService.deleteTeamActive();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -84,10 +68,71 @@ export const deleteTeamActiveByProjectId = createAsyncThunk(
 
 
 const initialState = {
-    entities: [],
-    currentTeamId: undefined,
-    loading: 'idle',
-    error: null,
+  entities: [
+    {
+        id: '1',
+        type: 'jpg',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Yura',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+        id: '2',
+        type: 'zip',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Sindy',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+        id: '3',
+        type: 'jpg',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Sindy',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+    {
+        id: '4',
+        type: 'jpg',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Sindy',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+        {
+        id: '5',
+        type: 'jpg',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Aliah Lane',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+        {
+        id: '6',
+        type: 'jpg',
+        fileImg: 'cocd',
+        fileName: 'Project tech requirements.pdf',
+        userName: 'Lee Sang Min',
+        userAvatar: 'Aliah Lane',
+        fileSize: '5.6',
+        uploadTime: 'Mon Nov 22 2022',
+    },
+  ],
+  currentTeamId: undefined,
+  loading: 'idle',
+  error: null,
 }
 
 
@@ -96,67 +141,6 @@ export const teamActivitiesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-
-    [fetchTeamActiveListByTeamId.fulfilled]: (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [fetchTeamActiveListByTeamId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
-    [fetchTeamActivityByProjectId.fulfilled]: (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [fetchTeamActivityByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
-    [createTeamActiveByProjectId.fulfilled]: (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [createTeamActiveByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
-    [updateTeamActiveByProjectId.fulfilled]: (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [updateTeamActiveByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
-    [deleteTeamActiveByProjectId.fulfilled]: (state, action) => {
-      state.loading = 'idle'
-      state.projects.push(action.payload)
-    },
-    [deleteTeamActiveByProjectId.rejected]: (state, action) => {
-      if (state.loading === 'pending') {
-        state.loading = 'idle'
-        state.error = action.error
-      }
-    },
-
-
 
   },
 })
