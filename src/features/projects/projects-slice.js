@@ -1,4 +1,4 @@
-import { createSlice, createSelector,createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { getMyProjectsStatus, getMyProjects, getMyCurrentProject, getMyProjectFinanceTotal, getMyProjectOurClient } from '~services/project-service';
 import { updateProject } from '../../services/project-service';
@@ -11,12 +11,12 @@ export const fetchProjectStatus = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getMyProjectsStatus();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -27,12 +27,12 @@ export const fetchProjectByUserId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getMyProjects();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -43,12 +43,12 @@ export const fetchMyCurrentProject = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getMyCurrentProject();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -59,12 +59,12 @@ export const fetchMyProjectFinanceTotal = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getMyProjectFinanceTotal();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -75,12 +75,12 @@ export const fetchMyProjectOurClient = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getMyProjectOurClient();
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
-      } 
+      }
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -93,10 +93,10 @@ export const createProjectByUserId = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await (createProject());
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -110,10 +110,10 @@ const UpdateProjectByUserId = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await (updateProject(id));
-      return response.data;  
-    } catch(err){
+      return response.data;
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -127,9 +127,9 @@ const DeleteProjectByUserId = createAsyncThunk(
     try {
       const response = await (deleteProject(id));
       return id;
-    } catch(err){
+    } catch (err) {
       let error = err;
-      if(!error.response){
+      if (!error.response) {
         throw err;
       }
       return thunkAPI.rejectWithValue(error.response.data);
@@ -139,20 +139,97 @@ const DeleteProjectByUserId = createAsyncThunk(
 
 
 const initialState = {
-  projects: [],
-  meta : [
+  projects: [
     {
-      CurrentProject : null
+      id : '1',
+      name : '',
+      title : 'Coffee detail page - Main Page',
+      content : 'asdasdasd',
+      status : 'yet',
+      dueDate : 'Due Date: Jun 20, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '75%',
     },
     {
-      FinanceTotal : null
+      id : '2',
+      name : '',
+      title : 'Poster illustation design',
+      content : 'asdasds',
+      status : 'yet',
+      dueDate : 'Due Date: Nov 10, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '100%',
     },
     {
-      OurClient : null
+      id : '3',
+      name : '',
+      title : 'Poster illustation design',
+      content : '123123123',
+      status : 'yet',
+      dueDate : 'Due Date: Nov 10, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '45%',
+    },
+    {
+      id : '4',
+      name : '',
+      title : 'Coffee detail page - Main Page',
+      content : 'asdasdasd',
+      status : 'progress',
+      dueDate : 'Due Date: Jun 20, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '100%',
+    },
+    {
+      id : '5',
+      name : '',
+      title : 'Poster illustation design',
+      content : 'asdasds',
+      status : 'progress',
+      dueDate : 'Due Date: Nov 10, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '100%',
+    },
+    {
+      id : '6',
+      name : '',
+      title : 'Poster illustation design',
+      content : '123123123',
+      status : 'progress',
+      dueDate : 'Due Date: Nov 10, 2022',
+      logoUrl : '',
+      type : '',
+      description : '',
+      completePercent : '36%',
     },
   ],
-  loading: 'idle',
-  error: null,
+  meta: [
+    {
+      title: 'Current Projects',
+      icon: '',
+      result: '237',
+    },
+    {
+      title: 'Project Finance',
+      icon: '',
+      result: '$3290',
+    },
+    {
+      title: 'Our Clients',
+      icon: '',
+      result: '49',
+    },
+  ]
 }
 
 
@@ -161,8 +238,8 @@ export const projectsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchProjectByUserId.pending] : (state, action) => {
-      if(state.loading === 'idle') {
+    [fetchProjectByUserId.pending]: (state, action) => {
+      if (state.loading === 'idle') {
         state.loading = 'pending'
       }
     },
@@ -177,8 +254,8 @@ export const projectsSlice = createSlice({
       }
     },
 
-    [fetchMyCurrentProject.pending] : (state, action) => {
-      if(state.loading === 'idle') {
+    [fetchMyCurrentProject.pending]: (state, action) => {
+      if (state.loading === 'idle') {
         state.loading = 'pending'
       }
     },
@@ -193,8 +270,8 @@ export const projectsSlice = createSlice({
       }
     },
 
-    [fetchMyProjectFinanceTotal.pending] : (state, action) => {
-      if(state.loading === 'idle') {
+    [fetchMyProjectFinanceTotal.pending]: (state, action) => {
+      if (state.loading === 'idle') {
         state.loading = 'pending'
       }
     },
@@ -209,8 +286,8 @@ export const projectsSlice = createSlice({
       }
     },
 
-    [fetchMyProjectOurClient.pending] : (state, action) => {
-      if(state.loading === 'idle') {
+    [fetchMyProjectOurClient.pending]: (state, action) => {
+      if (state.loading === 'idle') {
         state.loading = 'pending'
       }
     },
@@ -252,8 +329,8 @@ export const projectsSlice = createSlice({
     [UpdateProjectByUserId.fulfilled]: (state, action) => {
       state.loading = 'idle'
       const newProject = action.payload;
-      return state.project.map((item) => item.id === action.payload.id ? 
-      { ...item, newProject }  : item )
+      return state.project.map((item) => item.id === action.payload.id ?
+        { ...item, newProject } : item)
     },
     [UpdateProjectByUserId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -268,7 +345,7 @@ export const projectsSlice = createSlice({
       return state.project.filter((project) => project.id !== action.payload);
     },
     [DeleteProjectByUserId.rejected]: (state, action) => {
-     if (state.loading === 'pending') {
+      if (state.loading === 'pending') {
         state.loading = 'idle'
         state.error = action.error
       }
@@ -285,10 +362,10 @@ export const selectProjects = (state) => state.projects;
 export const selectProjectCount = (state) => state.projects.length();
 
 
-export const selectCurrentProjects = (state) =>state.projects.filter((project) => project.status === 'current');
+export const selectCurrentProjects = (state) => state.projects.filter((project) => project.status === 'current');
 
 export const getFilterCurrent = createSelector(selectProjects, lists => {
-  return lists.filter((project) => project.status === 'current' );
+  return lists.filter((project) => project.status === 'current');
 });
 
 

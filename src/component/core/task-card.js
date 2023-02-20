@@ -12,14 +12,10 @@ import Button from '@mui/material/Button'
 
 import BasicModal from '~pages/modal'
 
-const TaskCard = () => {
+const TaskCard = ({ data }) => {
     const theme = useTheme(); 
 
     const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-      console.log("TaskCard open " + open);
-    });
 
     const handleOpen = () => {
         setOpen(true);
@@ -31,7 +27,7 @@ const TaskCard = () => {
 
 
     return (
-        <Card >
+        <Card  sx={{ minWidth : '280px', minHeight : '180px'}}>
             <CardContent>
                 <BasicModal
                     open={open} 
@@ -42,13 +38,13 @@ const TaskCard = () => {
                     <Button sx={{ marginLeft : 'auto' }} onClick={handleOpen}> SHOW </Button>
                 </Box>
                 <Typography noWrap={true} >
-                    Meeting with customer
+                    {data.title}
                 </Typography>
                 <Typography variant='body2' gutterBottom color="text.secondary" maxWidth={230}
                     sx={{
                         wordWrap: 'break-word',
                     }}>
-                First, a disclaimer - the entire process writing a blog post often takes a couple
+                {data.content}
             </Typography>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

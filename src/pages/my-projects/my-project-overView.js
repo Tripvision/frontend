@@ -54,11 +54,11 @@ export const FilesCard = (props) => {
     const { data } = props;
     return (
         <>
-            <Card>
+            <Card sx={{ borderRadius : '15px' }}>
                 <CardContent>
                     {
                         data.map(item => (
-                            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                            <List sx={{ width: '100%', maxWidth: 360 }}>
                                 <ListItem alignItems="flex-start"
                                     onMouseOver={() => setShow(true)}
                                     onMouseOut={() => setShow(false)}
@@ -129,13 +129,13 @@ export const OverViewCard = (props) => {
     const { data } = props;
     return (
         <>
-            <Card>
+            <Card sx={{ mb :3 , borderRadius : '15px'}} >
                 <CardContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography>{data.title}</Typography>
                         <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-                            <Box sx={{ display: 'flex', width: '100%', justifyContent : 'space-around', flex : 1 }}>
+                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around', flex: 1 }}>
                                 <Box>
                                     <Typography>Status</Typography>
                                     <Typography>Line Prgoress</Typography>
@@ -178,7 +178,6 @@ export const OverViewCard = (props) => {
                     </Box>
                 </CardContent>
             </Card>
-            <Divider />
         </>
     )
 }
@@ -215,7 +214,7 @@ export function CalenderCard(props) {
     const { data } = props;
 
     return (
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ borderRadius : '15px' }} >
             <CardContent>
                 <Box mb={1}>
                     <Typography>What's on the road?</Typography>
@@ -224,30 +223,32 @@ export function CalenderCard(props) {
                 </Box>
                 <Box>
                     {data.map(item => (
-                        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                            <ListItem alignItems="flex-start"
-                            >
-                                <ListItemAvatar>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={item.title}
-                                    secondary={
-                                        <Box>
-                                            <Typography
-                                                component="span"
-                                                variant="body2"
-                                            >
-                                                {item.size} /
-                                            </Typography>
-                                            <Typography component="span" variant="body2"> {item.date}</Typography>
-                                            <Typography component="span" variant="body2">{item.uploader}</Typography>
-                                            {"  I'll be in your neighborhood doing errands this…"}
-                                        </Box>
-                                    }
-                                />
-                            </ListItem>
-                        </List>
+                        <Box>
+                            <List sx={{ width: '100%', maxWidth: 360 }}>
+                                <ListItem alignItems="flex-start"
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={item.title}
+                                        secondary={
+                                            <Box>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                >
+                                                    {item.size} /
+                                                </Typography>
+                                                <Typography component="span" variant="body2"> {item.date}</Typography>
+                                                <Typography component="span" variant="body2">{item.uploader}</Typography>
+                                                {"  I'll be in your neighborhood doing errands this…"}
+                                            </Box>
+                                        }
+                                    />
+                                </ListItem>
+                            </List>
+                        </Box>
                     ))}
                 </Box>
             </CardContent>

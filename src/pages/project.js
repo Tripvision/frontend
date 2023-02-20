@@ -155,8 +155,6 @@ const Project = () => {
                 {/* Today */}
                 <MuiIconCard />
 
-
-
                 {/* Total */}
                 <Grid container spacing={2} mb={3}>
 

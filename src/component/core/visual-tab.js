@@ -43,7 +43,6 @@ export function BasicCard() {
     };
 
     React.useEffect(() => {
-        // 파람이 바뀌면 
         console.log(id);
     },[useParams]);
 

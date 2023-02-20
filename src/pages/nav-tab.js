@@ -29,8 +29,9 @@ const breadcrumbNameMap = {
     '/projects/dash-board': 'Dash-board',
     '/projects/overview': 'Projects',
     // My Routing
-    '/profile/me': 'Profile',
-    '/account': 'Account',
+    '/my/profile': 'Profile',
+    '/my/account': 'Account',
+
 };
 
 
@@ -98,13 +99,13 @@ export function NavTab() {
 
                     {/* 라우팅으로 체인지 표본  */}
                     <List component="div" disablePadding>
-                        <MuiListItemLink breadcrumbNameMap={breadcrumbNameMap} to="/profile/me" />
+                        <MuiListItemLink breadcrumbNameMap={breadcrumbNameMap} to="/my/profile" />
                     </List>
 
 
                     {/* 라우팅으로 체인지 표본  */}
                     <List component="div" disablePadding>
-                        <MuiListItemLink breadcrumbNameMap={breadcrumbNameMap} to="/account" />
+                        <MuiListItemLink breadcrumbNameMap={breadcrumbNameMap} to="/my/account" />
                     </List>
 
                 </Collapse>

@@ -38,6 +38,10 @@ import MuiSpeedDial from '~component/dashboard/mui-speed-dial';
 import PrivateRoute from '~component/route/private-route';
 import OAuth2RedirectHandler from '~component/route/oauth2-redirect-handler';
 import VisualTab from '~component/core/visual-tab';
+import MyTotalTasks from '~pages/my-projects/my-total-tasks';
+import MyConnectMembers from '~pages/my-projects/my-connect-members';
+import MyProfile from '~pages/my-projects/my-profile';
+import MyAccount from '~pages/my-projects/my-account';
 
 
 const App = () => {
@@ -97,6 +101,10 @@ const App = () => {
           {/* Routing Line */}
           <Container mt={3}>
             <Routes>
+              <Route path='/' element={<MyProfile/>} />
+              <Route path='/my' element={<MyProfile/>} />
+              <Route path='/my/profile' element={<MyProfile/>} />
+              <Route path='/my/account' element={<MyAccount/>} />
               {/* 조건에 맞게 렌더링 시켜줄 조건  */}
               <Route path='/login' element={<LoginScreen />} />
               <Route path='/register' element={<LoginScreen />} />
@@ -105,7 +113,11 @@ const App = () => {
               // 해당 경로에 라우팅 패스 작성해주기
               </Route> */}
 
-              <Route path='projects/dash-board' element={<Project />} />
+              <Route path='/projects/dash-board' element={<Project />} />
+              <Route path='/total/tasks' element={<MyTotalTasks />} />
+              <Route path='/connect-memers' element={<MyConnectMembers />} />
+              <Route path='/productivity' element={<MyProjectActivity />} />
+              
 
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}></Route>
               {/* <Route path="/projects/dash-board" element={<Project />}></Route> */}

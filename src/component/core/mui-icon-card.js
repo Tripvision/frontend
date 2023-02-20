@@ -31,7 +31,7 @@ const iconCard = [
         title: 'Total Tasks',
         type: 'task',
         result: 715,
-        to : '/tasks'
+        to : '/total/tasks'
     },
     {
         id:'3',
@@ -47,7 +47,7 @@ const iconCard = [
         result: "93.8%",
         subResult: '+1.48',
         subIcon: 'upArrow',
-        to : '/Productivity'
+        to : '/productivity'
     }
 ]
 

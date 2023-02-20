@@ -26,13 +26,17 @@ export function MyProjectTarget() {
     const dispatch = useDispatch();
 
     const { id } = useParams();
-    
-    // const statusTaskList = taskService.getTaskListStatus(id);
+
+    //const statusTaskList = taskService.getTaskListStatus(id);
+    const yetTaskList = useSelector(state => state.tasks.statusList.yet);
+    const progressTaskList = useSelector(state => state.tasks.statusList.progress);
+    const completedTaskList = useSelector(state => state.tasks.statusList.completed);
 
     useEffect(() => {
-        // 통신 로직 정의 
-        // dispatch(); 
-        console.log(taskList);
+        
+        console.log(yetTaskList);
+        console.log(progressTaskList);
+        console.log(completedTaskList);
     }, []);
 
     return (
@@ -48,12 +52,13 @@ export function MyProjectTarget() {
                     <Box sx={{ display: 'flex' }}><Typography mr={1} >Yet to Start</Typography><Typography color="text.secondary">6</Typography></Box>
                     <Divider sx={{ borderColor: '#A1E3CB', borderBottomWidth: 5, mb: 3, borderRadius: 3 }}></Divider>
                     <Stack spacing={3}>
-                        <TaskCard 
-                            
-                        />
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
+                        {
+                            yetTaskList.map(task => (
+                                <TaskCard
+                                    data={task}
+                                />
+                            ))
+                        }
                     </Stack>
                 </Grid>
                 <Grid item
@@ -65,10 +70,13 @@ export function MyProjectTarget() {
                     <Box sx={{ display: 'flex' }}><Typography mr={1} >In Progress</Typography><Typography color="text.secondary">6</Typography></Box>
                     <Divider sx={{ borderColor: '#C6C7F8', borderBottomWidth: 5, mb: 3 }}></Divider>
                     <Stack spacing={2}>
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
+                        {
+                            progressTaskList.map(task => (
+                                <TaskCard
+                                    data={task}
+                                />
+                            ))
+                        }
                     </Stack>
                 </Grid>
                 <Grid item
@@ -80,10 +88,13 @@ export function MyProjectTarget() {
                     <Box sx={{ display: 'flex' }}><Typography mr={1} >Completed</Typography><Typography color="text.secondary">6</Typography></Box>
                     <Divider sx={{ borderColor: '#95A4FC', borderBottomWidth: 5, mb: 3 }}></Divider>
                     <Stack spacing={2}>
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
+                        {
+                            completedTaskList.map(task => (
+                                <TaskCard
+                                    data={task}
+                                />
+                            ))
+                        }
                     </Stack>
                 </Grid>
             </Grid>

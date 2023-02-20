@@ -127,84 +127,53 @@ const ProjectsOverView = () => {
 
     useEffect(() => {
         dispatch(fetchProjectByUserId());
-    },[dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(fetchMyCurrentProject());
-    },[dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(fetchMyProjectFinanceTotal());
-    },[dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(fetchMyProjectOurClient());
-    },[dispatch]);
-        
+    }, [dispatch]);
+
     return (
         <div>
             <Grid container spacing={3} mt={3}>
-
-                <Grid item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                >
-                    <Stack spacing={3}>
-                        <TitleCard data={titleData}/>
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                        <BasicCard data={data1} />
-                    </Stack>
-                </Grid>
-
-                <Grid item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                >
-
-                    <Stack spacing={3}>
-                        <TitleCard data={titleData}/>
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                        <BasicCard data={data2} />
-                    </Stack>
-                </Grid>
-
-                <Grid item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                >
-                    <Stack spacing={3}>
-
-                        <TitleCard data={titleData}/>
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                        <BasicCard data={data3} />
-                    </Stack>
-                </Grid>
+                {
+                    metaData.map(met => (
+                        <Grid item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={4}
+                            xl={4}
+                        >
+                            <TitleCard data={met} />
+                        </Grid>
+                    ))
+                }
             </Grid>
-        </div>
+            <Grid container spacing={3} mt={3}>
+                {
+                    projectList.map(project => (
+                        <Grid item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={4}
+                            xl={4}
+                        >
+                            <BasicCard data={project} />
+                        </Grid>
+                    ))
+                }
+            </Grid>
+        </div >
     );
 };
 
