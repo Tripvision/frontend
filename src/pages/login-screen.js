@@ -10,7 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
-import Card from '@mui/material/Card'
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import GoogleIcon from '@mui/icons-material/Google';
@@ -40,7 +41,7 @@ const LoginScreen = () => {
   return (
 
 
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275, mt: 3 }}>
       <CardContent>
         <Typography align="center" variant="h4" sx={{ textAlign: 'cetner', mb: 1.5 }} color='text.secondary'>
           Sign In
@@ -48,16 +49,21 @@ const LoginScreen = () => {
         <Typography align="center" variant='body2'>
           Your Social Campaigns
         </Typography>
-      </CardContent>
-      <CardActions>
-        <Link href={GOOGLE_AUTH_URL} color="inherit">
-          <Button variant="outlined" startIcon={<GoogleIcon />} sx={{ mr: 3 }}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <Button href={GOOGLE_AUTH_URL} variant="outlined" startIcon={<AppleIcon />} >
             Sign in with Google
           </Button>
-        </Link>
-        <Button href="https://apple.com" target="_blank" variant="outlined" startIcon={<AppleIcon />} >
-          Sign in with Apple
-        </Button>
+          <Button href="https://apple.com" target="_blank" variant="outlined" startIcon={<AppleIcon />} >
+            Sign in with Apple
+          </Button>
+        </Stack>
+      </CardContent>
+      <CardActions>
       </CardActions>
     </Card>
   )

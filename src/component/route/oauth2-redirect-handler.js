@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 // constants
 import { ACCESS_TOKEN } from '~constants/index';
-import { setToken, removeToken } from '~features/auth/auth-slice';
+import { setToken, removeToken, myProfile } from '~features/auth/auth-slice';
 
 const OAuth2RedirectHandler = () => {
 
@@ -22,10 +22,9 @@ const OAuth2RedirectHandler = () => {
     const token = getUrlParameter('token');
 
     useEffect(() => {
-
         if(token) {
             localStorage.setItem(ACCESS_TOKEN, token);
-            dispatch(setToken());
+            dispatch(myProfile());
         } else {
             dispatch(removeToken());
         }

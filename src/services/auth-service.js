@@ -5,11 +5,11 @@ import { GOOGLE_AUTH_URL, ACCESS_TOKEN } from "~constants/index.js";
 import { getAccessToken, setAccessToken } from "~utils/local-storage";
 
 export function addAuthHeader() {
-  
+
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
 
   const headers = {
-    headers : {
+    headers: {
       'Authorization': `Bearer ${accessToken}`
     }
   }
@@ -40,6 +40,13 @@ const login = () => {
     });
 };
 
+const myProfile = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/user/me', { headers: {
+    'Authorization': `Bearer ${accessToken}`
+  } });
+}
+
 const logout = () => {
   localStorage.removeItem("accessToken");
 };
@@ -49,6 +56,7 @@ const authService = {
   getUrlParameter,
   login,
   logout,
+  myProfile,
 };
 
 export default authService;

@@ -69,7 +69,7 @@ export function SettingForm() {
 
     return (
         <Box
-            sx={{ mt : 3 }}
+            sx={{ mt: 3 }}
         >
             {setting && (
                 <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
@@ -77,6 +77,8 @@ export function SettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Project Logo </Typography>
+                                <label className="signup-profileImg-label" htmlFor="logo">프로젝트 로고 추가</label>
+                                <Box sx={{ display : 'none' }}>
                                 <TextField
                                     id='logo'
                                     name='logo'
@@ -93,6 +95,7 @@ export function SettingForm() {
                                     error={errors.logo ? true : false}
                                     variant='standard'
                                 />
+                                </Box>
                                 {
                                     state.logo && <Box>
                                         <Avatar

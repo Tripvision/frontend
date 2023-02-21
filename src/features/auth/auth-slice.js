@@ -12,10 +12,18 @@ export const login = createAsyncThunk('auth/login', async (_, thunkAPI) => {
       return thunkAPI.rejectWithValue();
     }
 });
-  
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
+
+export const myProfile = createAsyncThunk('auth/login', async (_, thunkAPI) => {
+  try {
+    const response = await authService.myProfile();
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue();
+  }
 });
+
+
+
  
 const initialState = {
     userInfo : {},
@@ -44,7 +52,12 @@ const initialState = {
         state.isLoggedIn = false;
         state.user = null;
       },
-      [logout.fulfilled]: (state, action) => {
+
+      [myProfile.fulfilled]: (state, action) => {
+        state.isLoggedIn = true;
+        state.userInfo = action.payload;
+      },
+      [myProfile.rejected]: (state, action) => {
         state.isLoggedIn = false;
         state.user = null;
       },
