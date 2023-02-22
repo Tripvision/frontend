@@ -13,7 +13,7 @@ const RouteBreadcrumbs = () => {
 
   const breadcrumbs = useBreadcrumbs();
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
