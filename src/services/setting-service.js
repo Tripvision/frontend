@@ -16,8 +16,7 @@ export const getProjectSetting = (id) => {
 // post
 export const createSetting = (setting) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  const {id , state} = setting; 
-  return axios.post(API_BASE_URL + '/projects/' + id + '/setting', state ,{
+  return axios.post(API_BASE_URL + '/v1/projects', setting ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }

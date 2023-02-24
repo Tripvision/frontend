@@ -17,13 +17,14 @@ import { Login, Logout } from '@mui/icons-material';
 
 // login Async
 import { removeToken } from '~features/auth/auth-slice'
+import { isEmptyObj } from '../../utils/object-utils';
 
 
 // OK
 const ProfileBar = () => {
 
     const dispatch = useDispatch();
-    const user = useSelector(state => state.auth);
+    const user = useSelector(state => state.auth.userInfo);
 
     const [open, setOpen] = useState(false);
 
@@ -36,16 +37,15 @@ const ProfileBar = () => {
             <List sx={{ pt: 0 }}>
                 <ListItemButton onClick={handleClick}>
                     {
-                        user.isLoggedIn === true
+                        isEmptyObj(user) === false
                             ?
                             <Box sx={{display : 'flex', alignItems : 'center'}}>
                                 <ListItemAvatar>
-                                    <Avatar alt="Not Found" src={user.userInfo.avatarUrl} />
+                                    <Avatar alt="Not Found" src={user.avatarUrl} />
                                 </ListItemAvatar>
-                                <Typography> {user.userInfo.email} </Typography>
+                                <Typography> {user.email} </Typography>
                             </Box>
                             :
-
                             <ListItemText primary="로그인하세요." />
 
                     }
@@ -55,7 +55,7 @@ const ProfileBar = () => {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {
-                            user.isLoggedIn === true
+                            isEmptyObj(user) === false
                                 ? <ListItemButton onClick={() => { dispatch(removeToken()) }} sx={{ pl: 4 }}>
                                     <ListItemAvatar>
                                         <Login />

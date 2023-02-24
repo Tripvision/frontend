@@ -18,25 +18,27 @@ import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
 
 
+
 // Constants
 import { GOOGLE_AUTH_URL } from '~constants/index';
+import { isEmptyObj } from '../utils/object-utils';
 
 
 const LoginScreen = () => {
   // login
-  const { isLoggedIn } = useSelector((state) => state.auth)
+  const userInfo = useSelector((state) => state.auth.userInfo)
   const navigate = useNavigate();
 
   // submit
 
   // redirect authenticated user to profile screen
   useEffect(() => {
-    if (isLoggedIn) {
+    const isLogin = isEmptyObj(userInfo);
+    console.log(isLogin)
+    if ( isLogin === false ) {
       navigate('/projects/dash-board')
     }
-  }, [navigate, isLoggedIn])
-
-
+  }, [navigate, userInfo])
 
   return (
 

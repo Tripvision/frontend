@@ -15,7 +15,9 @@ export const login = createAsyncThunk('auth/login', async (_, thunkAPI) => {
 
 export const myProfile = createAsyncThunk('auth/login', async (_, thunkAPI) => {
   try {
+    
     const response = await authService.myProfile();
+    console.log(response.data);
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue();
@@ -28,7 +30,7 @@ export const myProfile = createAsyncThunk('auth/login', async (_, thunkAPI) => {
 const initialState = {
     userInfo : {},
     accessToken : null,
-    isLoggedIn : null,
+    isLoggedIn : false,
   }
   
   const authSlice = createSlice({
@@ -40,7 +42,7 @@ const initialState = {
       },
       removeToken : (state, _) => {
         localStorage.removeItem("accessToken");
-        state.isLoggedIn = false;
+        return initialState;
       }
     },
     extraReducers: {

@@ -42,6 +42,7 @@ import MyTotalTasks from '~pages/my-projects/my-total-tasks';
 import MyConnectMembers from '~pages/my-projects/my-connect-members';
 import MyProfile from '~pages/my-projects/my-profile';
 import MyAccount from '~pages/my-projects/my-account';
+import NewMyProjectSettings from '~pages/my-projects/new/new-my-project-setting';
 
 
 const App = () => {
@@ -151,7 +152,7 @@ const App = () => {
               </Route>
 
               {/* 프로젝트 생성하기  (My Project-create) OK */}
-              <Route path="projects/new" element={<MyProjectSettings />} />
+              <Route path="projects/new" element={<NewMyProjectSettings />} />
               {/* 전체 조회  */}
               <Route path="/projects/members" element={<Members />}></Route>
               {/* 단건 조회  */}

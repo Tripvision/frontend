@@ -13,10 +13,10 @@ export default function DatePicker({state, handleChange}) {
       <Stack spacing={3}>
         <DesktopDatePicker
           inputFormat="YYYY/MM/DD"
-          name="dueDate"
-          value={state || 'pick a due date'}
+          name="projectDueDate"
+          value={state.projectDueDate || 'pick a due date'}
           onChange={date => {
-            handleChange({ target: { value: moment(date._d).format('YYYY-MM-DD'), name: 'dueDate' } })}
+            handleChange({ target: { value: moment(date._d).format('YYYY-MM-DD'), name: 'projectDueDate' } })}
           }
           renderInput={(params) => <TextField {...params} />}
         />

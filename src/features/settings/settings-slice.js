@@ -18,7 +18,7 @@ export const fetchSettingsByProjectId = createAsyncThunk(
   }
 );
 
-export const createSettingsByProjectId = createAsyncThunk(
+export const createSettingsByMemberId = createAsyncThunk(
   'settings/create',
   async (setting, thunkAPI) => {
     console.log(setting);
@@ -71,15 +71,15 @@ export const DeleteSettingsByProjectId = createAsyncThunk(
 
 
 const initialState = {
-  setting: {
-    id: undefined,
-    logo: '',
-    name: 'My sample Project',
-    type: 'good man',
-    description: '',
-    dueDate: null,
-    notifications : null,
-    status: false,
+  setting : {
+    projectLogoUrl : "blob:http://localhost:3000/c83ca746-2928-4c73-ac43-68a510efe2f1",
+    projectTitle : "project1 update title",
+    projectName : "project1 update name",
+    projectType : "project1 update type",
+    projectDescription : "project new update description",
+    status : "COMPLETED",
+    projectDueDate : "2023-02-19",
+    projectNotificationType : []
   },
   loading: 'idle',
   currentTeamId: undefined,
@@ -104,11 +104,13 @@ export const settingsSlice = createSlice({
     },
 
 
-    [createSettingsByProjectId.fulfilled]: (state, action) => {
+    [createSettingsByMemberId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      state.projects.push(action.payload)
+      state.setting = {
+        ...action.payload
+      }
     },
-    [createSettingsByProjectId.rejected]: (state, action) => {
+    [createSettingsByMemberId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle'
         state.error = action.error

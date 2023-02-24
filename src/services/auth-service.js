@@ -42,7 +42,7 @@ const login = () => {
 
 const myProfile = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/user/me', { headers: {
+  return axios.get(API_BASE_URL + '/v1/user/me', { headers: {
     'Authorization': `Bearer ${accessToken}`
   } });
 }

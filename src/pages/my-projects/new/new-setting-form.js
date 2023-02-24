@@ -11,41 +11,49 @@ import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { IosSwitch } from '~component/core/ios-switch';
 
-import useForm from './use-form';
-import { validator } from './setting-validator';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { fetchSettingsByProjectId, createSettingsByProjectId, UpdateSettingsByProjectId, createSettingsByMemberId } from '~features/settings/settings-slice';
+import { createSettingsByMemberId } from '~features/settings/settings-slice';
 import { useDispatch, useSelector } from 'react-redux';
-import NotifiType from './NotifiType';
-import DatePicker from './date-picker';
 import { Avatar } from '@mui/material';
+import useForm from '~component/my-project/use-form';
 
-export function SettingForm() {
+
+import NotifiType from '~component/my-project/NotifiType';
+import DatePicker from '../../../component/my-project/date-picker';
+import { validator } from '~component/my-project/setting-validator';
+
+export default function NewSettingForm() {
     const { id } = useParams();
 
-    let navigate = useNavigate();
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const setting = useSelector(state => state.settings.setting);
-
-    useEffect(() => {
-        dispatch(fetchSettingsByProjectId(id));
-    }, [])
+    const setting = {
+        projectLogoUrl: "",
+        projectName: "",
+        projectType: "",
+        status: "",
+        projectDescription: "",
+        projectDueDate: "",
+        projectNotificationType: ""
+    }
 
     const submit = () => {
-        if (id) {
-            dispatch(UpdateSettingsByProjectId({ id, state, checkedItems }));
+        if(state.status === true) {
+            state.status = "YET"
         }
         else {
-            dispatch(createSettingsByMemberId({ id, state, checkedItems }));
+            state.status = "PENDING"
         }
+        const result = {
+            ...state,
+            ['projectNotificationType'] : [...checkedItems]   
+        }
+        dispatch(createSettingsByMemberId(result));
     };
-
-
 
     const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
         state, checkedItems, errors, isSubmited } =
@@ -56,15 +64,14 @@ export function SettingForm() {
             checkBox: true,
         });
 
-    useEffect(() => {
-        console.log(state)
-    })
-
-
     let isValidForm =
         Object.values(errors).filter(error => typeof error !== 'undefined')
             .length === 0;
 
+    // React.useEffect(() => {
+    //     console.log(state);
+    //     console.log(checkedItems);
+    // });
 
 
     return (
@@ -78,23 +85,23 @@ export function SettingForm() {
                             <CardContent>
                                 <Typography> Project Logo </Typography>
                                 <label className="signup-profileImg-label" htmlFor="logo">프로젝트 로고 추가</label>
-                                <Box sx={{ display : 'none' }}>
-                                <TextField
-                                    id='logo'
-                                    name='logo'
-                                    type='file'
-                                    className='image_box'
-                                    accept='image/*'
-                                    inputProps={{ accept: 'image/*' }}
-                                    InputProps={{ disableUnderline: true }}
-                                    hidden
-                                    fullWidth
-                                    // value={state.logo}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    error={errors.logo ? true : false}
-                                    variant='standard'
-                                />
+                                <Box sx={{ display: 'none' }}>
+                                    <TextField
+                                        id='projectLogoUrl'
+                                        name='projectLogoUrl'
+                                        type='file'
+                                        className='image_box'
+                                        accept='image/*'
+                                        inputProps={{ accept: 'image/*' }}
+                                        InputProps={{ disableUnderline: true }}
+                                        hidden
+                                        fullWidth
+                                        // value={state.logo}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        error={errors.logo ? true : false}
+                                        variant='standard'
+                                    />
                                 </Box>
                                 {
                                     state.logo && <Box>
@@ -118,12 +125,13 @@ export function SettingForm() {
                                     required
                                     fullWidth
                                     type='text'
-                                    name='name'
-                                    value={state.name || ''}
+                                    name='projectName'
+                                    id='projectName'
+                                    value={state.projectName || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.name ? true : false}
-                                    helperText={errors.name}
+                                    error={errors.projectName ? true : false}
+                                    helperText={errors.projectName}
                                     variant='standard'
                                     InputProps={{ disableUnderline: true }}
                                 />
@@ -137,12 +145,13 @@ export function SettingForm() {
                                     required
                                     type='text'
                                     fullWidth
-                                    name='type'
-                                    value={state.type || ''}
+                                    name='projectType'
+                                    id='projectType'
+                                    value={state.projectType || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.type ? true : false}
-                                    helperText={errors.type}
+                                    error={errors.projectType ? true : false}
+                                    helperText={errors.projectType}
                                     variant='standard'
                                     margin='dense'
                                     InputProps={{ disableUnderline: true }}
@@ -157,12 +166,13 @@ export function SettingForm() {
                                     required
                                     fullWidth
                                     type='text'
-                                    name='description'
-                                    value={state.description || ''}
+                                    name='projectDescription'
+                                    id='projectDescription'
+                                    value={state.projectDescription || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.description ? true : false}
-                                    helperText={errors.description}
+                                    error={errors.projectDescription ? true : false}
+                                    helperText={errors.projectDescription}
                                     variant='standard'
                                     margin='dense'
                                     InputProps={{ disableUnderline: true }}

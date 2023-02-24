@@ -21,7 +21,7 @@ const useForm = ({ initState, callback, validator, checkBox }) => {
   // ******************************
   const handleChange = e => {
     const { name, value } = e.target;
-    if(name === 'logo') {
+    if(name === 'projectLogoUrl') {
       encodeFileToBase64(e.target)
     }
     // Due Date 세팅하기
