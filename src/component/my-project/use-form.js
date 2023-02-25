@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // ******************************
-const useForm = ({ initState, callback, validator, checkBox }) => {
+const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   const [checkedItems, setCheckedItems] = useState(() => {
     if (checkBox === true) {
       return new Set();
@@ -23,6 +23,7 @@ const useForm = ({ initState, callback, validator, checkBox }) => {
     const { name, value } = e.target;
     if(name === 'projectLogoUrl') {
       encodeFileToBase64(e.target)
+      saveImgFile()
     }
     // Due Date 세팅하기
     setState(() => ({
@@ -39,7 +40,7 @@ const useForm = ({ initState, callback, validator, checkBox }) => {
   const handleStatus = (e) => {
     setState({
       ...state,
-      status : e.target.checked
+      status : e.target.value
     })
   }
 
