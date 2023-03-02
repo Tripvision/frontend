@@ -19,6 +19,7 @@ import TaskCard from '~component/core/task-card'
 import { useDispatch, useSelector } from 'react-redux'
 import taskService from '~services/task-service'
 import { useParams } from 'react-router-dom'
+import { fetchTaskListByProjectId } from '~features/tasks/tasks-slice'
 
 
 export function MyProjectTarget() {
@@ -34,6 +35,7 @@ export function MyProjectTarget() {
 
     useEffect(() => {
         
+        dispatch(fetchTaskListByProjectId(id));
         console.log(yetTaskList);
         console.log(progressTaskList);
         console.log(completedTaskList);
@@ -41,7 +43,7 @@ export function MyProjectTarget() {
 
     return (
         <Container fixed >
-            <Grid container spacing={3}>
+            {/* <Grid container spacing={3}>
                 <Grid item
                     xs={12}
                     sm={6}
@@ -97,7 +99,7 @@ export function MyProjectTarget() {
                         }
                     </Stack>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </Container>
     )
 }

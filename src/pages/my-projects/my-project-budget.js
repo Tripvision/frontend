@@ -29,6 +29,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { fetchBudgetByProjectId, createBudgetByProjectId, UpdateBudgetByProjectId } from '~features/budget/budget-slice';
+import { DeleteBudgetByProjectId } from '../../features/budget/budget-slice';
 
 
 // Refactor : props 전체를 받아오는 행위
@@ -57,27 +58,25 @@ export function TwoLineCard(props) {
 const MyProjectBudget = () => {
 
     const { id } = useParams();
-
     let navigate = useNavigate();
-
     const dispatch = useDispatch();
-
     const budget = useSelector(state => state.budget.budget);
 
     useEffect(() => {
         dispatch(fetchBudgetByProjectId(id));
-    }, [])
+    }, [dispatch])
 
     const submit = () => {
-        if (budget.id) {
-            dispatch(UpdateBudgetByProjectId({ id, state, checkedItems }));
+        const result = {
+            ...state,
+            ['notificationType']: [...checkedItems]
         }
-        else {
-            dispatch(createBudgetByProjectId({ id, state, checkedItems }));
-        }
+        console.log(result);
+        dispatch(UpdateBudgetByProjectId({ id: id, budget: result }));
     };
 
-    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
+
+    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler, handleSwitch,
         state, checkedItems, errors, isSubmited } =
         useForm({
             initState: budget,
@@ -86,14 +85,11 @@ const MyProjectBudget = () => {
             checkBox: true,
         });
 
-    useEffect(() => {
-        const newState = {
-            ...state,
-            ...checkedItems
-        }
-        console.log(newState);
-        console.log(checkedItems)
-    })
+
+    const handleDelete = () => {
+        dispatch(DeleteBudgetByProjectId(id));
+    }
+
 
 
     let isValidForm =
@@ -103,8 +99,6 @@ const MyProjectBudget = () => {
     return (
         <Container>
             <LineProgressBar />
-
-
             <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                 <Stack spacing={4}>
 
@@ -165,9 +159,9 @@ const MyProjectBudget = () => {
                                 required
                                 type='text'
                                 fullWidth
-                                name='manageBudget'
-                                value={state.manageBudget || ''}
-                                onChange={handleChange}
+                                name='max'
+                                value={state.max || ''}
+                                onChange={handleChange} 
                                 onBlur={handleBlur}
                                 error={errors.type ? true : false}
                                 helperText={errors.type}
@@ -196,9 +190,9 @@ const MyProjectBudget = () => {
                         <CardContent>
                             <Typography> Allow Changes </Typography>
                             <IosSwitch
-                                checked={state.status || false}
-                                name='status'
-                                onChange={handleStatus}
+                                checked={state.allow || false}
+                                name='allow'
+                                onChange={handleSwitch}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         </CardContent>
@@ -207,6 +201,16 @@ const MyProjectBudget = () => {
                     <Box
                         sx={{ display: 'flex' }}
                     >
+                        <Box>
+                            <Button
+                                variant='contained'
+                                color='error'
+                                onClick={handleDelete}
+                            >
+                                Delete Project
+                            </Button>
+                        </Box>
+
                         <Box sx={{ marginLeft: 'auto' }}>
                             <Button
                                 sx={{ mr: 3 }}
@@ -231,7 +235,7 @@ const MyProjectBudget = () => {
                 </Stack>
                 <ToastContainer />
             </Box>
-        
+
         </Container>
     );
 };

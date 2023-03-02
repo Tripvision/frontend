@@ -51,9 +51,10 @@ export const fetchTaskByProjectId = createAsyncThunk(
 
 export const createTaskByProjectId = createAsyncThunk(
   'tasks/create',
-  async (_, thunkAPI) => {
+  async (task, thunkAPI) => {
+    const { projectId } = task;
     try {
-      const response = await createTask();
+      const response = await createTask(projectId, task);
       return response.data;
     } catch (err) {
       let error = err;
@@ -100,212 +101,212 @@ export const DeleteTaskByProjectId = createAsyncThunk(
 
 const initialState = {
   entities: [
-    {
-      id: 1,
-      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
-      title: 'good',
-      content: 'dasdasdsadasd',
-      status: 'yet',
-      fileList: [
-        {
-          id: '1',
-          fileName: 'pexels-photo-15579683.jpeg',
-          fileSize: '',
-          fileUploader: '1', // member Id 입니다.
-        },
-        {
-          id: '2',
-          fileName: 'pexels-photo-123132.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '2', // member Id 입니다.
-        },
-        {
-          id: '3',
-          fileName: 'pexels-bike-1222.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '1', // member Id 입니다.
-        },
-      ]
-    },
-    {
-      id: 2,
-      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
-      title: 'good',
-      content: 'dasdasdsadasd',
-      status: 'progress',
-      fileList: [
-        {
-          id: '4',
-          fileName: 'pexels-photo-15579683.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '1', // member Id 입니다.
-        },
-        {
-          id: '5',
-          fileName: 'pexels-photo-123132.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '2', // member Id 입니다.
-        },
-        {
-          id: '6',
-          fileName: 'pexels-bike-1222.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '1', // member Id 입니다.
-        },
-      ]
-    },
-    {
-      id: 3,
-      tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
-      title: 'good',
-      content: 'dasdasdsadasd',
-      status: 'completed',
-      fileList: [
-        {
-          id: '7',
-          fileName: 'pexels-photo-15579683.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '1', // member Id 입니다.
-        },
-        {
-          id: '8',
-          fileName: 'pexels-photo-123132.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '2', // member Id 입니다.
-        },
-        {
-          id: '9',
-          fileName: 'pexels-bike-1222.jpeg',
-          fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
-          fileUploader: '1', // member Id 입니다.
-        },
-      ]
-    },
+    // {
+    //   id: 1,
+    //   tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+    //   title: 'good',
+    //   content: 'dasdasdsadasd',
+    //   status: 'yet',
+    //   fileList: [
+    //     {
+    //       id: '1',
+    //       fileName: 'pexels-photo-15579683.jpeg',
+    //       fileSize: '',
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '2',
+    //       fileName: 'pexels-photo-123132.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '2', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '3',
+    //       fileName: 'pexels-bike-1222.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //   ]
+    // },
+    // {
+    //   id: 2,
+    //   tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+    //   title: 'good',
+    //   content: 'dasdasdsadasd',
+    //   status: 'progress',
+    //   fileList: [
+    //     {
+    //       id: '4',
+    //       fileName: 'pexels-photo-15579683.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '5',
+    //       fileName: 'pexels-photo-123132.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '2', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '6',
+    //       fileName: 'pexels-bike-1222.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //   ]
+    // },
+    // {
+    //   id: 3,
+    //   tags: 'UI Design', // 태그는 자유롭게 만들 수 있습니다.
+    //   title: 'good',
+    //   content: 'dasdasdsadasd',
+    //   status: 'completed',
+    //   fileList: [
+    //     {
+    //       id: '7',
+    //       fileName: 'pexels-photo-15579683.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '8',
+    //       fileName: 'pexels-photo-123132.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '2', // member Id 입니다.
+    //     },
+    //     {
+    //       id: '9',
+    //       fileName: 'pexels-bike-1222.jpeg',
+    //       fileSize: '', // 올리고 계산이 되는 건지 계산을 해야하는건지 찾아보겠습니다.
+    //       fileUploader: '1', // member Id 입니다.
+    //     },
+    //   ]
+    // },
   ],
   statusList: {
-    yet: [
-      {
-        id: '1',
-        name: '',
-        title: 'Yet Task1',
-        content: 'asdasdasd',
-        status: 'yet',
-        dueDate: 'Due Date: Jun 20, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '75%',
-        tags : 'UI Design',
-      },
-      {
-        id: '2',
-        name: '',
-        title: 'Yet Task2',
-        content: 'asdasds',
-        status: 'yet',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '100%',
-        tags : 'Development',
-      },
-      {
-        id: '3',
-        name: '',
-        title: 'Yet Task3',
-        content: '123123123',
-        status: 'yet',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '45%',
-        tags : 'Testing',
-      },
-    ],
-    progress: [
-      {
-        id: '1',
-        name: '',
-        title: 'Progoress Task1',
-        content: 'asdasdasd',
-        status: 'progress',
-        dueDate: 'Due Date: Jun 20, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '100%',
-        tags : 'Testing',
-      },
-      {
-        id: '2',
-        name: '',
-        title: 'Progoress Task2',
-        content: 'asdasds',
-        status: 'progress',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '100%',
-        tags : 'QA',
-      },
-      {
-        id: '3',
-        name: '',
-        title: 'Progoress Task3',
-        content: '123123123',
-        status: 'progress',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '36%',
-        tags : 'Phase 2.6 QA',
-      },
-    ],
-    completed: [
-      {
-        id: '1',
-        name: 'a1s2',
-        title: 'Coffee detail page - Main Page',
-        content: 'asdasdasd',
-        status: 'completed',
-        dueDate: 'Due Date: Jun 20, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '38%',
-        tags : 'Phase 2.6 QA',
-      },
-      {
-        id: '2',
-        name: '',
-        title: 'Poster illustation design',
-        content: 'asdasds',
-        status: 'completed',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '78%',
-        tags : 'UI Design',
-      },
-      {
-        id: '3',
-        name: '',
-        title: 'Poster illustation design',
-        content: '123123123',
-        status: 'completed',
-        dueDate: 'Due Date: Nov 10, 2022',
-        logoUrl: '',
-        type: '',
-        description: '',
-        completePercent: '18%',
-        tags : 'UI Design',
-      },
-    ],
+    // yet: [
+    //   {
+    //     id: '1',
+    //     name: '',
+    //     title: 'Yet Task1',
+    //     content: 'asdasdasd',
+    //     status: 'yet',
+    //     dueDate: 'Due Date: Jun 20, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '75%',
+    //     tags : 'UI Design',
+    //   },
+    //   {
+    //     id: '2',
+    //     name: '',
+    //     title: 'Yet Task2',
+    //     content: 'asdasds',
+    //     status: 'yet',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '100%',
+    //     tags : 'Development',
+    //   },
+    //   {
+    //     id: '3',
+    //     name: '',
+    //     title: 'Yet Task3',
+    //     content: '123123123',
+    //     status: 'yet',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '45%',
+    //     tags : 'Testing',
+    //   },
+    // ],
+    // progress: [
+    //   {
+    //     id: '1',
+    //     name: '',
+    //     title: 'Progoress Task1',
+    //     content: 'asdasdasd',
+    //     status: 'progress',
+    //     dueDate: 'Due Date: Jun 20, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '100%',
+    //     tags : 'Testing',
+    //   },
+    //   {
+    //     id: '2',
+    //     name: '',
+    //     title: 'Progoress Task2',
+    //     content: 'asdasds',
+    //     status: 'progress',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '100%',
+    //     tags : 'QA',
+    //   },
+    //   {
+    //     id: '3',
+    //     name: '',
+    //     title: 'Progoress Task3',
+    //     content: '123123123',
+    //     status: 'progress',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '36%',
+    //     tags : 'Phase 2.6 QA',
+    //   },
+    // ],
+    // completed: [
+    //   {
+    //     id: '1',
+    //     name: 'a1s2',
+    //     title: 'Coffee detail page - Main Page',
+    //     content: 'asdasdasd',
+    //     status: 'completed',
+    //     dueDate: 'Due Date: Jun 20, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '38%',
+    //     tags : 'Phase 2.6 QA',
+    //   },
+    //   {
+    //     id: '2',
+    //     name: '',
+    //     title: 'Poster illustation design',
+    //     content: 'asdasds',
+    //     status: 'completed',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '78%',
+    //     tags : 'UI Design',
+    //   },
+    //   {
+    //     id: '3',
+    //     name: '',
+    //     title: 'Poster illustation design',
+    //     content: '123123123',
+    //     status: 'completed',
+    //     dueDate: 'Due Date: Nov 10, 2022',
+    //     logoUrl: '',
+    //     type: '',
+    //     description: '',
+    //     completePercent: '18%',
+    //     tags : 'UI Design',
+    //   },
+    // ],
   },
   loading: 'idle',
   error: null,
@@ -320,7 +321,7 @@ export const tasksSlice = createSlice({
 
     [fetchTaskListByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      state.entities.push(action.payload)
+      state.entities = action.payload
     },
 
     [fetchTaskListByProjectId.rejected]: (state, action) => {
@@ -359,7 +360,7 @@ export const tasksSlice = createSlice({
     // 여기는 수정해야 합니다.
     [createTaskByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      state.projects.push(action.payload)
+      state.entities.push(action.payload);
     },
     [createTaskByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {

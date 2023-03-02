@@ -7,7 +7,13 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
       return new Set();
     }
   });
-  const [state, setState] = useState(initState);
+  useEffect(() => {
+    setState({
+      ...initState
+    })
+  },[initState]);
+
+  const [state, setState] = useState({...initState});
   const [errors, setErrors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
 
@@ -41,6 +47,13 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     setState({
       ...state,
       status : e.target.value
+    })
+  }
+
+  const handleSwitch = (e) => {
+    setState({
+      ...state,
+      [e.target.name] : e.target.checked
     })
   }
 
@@ -102,6 +115,7 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     handleClear,
     handleStatus,
     handleCheckedItemHandler,
+    handleSwitch,
     state,
     checkedItems,
     errors,

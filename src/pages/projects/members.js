@@ -10,9 +10,11 @@ import {
     GridToolbarFilterButton,
     GridToolbarDensitySelector,
     GridToolbarExport,
-    GridToolbarContainerProps
+    GridToolbarContainerProps,
+    GridCellEditStopReasons
 
 } from '@mui/x-data-grid';
+import Button from '@mui/material/Button';
 
 
 // Material ui 
@@ -23,16 +25,21 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjectMembers } from '~features/project-members/project-members-slice';
+import { fetchProjectMembersThunk, deleteProjectMemberThunk, InviteProjectMemberThunk, updateProjectMemberThunk } from '~features/project-members/project-members-slice';
+import { useParams } from 'react-router-dom';
+import { isEmptyArr, isEmptyObj } from '../../utils/object-utils';
+import { DeleteTeamByProjectId, UpdateTeamByProjectId } from '~features/team/team-slice';
 
 
 // Refactor : Avatar 정보 Redux 에서 가져오기 memberRows
 const RenderAvatar = (props) => {
     const { hasFocus, value } = props;
     return (
-        <Avatar src={`/avatar/${value}.svg`} variant="rounded" alt="Not Found" />
+        <Avatar src={value} variant="rounded" alt="Not Found" />
     )
 }
+
+
 
 function renderCellExpand(params) {
     return (
@@ -137,71 +144,153 @@ const GridCellExpand = React.memo(function GridCellExpand(props) {
 });
 
 
-const memberColumn = [
-    { field: 'id', hide: true },
-    {
-        field: 'avatar',
-        headerName: 'Avatar',
-        width: 80,
-        sortable: false,
-        renderCell: RenderAvatar,
-    },
-    { field: 'name', headerName: 'Name', renderCell: renderCellExpand },
-    // 콘텐츠의 길이가 긴 경우 Exapnd 
-    {
-        field: 'address', headerName: 'Address',
-        width: 100,
-        renderCell: renderCellExpand,
-    },
-    { field: 'email', headerName: 'Email', flex: 1, renderCell: renderCellExpand, },
-    {
-        field: 'isAdmin',
-        headerName: 'IsAdmin',
-        type: 'boolean',
-    },
-    { field: 'phone', headerName: 'Phone', renderCell: renderCellExpand },
-    {
-        field: 'lastUpdated',
-        headerName: 'Update On',
-        type: 'dateTime',
-        width: 120,
-        flex: 1,
-        valueGetter: ({ value }) => value && new Date(value),
-    },
-];
-
 
 
 
 const Members = () => {
 
     const dispatch = useDispatch();
-    const projectMemberList = useSelector(state => state.projectMember.entities);
+    const { id } = useParams();
+    const entities = useSelector(state => state.projectMember.entities.content);
+    const [selectionModel, setSelectionModel] = React.useState({
+        projectId: id
+
+    });
+    const [value, setValue] = React.useState({});
+    const handleProcessRowUpdate = (newRow, oldRow) => {
+        setSelectionModel({
+            ...selectionModel,
+            ['0']: {
+                ...selectionModel['0'],
+                ...newRow
+            }
+        })
+        return newRow;
+    };
+
+
+    const onRowsSelectionHandler = (ids) => {
+        const selectedRowsData = ids.map((id) => entities.find((row) => row.memberId === id));
+        const newRows = selectedRowsData.slice(0, 1)
+
+        setSelectionModel({
+            ...selectionModel,
+            ...newRows,
+        })
+    };
+
+    useEffect(() => {
+        dispatch(fetchProjectMembersThunk(id));
+    }, [dispatch])
 
     React.useEffect(() => {
-        //dispatch(fetchProjectMembers(1));
-        console.log(projectMemberList)
-    },[]);
+        // console.log(selectionModel);
+    })
+
+    const handleUpdate = () => {
+        dispatch(updateProjectMemberThunk(
+            selectionModel
+            // projectId: selectionModel.projectId, member: selectionModel['0']
+        ))  
+    }
+
+
+    const RenderUpdateButton = (props) => {
+        const { hasFocus, value, field } = props;
+        console.log(selectionModel);
+        return (
+            <Button color="primary"
+                variant="rounded"
+                alt="Not Found"
+                onClick={handleUpdate}
+            >{field}</Button>
+        )
+    }
+
+    const RenderDeleteButton = (props, id) => {
+        const { hasFocus, value, field } = props;
+        return (
+            <Button color="primary"
+                variant="rounded"
+                alt="Not Found"
+                onClick={() => { dispatch(deleteProjectMemberThunk({ projectId: selectionModel.projectId, memberId: selectionModel['0'].memberId })) }}
+            >{field}</Button>
+        )
+    }
+
+
+    const memberColumn = React.useMemo(() => {
+        return [
+            { field: 'memberId', hide: true },
+            {
+                field: 'memberAvatarUrl',
+                headerName: 'Avatar',
+                width: 80,
+                sortable: false,
+                renderCell: RenderAvatar,
+            },
+            { field: 'memberName', headerName: '이름', renderCell: renderCellExpand, flex: 1, maxWidth: 120, },
+            { field: 'memberEmail', headerName: '이메일', renderCell: renderCellExpand, flex: 1, maxWidth: 200, },
+            { field: 'memberProjectRole', headerName: '권한', renderCell: renderCellExpand, width: 120, editable: true },
+            { field: 'memberStandardPosition', headerName: '선호포지션', renderCell: renderCellExpand, flex: 1, editable: true },
+            {
+                field: '수정',
+                headerName: '',
+                width: 80,
+                renderCell: RenderUpdateButton
+            },
+            {
+                field: '삭제',
+                headerName: '',
+                width: 80,
+                renderCell: RenderDeleteButton
+            },
+            // {
+            //     field: 'memberRegistrationDate',
+            //     headerName: 'Update On',
+            //     // type: 'dateTime',
+            //     width: 120,
+            //     flex: 1,
+            //     valueGetter: ({ value }) => value && new Date(value),
+            // },
+        ];
+
+    }, []);
 
     return (
-        <div style={{ height: 700, width: '100%' }}>
-            <DataGrid
-                checkboxSelection
-                components={{
-                    NoRowsOverlay: CustomNoRowsOverlay,
-                    Toolbar: GridToolbar,
-                }}
-                columns={memberColumn}
-                rows={projectMemberList}
-                componentsProps={{
-                    toolbar: {
-                        showQuickFilter: true,
-                        quickFilterProps: { debounceMs: 500 },
-                    },
-                }}
+        <>
+            {
+                isEmptyArr(entities) === false ?
+                    <div style={{ height: 700, width: '100%' }}>
+                        <DataGrid
+                            components={{
+                                NoRowsOverlay: CustomNoRowsOverlay,
+                                Toolbar: GridToolbar,
+                            }}
+                            columns={memberColumn}
+                            rows={entities || []}
+                            getRowId={(row) => row.memberId}
 
-            />
-        </div>
+                            componentsProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: { debounceMs: 500 },
+                                },
+                            }}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                            experimentalFeatures={{ newEditingApi: true }}
+                            onCellEditStop={(params, event) => {
+                                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                                    event.defaultMuiPrevented = true;
+                                }
+                            }}
+                            processRowUpdate={handleProcessRowUpdate}
+                        />
+                    </div>
+                    : <div>1</div>
+            }
+        </>
     );
 };
 export default Members;
@@ -209,7 +298,7 @@ export default Members;
 
 // 툴바 커스텀 
 
-export const GridCustomToolbar = (props, ref) => {
+const GridCustomToolbar = (props, ref) => {
     const { className, ...other } = props;
     const rootProps = useGridRootProps();
 
@@ -217,10 +306,10 @@ export const GridCustomToolbar = (props, ref) => {
         <Box>
             <GridToolbarContainer ref={ref} {...other}>
                 <GridToolbarColumnsButton startIcon={<img alt='Not Found' src='/data-grid/add.svg' />} />
-                <GridToolbarFilterButton startIcon={<img  alt='Not Found' src='/data-grid/filter.svg'/>}/>
-                <GridToolbarDensitySelector startIcon={<img  alt='Not Found' src='/data-grid/hamburger.svg'/>} />
-                <GridToolbarExport startIcon={<img  alt='Not Found' src='/data-grid/simCard.svg'/>}  />
-                <showQuickFilter/>
+                <GridToolbarFilterButton startIcon={<img alt='Not Found' src='/data-grid/filter.svg' />} />
+                <GridToolbarDensitySelector startIcon={<img alt='Not Found' src='/data-grid/hamburger.svg' />} />
+                <GridToolbarExport startIcon={<img alt='Not Found' src='/data-grid/simCard.svg' />} />
+                <showQuickFilter />
             </GridToolbarContainer>
         </Box>
     );

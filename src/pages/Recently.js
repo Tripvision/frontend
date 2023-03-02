@@ -1,23 +1,42 @@
-import React, { useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom'
+import React, { useState, useMemo } from 'react';
 import { useEffect } from 'react'
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
+import { getLastPath, findIndex } from '~utils/object-utils';
 
 export const Recently = (props) => {
     const [preves, setPreves] = useState([]);
     const { children, value, index, prev, ...other } = props;
+    const label = useMemo(() => {
+        
+        return ['overview', 'tasks', 'budgets', 'members', 'files', 'activities', 'settings'];
+    },[]);
+
 
     useEffect(() => {
-        if(preves.length >= 4) {
-            let temp = preves.concat(prev);
-            temp.shift();
-            setPreves(temp);
+        let history = {
+            path: null,
+            lastString: null,
+        }
+        if (typeof prev === 'string') {
+            history.path = prev;
+            const findWord = getLastPath("/", prev);
+            const index = findIndex(label, findWord);
+            history.lastString = index;
+            if (preves.length >= 4) {
+                let temp = preves.concat(history);
+                temp.shift();
+                setPreves(temp);
+            }
+            else {
+                setPreves(
+                    preves.concat(history)
+                );
+            }
         }
         else {
-            setPreves(preves.concat(prev));
         }
-    }, [props.prev]);
+    }, [props.prev, label]);
 
     return (
         <div
@@ -31,7 +50,7 @@ export const Recently = (props) => {
                 <Box sx={{ p: 3 }}>
                     <Box>
                         {
-                            preves.map(prev => (<Box sx={{ display: 'flex' }}> <Link to={`${prev}`}>{prev}</Link> </Box>))
+                            preves.map((prev, index) => (<Box key={index} sx={{ display: 'flex' }}> <Link to={`${prev.path}`} state={{ index: prev.lastString }}  >{prev.path}</Link> </Box>))
                         }
                     </Box>
                 </Box>

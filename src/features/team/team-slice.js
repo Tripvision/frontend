@@ -85,10 +85,10 @@ export const UpdateTeamByProjectId = createAsyncThunk(
 
 export const DeleteTeamByProjectId = createAsyncThunk(
   'team/delete',
-  async (id, thunkAPI) => {
+  async (memberId, thunkAPI) => {
     try {
-      const response = await teamService.deleteTeam();
-      return id; 
+      const response = await teamService.deleteTeam(memberId);
+      return response.data; 
     } catch(err){
       let error = err;
       if(!error.response){

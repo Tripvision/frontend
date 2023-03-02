@@ -8,7 +8,10 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
-
+import { API_BASE_URL } from '~constants/index.js';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { InviteProjectMemberThunk } from '~features/project-members/project-members-slice';
 
 const style = {
   position: 'absolute',
@@ -26,10 +29,11 @@ const style = {
 
 export default function UserSearch() {
 
-
+  const { id } = useParams();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
 
   const [value, setValue] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
@@ -38,7 +42,7 @@ export default function UserSearch() {
   const getComments = async (request, callback) => {
     try {
       const response = await axios.get(
-        'https://jsonplaceholder.typicode.com/comments?postId=' + request
+        API_BASE_URL + "/v1/members/" + request
       );
       // return response.data;
       callback(response.data);
@@ -48,7 +52,7 @@ export default function UserSearch() {
   };
   
   const handleSubmit = e => {
-    console.log(value);
+    dispatch(InviteProjectMemberThunk([{ projectId : id,  memberEmail : value}]))
   }
 
   const fetch = React.useMemo(
@@ -78,7 +82,6 @@ export default function UserSearch() {
         setOptions(newOptions);
       }
     });
-
     return () => {
       active = false;
     };
@@ -104,7 +107,7 @@ export default function UserSearch() {
             options={options}
             value={value}
             getOptionLabel={option =>
-              typeof option === 'string' ? option : option.name
+              typeof option === 'string' ? option : option
             }
             filterOptions={x => x}
             onChange={(event, newValue) => {
@@ -114,11 +117,13 @@ export default function UserSearch() {
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);
             }}
+            // input 박스 헬퍼 텍스트 입니다.
             renderInput={params => (
-              <TextField {...params} label='Comments of Post' fullWidth />
+              <TextField {...params} label='Search User By Email' fullWidth />
             )}
             //옵션 렌더링 될 때 보여질 박스 입니다.
             renderOption={(props, option) => {
+              console.log(option);
               return (
                 <li {...props}>
                   <Grid container alignItems='center'>
@@ -127,7 +132,7 @@ export default function UserSearch() {
                       sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}
                     >
                       <Typography variant='body2' color='text.secondary'>
-                        {option.email}
+                        {option}
                       </Typography>
                     </Grid>
                   </Grid>

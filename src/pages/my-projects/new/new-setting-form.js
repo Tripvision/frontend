@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -24,30 +24,33 @@ import useForm from '~component/my-project/use-form';
 import NotifiType from '~component/my-project/NotifiType';
 import DatePicker from '../../../component/my-project/date-picker';
 import { validator } from '~component/my-project/setting-validator';
+import StatusRadio from '../../../component/project/status-radio';
 
 export default function NewSettingForm() {
-    const { id } = useParams();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const setting = {
-        projectLogoUrl: "",
-        projectName: "",
-        projectType: "",
-        status: "",
-        projectDescription: "",
-        projectDueDate: "",
-        projectNotificationType: ""
-    }
+    const setting = useMemo(() => {
+        return {
+            projectLogoUrl: "",
+            projectName: "",
+            projectType: "",
+            status: "",
+            projectDescription: "",
+            projectDueDate: "",
+            projectNotificationType: ""
+        }
+    },[])
+    
+
+    const saveImgFile = () => {
+        const file = imgRef.current.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+    };
 
     const submit = () => {
-        if(state.status === true) {
-            state.status = "YET"
-        }
-        else {
-            state.status = "PENDING"
-        }
         const result = {
             ...state,
             ['projectNotificationType'] : [...checkedItems]   
@@ -62,16 +65,17 @@ export default function NewSettingForm() {
             callback: submit,
             validator,
             checkBox: true,
+            saveImgFile : saveImgFile
         });
 
     let isValidForm =
         Object.values(errors).filter(error => typeof error !== 'undefined')
             .length === 0;
 
-    // React.useEffect(() => {
-    //     console.log(state);
-    //     console.log(checkedItems);
-    // });
+
+    const imgRef = useRef();
+
+    // 이미지 업로드 input의 onChange
 
 
     return (
@@ -84,7 +88,10 @@ export default function NewSettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Project Logo </Typography>
-                                <label className="signup-profileImg-label" htmlFor="logo">프로젝트 로고 추가</label>
+                                <Avatar sx={{ width : '150px', height : '100px' }} src={state.projectLogoUrl ? state.projectLogoUrl : `/images/icon/user.png`}
+                                    alt="projectLogoUrl"
+                                />
+                                <label className="signup-profileImg-label" htmlFor="projectLogoUrl">프로젝트 로고 추가</label>
                                 <Box sx={{ display: 'none' }}>
                                     <TextField
                                         id='projectLogoUrl'
@@ -101,6 +108,7 @@ export default function NewSettingForm() {
                                         onBlur={handleBlur}
                                         error={errors.logo ? true : false}
                                         variant='standard'
+                                        ref={imgRef}
                                     />
                                 </Box>
                                 {
@@ -113,7 +121,6 @@ export default function NewSettingForm() {
                                         />
                                     </Box>
                                 }
-
                                 <Typography> Allow Types : png, jpg, jpeg. </Typography>
                             </CardContent>
                         </Card>
@@ -200,11 +207,10 @@ export default function NewSettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Status </Typography>
-                                <IosSwitch
-                                    checked={state.status || false}
+                                <StatusRadio
+                                    status={state.status || 'YET'}
                                     name='status'
-                                    onChange={handleStatus}
-                                    inputProps={{ 'aria-label': 'controlled' }}
+                                    handleStatus={handleStatus}
                                 />
                             </CardContent>
                         </Card>

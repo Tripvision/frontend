@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 // Material ui 
 import Box from '@mui/material/Box';
@@ -19,40 +19,35 @@ function a11yProps(index) {
     };
 }
 
-
 export function BasicCard() {
     const location = useLocation();
-    const { id } = useParams();
     const navigate = useNavigate();
     const [value, setValue] = useState(0);
-    const [activateTab, setActivateTab] = useState(false);
-    const label = ['Overview', 'Tasks', 'Budgets', 'Members', 'Files', 'Activities', 'Settings'];
+    const label = React.useMemo(() => {
+        return ['Overview', 'Tasks', 'Budgets', 'Members', 'Files', 'Activities', 'Settings'];
+    }, []);
 
     const [open, setOpen] = useState(false);
-    
+
     const handleOpen = () => {
         setOpen(true);
     }
 
-    setTimeout(() => {
-        setActivateTab(true)
-    }, 100)
+    useEffect(() => {
+        setValue(location.state.index);
+    }, [location])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-    React.useEffect(() => {
-        console.log(id);
-    },[useParams]);
-
+    
     return (
         <Box
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                paddingLeft : '24px',
+                paddingLeft: '24px',
             }}
             mb={3}
         >
@@ -63,16 +58,20 @@ export function BasicCard() {
                 aria-label='basic tabs example'
                 indicatorColor='secondary'
                 textColor='secondary'
+                variant="scrollable"
+                scrollButtons="auto"
             >
                 {
                     label.map((item, index) => (
                         <Tab key={index} label={label[index]}  {...a11yProps(index)}
-                            onClick={() => { navigate(label[index].toLowerCase()) }}
+                            onClick={() => {
+                                navigate(label[index].toLowerCase(),{ state : {index} })
+                            }}
                         />
                     ))
                 }
+
             </Tabs>
-            {/* 하이드 처리 해야합니다. */}
             <Box sx={{ marginLeft: 'auto', display: 'flex' }}>
                 <Button onClick={handleOpen} variant='text'>
                     Add Task
@@ -82,9 +81,9 @@ export function BasicCard() {
                     Add Project
                 </Button>
                 <NewModal
-                    open={open} 
+                    open={open}
                     setOpen={setOpen}
-                    sx={{display : 'none'}}
+                    sx={{ display: 'none' }}
                 />
 
             </Box>
@@ -101,3 +100,5 @@ export default function VisualTab() {
         </div>
     );
 }
+
+

@@ -21,7 +21,7 @@ export const fetchBudgetByProjectId = createAsyncThunk(
   'budget/fetch',
   async (id, thunkAPI) => {
     try {
-      const response = await budgetService.getProjectBudget();
+      const response = await budgetService.getProjectBudget(id);
       return response.data;  
     } catch(err){
       let error = err;
@@ -52,9 +52,9 @@ export const createBudgetByProjectId = createAsyncThunk(
 
 export const UpdateBudgetByProjectId = createAsyncThunk(
   'budget/update',
-  async (id, thunkAPI) => {
+  async (request, thunkAPI) => {
     try {
-      const response = await budgetService.updateProjectBudget();
+      const response = await budgetService.updateProjectBudget(request);
       return response.data;  
     } catch(err){
       let error = err;
@@ -70,8 +70,8 @@ export const DeleteBudgetByProjectId = createAsyncThunk(
   'budget/delete',
   async (id, thunkAPI) => {
     try {
-      const response = await budgetService.deleteProjectBudget();
-      return id; 
+      const response = await budgetService.deleteProjectBudget(id);
+      return response.data; 
     } catch(err){
       let error = err;
       if(!error.response){
@@ -84,14 +84,7 @@ export const DeleteBudgetByProjectId = createAsyncThunk(
 
 
 const initialState = {
-  budget: {
-    id: undefined,
-    usageCharacter : '',
-    notes: '',
-    manageBudget: 'My sample Project',
-    overuseNotifications: null,
-    status: false,
-  },
+  budget: {},
   loading: 'idle',
   currentTeamId: undefined,
   error: null,
@@ -104,7 +97,7 @@ export const budgetSlice = createSlice({
   extraReducers: {
     [fetchBudgetByProjectId.fulfilled] : (state, action) => {
       state.loading = 'idle'
-      state.entities.push(action.payload)
+      state.budget = action.payload
     },
     [fetchBudgetByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -137,7 +130,7 @@ export const budgetSlice = createSlice({
 
     [UpdateBudgetByProjectId.fulfilled] : (state, action) => {
       state.loading = 'idle'
-      state.entities.push(action.payload)
+      state.budget = action.payload
     },
     [UpdateBudgetByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -148,7 +141,7 @@ export const budgetSlice = createSlice({
 
     [DeleteBudgetByProjectId.fulfilled] : (state, action) => {
       state.loading = 'idle'
-      state.entities.push(action.payload)
+      return initialState;
     },
     [DeleteBudgetByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {

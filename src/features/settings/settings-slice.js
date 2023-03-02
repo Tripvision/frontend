@@ -3,7 +3,7 @@ import { getProjectSetting, createSetting, updateSetting, deleteSetting } from '
 
 
 export const fetchSettingsByProjectId = createAsyncThunk(
-  'settings/fetch',
+  'project/setting/fetch',
   async (id, thunkAPI) => {
     try {
       const response = await getProjectSetting(id);
@@ -19,9 +19,8 @@ export const fetchSettingsByProjectId = createAsyncThunk(
 );
 
 export const createSettingsByMemberId = createAsyncThunk(
-  'settings/create',
+  'project/setting/create',
   async (setting, thunkAPI) => {
-    console.log(setting);
     try {
       const response = await (createSetting(setting));
       return response.data;
@@ -37,11 +36,10 @@ export const createSettingsByMemberId = createAsyncThunk(
 
 
 export const UpdateSettingsByProjectId = createAsyncThunk(
-  'settings/update',
-  async (setting, thunkAPI) => {
-    console.log(setting);
+  'project/setting/update',
+  async ( request , thunkAPI) => {
     try {
-      const response = await (updateSetting(setting));
+      const response = await (updateSetting(request));
       return response.data;
     } catch (err) {
       let error = err;
@@ -54,7 +52,7 @@ export const UpdateSettingsByProjectId = createAsyncThunk(
 );
 
 export const DeleteSettingsByProjectId = createAsyncThunk(
-  'settings/delete',
+  'project/setting/delete',
   async (id, thunkAPI) => {
     try {
       const response = await (deleteSetting(id));
@@ -72,14 +70,7 @@ export const DeleteSettingsByProjectId = createAsyncThunk(
 
 const initialState = {
   setting : {
-    projectLogoUrl : "blob:http://localhost:3000/c83ca746-2928-4c73-ac43-68a510efe2f1",
-    projectTitle : "project1 update title",
-    projectName : "project1 update name",
-    projectType : "project1 update type",
-    projectDescription : "project new update description",
-    status : "COMPLETED",
-    projectDueDate : "2023-02-19",
-    projectNotificationType : []
+
   },
   loading: 'idle',
   currentTeamId: undefined,
@@ -94,7 +85,7 @@ export const settingsSlice = createSlice({
 
     [fetchSettingsByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      state.projects.push(action.payload)
+      state.setting = action.payload
     },
     [fetchSettingsByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -103,12 +94,9 @@ export const settingsSlice = createSlice({
       }
     },
 
-
     [createSettingsByMemberId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      state.setting = {
-        ...action.payload
-      }
+      state.setting = action.payload
     },
     [createSettingsByMemberId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -120,9 +108,7 @@ export const settingsSlice = createSlice({
 
     [UpdateSettingsByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      const newProject = action.payload;
-      return state.project.map((item) => item.id === action.payload.id ?
-        { ...item, newProject } : item)
+      state.setting = action.payload
     },
     [UpdateSettingsByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -134,7 +120,7 @@ export const settingsSlice = createSlice({
 
     [DeleteSettingsByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      return state.project.filter((project) => project.id !== action.payload);
+      return initialState;
     },
     [DeleteSettingsByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {

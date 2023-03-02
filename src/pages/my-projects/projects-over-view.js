@@ -15,37 +15,50 @@ import Stack from '@mui/material/Stack';
 
 // Redux toolkit 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjectByUserId, fetchMyCurrentProject, fetchMyProjectFinanceTotal, fetchMyProjectOurClient } from '~features/projects/projects-slice';
-
-
-const titleData =
-{
-    title: 'Our Clients',
-    icon: '',
-    result: '49',
-}
+import { fetchProjectListByUserId, fetchMyProjectSituation } from '~features/projects/projects-slice';
 
 
 const TitleCard = (props) => {
 
     const { data } = props
 
+
     return (
         <div>
+            {
+                data[1] === null ?
 
-            <Card>
-                <CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography sx={{ mb: 1.5 }} variant='body2'>
-                            {data.title}
-                        </Typography>
-                        <img alt='' src='/card/Folder.svg' width={24} height={24} />
-                    </Box>
-                    <Typography variant='h5'>
-                        {data.result}
-                    </Typography>
-                </CardContent>
-            </Card>
+                    <>
+                        <Card>
+                            <CardContent>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography sx={{ mb: 1.5 }} variant='body2'>
+                                        {data[0]}
+                                    </Typography>
+                                    <img alt='' src='/card/Folder.svg' width={24} height={24} />
+                                </Box>
+                                <Typography variant='h5'>
+                                    아직 없는 값입니다.
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </> :
+
+                    <Card>
+                        <CardContent>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography sx={{ mb: 1.5 }} variant='body2'>
+                                    {data[0]}
+                                </Typography>
+                                <img alt='' src='/card/Folder.svg' width={24} height={24} />
+                            </Box>
+                            <Typography variant='h5'>
+                                {data[1]}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+            }
+
 
         </div>
     )
@@ -58,11 +71,12 @@ const BasicCard = (props) => {
 
     // 컬러별로 찾기
     const { data } = props;
+    const memberList = data.memberList;
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/projects/1/overview')
+        navigate('/projects/' + data.projectId + '/overview', { state: { index: 0 } })
     }
 
     return (
@@ -72,10 +86,10 @@ const BasicCard = (props) => {
                     <Box sx={{ display: 'flex' }}>
                         <Box>
                             <Typography variant='body1' sx={{ maxWidth: '170px' }} noWrap={true} color={data.textColor} >
-                                Poster illustation design
+                                {data.projectName}
                             </Typography>
                             <Typography variant='body2' noWrap={true}  >
-                                Due Date : Nov 10, 2022
+                                Due Date : {data.projectDueDate}
                             </Typography>
                         </Box>
                         <Avatar sx={{ width: 56, height: 56, marginLeft: 'auto' }} src='https://images.pexels.com/photos/430205/pexels-photo-430205.jpeg?auto=compress&cs=tinysrgb&w=800' />
@@ -83,7 +97,14 @@ const BasicCard = (props) => {
 
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Avatar sx={{ width: 25, height: 25 }} src='https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' />
+                        {
+                            memberList.map(member => (
+                                <>
+                                    <Avatar sx={{ width: 25, height: 25 }} src={member.memberAvatarUrl} />
+                                </>
+                            ))
+                        }
+
                         <Typography variant='body2' color={data.textColor}>{data.state}</Typography>
                     </Box>
 
@@ -92,8 +113,8 @@ const BasicCard = (props) => {
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant='body2'>13 / 49 Total Tasks</Typography>
-                        <Typography variant='body2'>75% </Typography>
+                        <Typography variant='body2'>{data.completeTaskCount} / {data.totalTaskCount} Total Tasks</Typography>
+                        <Typography variant='body2'>{data.taskPercent} </Typography>
                     </Box>
 
                 </CardContent>
@@ -126,37 +147,34 @@ const ProjectsOverView = () => {
     const metaData = useSelector(state => state.projects.meta)
 
     useEffect(() => {
-        dispatch(fetchProjectByUserId());
+        dispatch(fetchProjectListByUserId());
+        dispatch(fetchMyProjectSituation());
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(fetchMyCurrentProject());
-    }, [dispatch]);
+    React.useEffect(() => {
+        console.log(projectList);
+        console.log(metaData);
+    })
 
-    useEffect(() => {
-        dispatch(fetchMyProjectFinanceTotal());
-    }, [dispatch]);
-
-    useEffect(() => {
-        dispatch(fetchMyProjectOurClient());
-    }, [dispatch]);
 
     return (
         <div>
             <Grid container spacing={3} mt={3}>
-                {
-                    metaData.map(met => (
+
+                {Object.entries(metaData).map((value, index) => {
+                    return (
                         <Grid item
                             xs={12}
                             sm={6}
                             md={4}
                             lg={4}
                             xl={4}
+                            key={index}
                         >
-                            <TitleCard data={met} />
+                            <TitleCard data={value} />
                         </Grid>
-                    ))
-                }
+                    );
+                })}
             </Grid>
             <Grid container spacing={3} mt={3}>
                 {
@@ -167,6 +185,7 @@ const ProjectsOverView = () => {
                             md={4}
                             lg={4}
                             xl={4}
+                            index={project.projectId}
                         >
                             <BasicCard data={project} />
                         </Grid>

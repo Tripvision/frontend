@@ -54,10 +54,6 @@ const MuiNotificationList = () => {
         }
     }, [userInfo, notifier, dispatch])
 
-    useEffect(() => {
-        console.log(notiList)
-    },[])
-
     return (
         <div>
             {

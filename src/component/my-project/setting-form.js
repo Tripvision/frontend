@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -8,44 +8,53 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { IosSwitch } from '~component/core/ios-switch';
 
 import useForm from './use-form';
 import { validator } from './setting-validator';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { fetchSettingsByProjectId, createSettingsByProjectId, UpdateSettingsByProjectId, createSettingsByMemberId } from '~features/settings/settings-slice';
+import { fetchSettingsByProjectId, DeleteSettingsByProjectId, UpdateSettingsByProjectId, createSettingsByMemberId } from '~features/settings/settings-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import NotifiType from './NotifiType';
 import DatePicker from './date-picker';
 import { Avatar } from '@mui/material';
+import StatusRadio from '../project/status-radio';
+import { isEmptyObj } from '../../utils/object-utils';
 
 export function SettingForm() {
     const { id } = useParams();
-
     let navigate = useNavigate();
-
     const dispatch = useDispatch();
-
     const setting = useSelector(state => state.settings.setting);
+    const isEmptyObj = useCallback(
+        obj => {
+            if (obj.constructor === Object
+                && Object.keys(obj).length === 0) {
+                return true;
+            }
+            return false;
+        },
+        []
+    );
 
     useEffect(() => {
         dispatch(fetchSettingsByProjectId(id));
-    }, [])
+    }, [dispatch])
 
     const submit = () => {
-        if (id) {
-            dispatch(UpdateSettingsByProjectId({ id, state, checkedItems }));
+        const result = {
+            ...state,
+            ['projectNotificationType']: [...checkedItems]
         }
-        else {
-            dispatch(createSettingsByMemberId({ id, state, checkedItems }));
-        }
+        console.log(result);
+        dispatch(UpdateSettingsByProjectId({ id: id, setting: result }));
     };
 
-
+    const hadleDelete = () => {
+        dispatch(DeleteSettingsByProjectId(id));
+    }
 
     const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
         state, checkedItems, errors, isSubmited } =
@@ -56,45 +65,40 @@ export function SettingForm() {
             checkBox: true,
         });
 
-    useEffect(() => {
-        console.log(state)
-    })
-
-
     let isValidForm =
         Object.values(errors).filter(error => typeof error !== 'undefined')
             .length === 0;
-
 
 
     return (
         <Box
             sx={{ mt: 3 }}
         >
-            {setting && (
+            <span> 아니 왜 </span>
+            {isEmptyObj(setting) === false ?
                 <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                     <Stack spacing={4}>
                         <Card>
                             <CardContent>
                                 <Typography> Project Logo </Typography>
-                                <label className="signup-profileImg-label" htmlFor="logo">프로젝트 로고 추가</label>
-                                <Box sx={{ display : 'none' }}>
-                                <TextField
-                                    id='logo'
-                                    name='logo'
-                                    type='file'
-                                    className='image_box'
-                                    accept='image/*'
-                                    inputProps={{ accept: 'image/*' }}
-                                    InputProps={{ disableUnderline: true }}
-                                    hidden
-                                    fullWidth
-                                    // value={state.logo}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    error={errors.logo ? true : false}
-                                    variant='standard'
-                                />
+                                <label className="signup-profileImg-label" htmlFor="projectLogoUrl">프로젝트 로고 추가</label>
+                                <Box sx={{ display: 'none' }}>
+                                    <TextField
+                                        id='projectLogoUrl'
+                                        name='projectLogoUrl'
+                                        type='file'
+                                        className='image_box'
+                                        accept='image/*'
+                                        inputProps={{ accept: 'image/*' }}
+                                        InputProps={{ disableUnderline: true }}
+                                        hidden
+                                        fullWidth
+                                        // value={state.logo}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        error={errors.logo ? true : false}
+                                        variant='standard'
+                                    />
                                 </Box>
                                 {
                                     state.logo && <Box>
@@ -102,11 +106,9 @@ export function SettingForm() {
                                             sx={{ width: 200, height: 150 }}
                                             src={state.logo}
                                             alt='preview-img'
-
                                         />
                                     </Box>
                                 }
-
                                 <Typography> Allow Types : png, jpg, jpeg. </Typography>
                             </CardContent>
                         </Card>
@@ -118,12 +120,12 @@ export function SettingForm() {
                                     required
                                     fullWidth
                                     type='text'
-                                    name='name'
-                                    value={state.name || ''}
+                                    name='projectName'
+                                    value={state.projectName || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.name ? true : false}
-                                    helperText={errors.name}
+                                    error={errors.projectName ? true : false}
+                                    helperText={errors.projectName}
                                     variant='standard'
                                     InputProps={{ disableUnderline: true }}
                                 />
@@ -137,12 +139,13 @@ export function SettingForm() {
                                     required
                                     type='text'
                                     fullWidth
-                                    name='type'
-                                    value={state.type || ''}
+                                    id='projectType'
+                                    name='projectType'
+                                    value={state.projectType || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.type ? true : false}
-                                    helperText={errors.type}
+                                    error={errors.projectType ? true : false}
+                                    helperText={errors.projectType}
                                     variant='standard'
                                     margin='dense'
                                     InputProps={{ disableUnderline: true }}
@@ -157,12 +160,13 @@ export function SettingForm() {
                                     required
                                     fullWidth
                                     type='text'
-                                    name='description'
-                                    value={state.description || ''}
+                                    id='projectDescription'
+                                    name='projectDescription'
+                                    value={state.projectDescription || ''}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    error={errors.description ? true : false}
-                                    helperText={errors.description}
+                                    error={errors.projectDescription ? true : false}
+                                    helperText={errors.projectDescription}
                                     variant='standard'
                                     margin='dense'
                                     InputProps={{ disableUnderline: true }}
@@ -173,7 +177,7 @@ export function SettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Due Date </Typography>
-                                {handleChange ? <DatePicker state={state} handleChange={handleChange} /> : null}
+                                <DatePicker state={state} handleChange={handleChange} />
                             </CardContent>
                         </Card>
 
@@ -190,11 +194,10 @@ export function SettingForm() {
                         <Card>
                             <CardContent>
                                 <Typography> Status </Typography>
-                                <IosSwitch
-                                    checked={state.status || false}
+                                <StatusRadio
+                                    status={state.status || 'YET'}
                                     name='status'
-                                    onChange={handleStatus}
-                                    inputProps={{ 'aria-label': 'controlled' }}
+                                    handleStatus={handleStatus}
                                 />
                             </CardContent>
                         </Card>
@@ -203,6 +206,19 @@ export function SettingForm() {
                                 display: 'flex'
 
                             }}>
+                            <Box>
+                                <Button
+                                    // disabled={!isValidForm && isSubmited}
+                                    variant='contained'
+                                    color='error'
+                                >
+                                    onClick={hadleDelete}
+
+                                    Delete Project
+                                </Button>
+                                x
+
+                            </Box>
                             <Box
                                 sx={{
                                     marginLeft: 'auto',
@@ -210,15 +226,14 @@ export function SettingForm() {
                                 <Button
                                     sx={{ mr: 3 }}
                                     onClick={handleClear}
-                                    type='submit'
                                     variant='contained'
                                     color='primary'
                                 >
                                     Discard
                                 </Button>
                                 <Button
-                                    disabled={!isValidForm && isSubmited}
-                                    type='submit'
+                                    onClick={handleSubmit}
+                                    // disabled={!isValidForm && isSubmited}
                                     variant='contained'
                                     color='primary'
                                 >
@@ -229,7 +244,8 @@ export function SettingForm() {
                     </Stack>
                     <ToastContainer />
                 </Box>
-            )}
+                : null
+            }
         </Box>
     );
 

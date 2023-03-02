@@ -1,103 +1,73 @@
 import axios from 'axios';
 import { addAuthHeader as authHeader } from '~services/auth-service';
-import { API_BASE_URL } from '~constants/index.js';
+import { API_BASE_URL, ACCESS_TOKEN } from '~constants/index.js';
 
-
-export const getProjectTeam = id => {
-  return axios.get(API_BASE_URL + '/projects/team/' + id, {
-    headers: authHeader(),
-  });
+export const getProjectMembers = id => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/projects/' + id + "/members", {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
-export const getProjectTeamSetting = id => {
-  return axios.get(API_BASE_URL + '/projects/team/' + id + '/setting');
+export const updateProjectMember = (projectId, member) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  console.log(member);
+  return axios.put(API_BASE_URL + '/v1/projects/' + projectId + "/projectmembers/" + member.memberId, member ,{
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
-export const getProjectTeamMembers = id => {
-  return axios.get(API_BASE_URL + '/projects/team/' + id + '/members');
+export const deleteProjectMember = (projectId, memberId) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.delete(API_BASE_URL + '/v1/projects/' + projectId + "/members/" + memberId, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
-export const getProjectTeamMember = (teamId, memberId) => {
-  return axios.get(
-    API_BASE_URL + '/projects/team/' + teamId + '/members' + memberId
-  );
+export const inviteProjectMember = (projectId, mergeAuthority) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.post(API_BASE_URL + '/v1/projects/' + projectId + "/members", mergeAuthority  , {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
-// post
-export const createTeam = ( {team} ) => {
-  let { teamTitle } = team;
-  let config = {
-    headers: authHeader(),
-    params: {
-      title : teamTitle,
-    },
-  };
-  return axios.get(API_BASE_URL + '/projects/team', config);
+// 애는 리듀서에 올리지 말고 바로 요청할 것.
+export const searchMemberByEmail = (memberEmail) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/members/' + memberEmail , {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
-export const inviteTeamMember = (teamId, {member}) => {
-  let { memberName } = member;
-  let config = {
-    headers: authHeader(),
-    params: {
-      name : memberName,
-    },
-  };
-  return axios.get(
-    API_BASE_URL + '/projects/teams/' + teamId + '/members',
-    config
-  );
-};
-
-// put
-
-export const updateTeam = (projectId , { team } ) => {
-  let {teamId} = team;
-  let config = {
-    headers: authHeader(),
-    params: {
-      id: teamId,
-    },
-  };
-  return axios.put(API_BASE_URL + '/projects/' + projectId +"/teams", config);
-};
-
-export const updateTeamMember = (teamId, {member}) => {
-  let {memberId} = member;
-  let config = {
-    headers: authHeader(),
-    params: {
-      id: memberId,
-    },
-  };
-  return axios.put(API_BASE_URL + '/teams/' + teamId, + "/members" ,config);
+export const getAllMyTeamsCount = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/teams/count' , {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
 
-// delete
-export const deleteTeam = (id) => {
-  return axios.delete(API_BASE_URL + '/projects/' + id + "/teams", { headers: authHeader() });
-};
 
-export const deleteTeamMember = (id) => {
-  return axios.delete(API_BASE_URL + '/projects/' + id + "/teams/members", {
-    headers: authHeader(),
-  });
-};
 
-const teamService = {
-  getProjectTeam,
-  getProjectTeamSetting,
-  getProjectTeamMembers,
-  getProjectTeamMember,
 
-  createTeam,
-  inviteTeamMember,
-  updateTeam,
-  updateTeamMember,
-
-  deleteTeam,
-  deleteTeamMember,
+export const teamService = {
+  getProjectMembers,
+  deleteProjectMember,
+  inviteProjectMember,
+  updateProjectMember,
+  searchMemberByEmail
 };
 
 export default teamService;

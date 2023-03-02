@@ -16,7 +16,7 @@ export const getTaskListByMemberId = (memberId) => {
 // My-project-target ( figma )
 export const getTaskListStatus = (projectId) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects/' + projectId + '/tasks/status' , {
+  return axios.get(API_BASE_URL + '/v1/projects/' + projectId + '/tasks/status' , {
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
@@ -25,7 +25,7 @@ export const getTaskListStatus = (projectId) => {
 
 export const getTaskListByProjectId = (projectId) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects/' + projectId + '/tasks', {
+  return axios.get(API_BASE_URL + '/v1/projects/' + projectId + '/tasks', {
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
@@ -33,20 +33,20 @@ export const getTaskListByProjectId = (projectId) => {
 };
 
 export const getTask = (id, taskId) => {
-  return axios.get(API_BASE_URL + '/projects/' + id + '/tasks/' + taskId, { headers: addAuthHeader() });
+  return axios.get(API_BASE_URL + '/v1/projects/' + id + '/tasks/' + taskId, { headers: addAuthHeader() });
 };
 
-export const createTask = (projectId, { task }) => {
-  let { title } = task;
-  let newTask = {
-    headers: addAuthHeader(),
-    params: {
-      title: title,
-    },
-  };
-  return axios.get(API_BASE_URL + '/projects/' + projectId + '/tasks', newTask);
-}
 
+// post
+export const createTask = (projectId, task) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.post(API_BASE_URL + '/v1/projects/' + projectId + "/tasks", task ,{
+    headers: {
+      "Content-Type": "multipart/form-data",
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+}
 
 // put
 export const updateTask = (projectId, { task }) => {
@@ -57,12 +57,22 @@ export const updateTask = (projectId, { task }) => {
       id: taskId,
     },
   };
-  return axios.put(API_BASE_URL + '/projects/' + projectId + '/tasks/' + taskId, config);
+  return axios.put(API_BASE_URL + '/v1/projects/' + projectId + '/tasks/' + taskId, config);
 }
 
 // delete
 export const deleteTask = (projectId, taskId) => {
-  return axios.delete(API_BASE_URL + '/projects/' + projectId + '/tasks/' + taskId, { headers: addAuthHeader() });
+  return axios.delete(API_BASE_URL + '/v1/projects/' + projectId + '/tasks/' + taskId, { headers: addAuthHeader() });
+}
+
+// Task Count
+export const getTaskCount = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/tasks/count', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 }
 
 const taskService = {
@@ -73,6 +83,7 @@ const taskService = {
   createTask,
   updateTask,
   deleteTask,
+  getTaskCount,
 };
 
 export default taskService;

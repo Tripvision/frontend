@@ -10,11 +10,13 @@ import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { useDispatch } from 'react-redux';
 
 
 import EditMenu from '~component/core/edit-menu';
 import Comment from '~component/core/commnet.js';
 import { useParams } from 'react-router-dom';
+import { createTaskByProjectId } from '~features/tasks/tasks-slice';
 // // N+1 Task <--> file <--> comment
 // List<Task> taskList = taskRepository.findbyId(projectId);
 
@@ -47,6 +49,7 @@ export default function NewModal({ open, setOpen }) {
     };
 
     const { id } = useParams();
+    const dispatch = useDispatch();
 
     const sampleTask = {
         projectId: id,
@@ -63,6 +66,8 @@ export default function NewModal({ open, setOpen }) {
             }
         ],
     };
+
+    
 
     // 전체 useState
     const [task, setTask] = React.useState({});
@@ -84,9 +89,8 @@ export default function NewModal({ open, setOpen }) {
 
     const fileInput = React.createRef();
 
-    React.useEffect(() => {
-        console.log(files);
-    }, [files]);
+    // React.useEffect(() => {
+    // }, [files]);
 
     const handleNewCommentChange = e => {
         const { name, value } = e.target;
@@ -144,6 +148,8 @@ export default function NewModal({ open, setOpen }) {
             fileList : files.map(file => file)
         }
         console.log(newTask);
+        dispatch(createTaskByProjectId(newTask))
+        
     };
 
     const handlePopoverOpen = event => {

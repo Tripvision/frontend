@@ -51,18 +51,6 @@ const App = () => {
   const left = useSelector(state => state.layout.left);
   const center = useSelector(state => state.layout.center);
   const right = useSelector(state => state.layout.right);
-  
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!user.userInfo) {
-      
-    }
-    else {
-
-    }
-  }, [user.userInfo, dispatch]);
-
 
   return (
     <BrowserRouter>
@@ -82,7 +70,7 @@ const App = () => {
         sx={{ flexWrap: 'nowrap' }}
       >
         <Grid container item
-          display={{ xs: 'none', sm: 'none', md: "none", lg:`${left.display}`, xl:`${left.display}`}}
+          display={{ xs: 'none', sm: 'none', md: "none", lg: `${left.display}`, xl: `${left.display}` }}
           xs={0}
           sm={0}
           md={2}
@@ -102,10 +90,10 @@ const App = () => {
           {/* Routing Line */}
           <Container mt={3}>
             <Routes>
-              <Route path='/' element={<MyProfile/>} />
-              <Route path='/my' element={<MyProfile/>} />
-              <Route path='/my/profile' element={<MyProfile/>} />
-              <Route path='/my/account' element={<MyAccount/>} />
+              <Route path='/' element={<MyProfile />} />
+              <Route path='/my' element={<MyProfile />} />
+              <Route path='/my/profile' element={<MyProfile />} />
+              <Route path='/my/account' element={<MyAccount />} />
               {/* 조건에 맞게 렌더링 시켜줄 조건  */}
               <Route path='/login' element={<LoginScreen />} />
               <Route path='/register' element={<LoginScreen />} />
@@ -118,53 +106,37 @@ const App = () => {
               <Route path='/total/tasks' element={<MyTotalTasks />} />
               <Route path='/connect-memers' element={<MyConnectMembers />} />
               <Route path='/productivity' element={<MyProjectActivity />} />
-              
 
-              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}></Route>
+
+              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />}></Route>
               {/* <Route path="/projects/dash-board" element={<Project />}></Route> */}
 
 
-              {/* 전체 프로젝트 오버뷰 */}
               <Route path="/projects" element={<ProjectsOverView />} />
-              {/* 전체 프로젝트 오버뷰 */}
               <Route path="/projects/overview" element={<ProjectsOverView />} />
 
-              {/* 나의 전체 태스크 오버뷰 */}
               <Route path="/tasks" element={<MyMemberTask />} />
 
-              {/* 프로젝트 단건 한눈에보기 (조회)  OK */}
+
               <Route path='/projects/:id/' element={<VisualTab />}>
                 <Route path="" element={<MyProjectOverView />} />
-                {/* 프로젝/projects/:id 태스크별로 보기 (My Project-Targets) OK  */}
                 <Route path="overview" element={<MyProjectOverView />} />
-                {/* 프로젝/projects/:id 태스크별로 보기 (My Project-Targets) OK  */}
                 <Route path="tasks" element={<MyProjectTarget />} />
-                {/* 프로젝/projects/:id 예산 조회 (My Project-Budget) OK  */}
                 <Route path="budgets" element={<MyProjectBudget />} />
-                {/* 프로젝/projects/:id 멤버 조회 (My Project-members) OK */}
-                <Route path="members" element={<MyProjectUsers />} />
-                {/* 프로젝/projects/:id 파일 조회 (My Project-files) OK */}
+                <Route path="members" element={<Members />} />
                 <Route path="files" element={<MyProjectFiles />} />
-                {/* 프로젝/projects/:id 활동 조회 (My Project-Activity) OK */}
                 <Route path="activities" element={<MyProjectActivity />} />
-                {/* 프로젝/projects/:id 세팅 조회 (My Project-Settings) OK */}
                 <Route path="settings" element={<MyProjectSettings />} />
               </Route>
 
-              {/* 프로젝트 생성하기  (My Project-create) OK */}
               <Route path="projects/new" element={<NewMyProjectSettings />} />
-              {/* 전체 조회  */}
-              <Route path="/projects/members" element={<Members />}></Route>
-              {/* 단건 조회  */}
-              <Route path="/projects/members/:id" element={<Members />}></Route>
-              {/* 에러 페이지  */}
               {<Route path="*" element={<NotFound />}></Route>}
             </Routes>
           </Container>
         </Grid>
         <Divider orientation="vertical" flexItem></Divider>
         <Grid container item
-          display={{ xs: 'none', sm: 'none', md: "none", lg:`${right.display}`, xl:`${right.display}` }}
+          display={{ xs: 'none', sm: 'none', md: "none", lg: `${right.display}`, xl: `${right.display}` }}
           xs={0}
           sm={0}
           md={0}
@@ -176,7 +148,7 @@ const App = () => {
         >
           <StateBar />
         </Grid>
-      </Grid> 
+      </Grid>
     </BrowserRouter >
   )
 }

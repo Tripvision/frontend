@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Material ui 
 import Card from '@mui/material/Card';
@@ -13,6 +13,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProjectById, fetchProjectOverViewById } from '../../features/projects/projects-slice';
+import OverViewCard from '~component/overview/overview-header';
+import { isEmptyObj, isEmptyArr } from '../../utils/object-utils';
+import Activity from '../projects/activity';
 
 
 
@@ -54,42 +60,49 @@ export const FilesCard = (props) => {
     const { data } = props;
     return (
         <>
-            <Card sx={{ borderRadius : '15px' }}>
-                <CardContent>
-                    {
-                        data.map(item => (
-                            <List sx={{ width: '100%', maxWidth: 360 }}>
-                                <ListItem alignItems="flex-start"
-                                    onMouseOver={() => setShow(true)}
-                                    onMouseOut={() => setShow(false)}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={item.title}
-                                        secondary={
-                                            <Box>
-                                                <Typography
-                                                    component="span"
-                                                    variant="body2"
-                                                >
-                                                    {item.size} /
-                                                </Typography>
-                                                <Typography component="span" variant="body2"> {item.date}</Typography>
-                                                <Typography component="span" variant="body2">{item.uploader}</Typography>
-                                                {"  I'll be in your neighborhood doing errands this…"}
-                                            </Box>
-                                        }
-                                    />
-                                    {show && <Typography> exit </Typography>}
-                                </ListItem>
-                            </List>
-                        ))
-                    }
-                </CardContent>
-            </Card>
-            <Divider />
+            {
+                isEmptyArr(data) === true ? <div> File is Empty </div> :
+                    <>
+                        <Card sx={{ borderRadius: '15px' }}>
+                            <CardContent>
+                                {
+                                    data.map(item => (
+                                        <List sx={{ width: '100%', maxWidth: 360 }}>
+                                            <ListItem alignItems="flex-start"
+                                                onMouseOver={() => setShow(true)}
+                                                onMouseOut={() => setShow(false)}
+                                            >
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={item.title}
+                                                    secondary={
+                                                        <Box>
+                                                            <Typography
+                                                                component="span"
+                                                                variant="body2"
+                                                            >
+                                                                {item.size} /
+                                                            </Typography>
+                                                            <Typography component="span" variant="body2"> {item.date}</Typography>
+                                                            <Typography component="span" variant="body2">{item.uploader}</Typography>
+                                                            {"  I'll be in your neighborhood doing errands this…"}
+                                                        </Box>
+                                                    }
+                                                />
+                                                {show && <Typography> exit </Typography>}
+                                            </ListItem>
+                                        </List>
+                                    ))
+                                }
+                            </CardContent>
+                        </Card>
+                        <Divider />
+                    </>
+            }
+
+
         </>
     )
 }
@@ -104,162 +117,105 @@ export const filesCard = () => {
 
 
 
-const OverViewData = {
-    title: 'Coffee detila Page',
-    status: '51%',
-    totalTasks: '48',
-    comTasks: '14',
-    budgetSpent: '15,000',
-    members: [
-        {
-            name: 'sara',
-            email: 'ehdqn119@gmail.com',
-        },
-        {
-            name: 'Yura',
-            email: 'ehdqn119@gmail.com',
-        }, {
-            name: 'Sindy',
-            email: 'ehdqn119@gmail.com',
-        }
-    ]
-}
-
-export const OverViewCard = (props) => {
-    const { data } = props;
-    return (
-        <>
-            <Card sx={{ mb :3 , borderRadius : '15px'}} >
-                <CardContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography>{data.title}</Typography>
-                        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around', flex: 1 }}>
-                                <Box>
-                                    <Typography>Status</Typography>
-                                    <Typography>Line Prgoress</Typography>
-                                </Box>
-                                <Divider orientation="vertical" variant="middle" flexItem />
-
-                                <Box>
-                                    <Typography>Total Tasks</Typography>
-                                    <Typography>15 / 48</Typography>
-                                </Box>
-                                <Divider orientation="vertical" variant="middle" flexItem />
-                                <Box>
-                                    <Typography>Due Date</Typography>
-                                    <Typography>29 Jan, 2022</Typography>
-                                </Box>
-                                <Divider orientation="vertical" variant="middle" flexItem />
-                                <Box>
-                                    <Typography>Budget Spent</Typography>
-                                    <Typography>$15000</Typography>
-                                </Box>
-                            </Box>
-
-                            <Box sx={{ marginLeft: 'auto' }}>
-                                <Avatar src="" alt="d" sx={{ marginLeft: 'auto', width: 42, height: 42 }} />
-                                {/* 리팩토링 대상 */}
-                                <AvatarGroup max={4}
-                                    sx={{
-                                        '& .MuiAvatar-root': { width: 20, height: 20, fontSize: 15 },
-                                    }}
-                                >
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 20, height: 20 }} />
-                                    <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" sx={{ width: 20, height: 20 }} />
-                                    <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" sx={{ width: 20, height: 20 }} />
-                                    <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" sx={{ width: 20, height: 20 }} />
-                                    <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" sx={{ width: 20, height: 20 }} />
-                                </AvatarGroup>
-                            </Box>
-                        </Box>
-
-                    </Box>
-                </CardContent>
-            </Card>
-        </>
-    )
-}
 
 
 
 
-
-const data = [
-    {
-        title: 'Edited the details of Project X',
-        time: '5am ago',
-    },
-    {
-        title: 'Changed the status of Project X',
-        time: '1:32 AM',
-    },
-    {
-        title: 'Submitted a bug',
-        time: 'Yesterday 12:39 AM',
-    },
-    {
-        title: 'Modified a date in Page X',
-        time: 'Last Thursday 3:34 AM',
-    },
-    {
-        title: 'Deleted a page in Project X',
-        time: 'Aug 11',
-    },
-];
+// const data = [
+//     {
+//         title: 'Edited the details of Project X',
+//         time: '5am ago',
+//     },
+//     {
+//         title: 'Changed the status of Project X',
+//         time: '1:32 AM',
+//     },
+//     {
+//         title: 'Submitted a bug',
+//         time: 'Yesterday 12:39 AM',
+//     },
+//     {
+//         title: 'Modified a date in Page X',
+//         time: 'Last Thursday 3:34 AM',
+//     },
+//     {
+//         title: 'Deleted a page in Project X',
+//         time: 'Aug 11',
+//     },
+// ];
 
 export function CalenderCard(props) {
 
     const { data } = props;
 
+    React.useEffect(() => {
+        console.log(data);
+    });
+
     return (
-        <Card sx={{ borderRadius : '15px' }} >
-            <CardContent>
-                <Box mb={1}>
-                    <Typography>What's on the road?</Typography>
-                    <Box>
-                    </Box>
-                </Box>
-                <Box>
-                    {data.map(item => (
-                        <Box>
-                            <List sx={{ width: '100%', maxWidth: 360 }}>
-                                <ListItem alignItems="flex-start"
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={item.title}
-                                        secondary={
-                                            <Box>
-                                                <Typography
-                                                    component="span"
-                                                    variant="body2"
-                                                >
-                                                    {item.size} /
-                                                </Typography>
-                                                <Typography component="span" variant="body2"> {item.date}</Typography>
-                                                <Typography component="span" variant="body2">{item.uploader}</Typography>
-                                                {"  I'll be in your neighborhood doing errands this…"}
-                                            </Box>
-                                        }
-                                    />
-                                </ListItem>
-                            </List>
-                        </Box>
-                    ))}
-                </Box>
-            </CardContent>
-        </Card>
+        <>
+            {
+                isEmptyObj(data) === true ?
+                     <div> Activity is Empty </div>
+                    :
+                    <Card sx={{ borderRadius: '15px' }} >
+                        <CardContent>
+                            <Box mb={1}>
+                                <Typography>What's on the road?</Typography>
+                                <Box>
+                                </Box>
+                            </Box>
+                            <Box>
+                                {data.map(item => (
+                                    <Box>
+                                        <List sx={{ width: '100%', maxWidth: 360 }}>
+                                            <ListItem alignItems="flex-start"
+                                            >
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={item.title}
+                                                    secondary={
+                                                        <Box>
+                                                            <Typography
+                                                                component="span"
+                                                                variant="body2"
+                                                            >
+                                                                {item.size} /
+                                                            </Typography>
+                                                            <Typography component="span" variant="body2"> {item.date}</Typography>
+                                                            <Typography component="span" variant="body2">{item.uploader}</Typography>
+                                                            {"  I'll be in your neighborhood doing errands this…"}
+                                                        </Box>
+                                                    }
+                                                />
+                                            </ListItem>
+                                        </List>
+                                    </Box>
+                                ))}
+                            </Box>
+                        </CardContent>
+                    </Card>
+            }
+        </>
     );
 }
 
 const MyProjectOverView = () => {
+    const { id } = useParams();
+    const dispatch = useDispatch();
+    const project = useSelector(state => state.projects.project);
+    const fileList = useSelector(state => state.projects.project.fileList);
+    const activityList = useSelector(state => state.projects.project.activityList);
+
+    useEffect(() => {
+        dispatch(fetchProjectOverViewById(id));
+    }, [dispatch])
+
     return (
         <div>
-            <OverViewCard data={OverViewData} />
+            <OverViewCard data={project} />
             <Grid container spacing={3}>
                 <Grid item
                     xs={12}
@@ -267,7 +223,7 @@ const MyProjectOverView = () => {
                     lg={6}
                     xl={6}
                 >
-                    <CalenderCard data={data} />
+                    <CalenderCard data={activityList} />
                 </Grid>
                 <Grid item
                     xs={12}
@@ -275,7 +231,7 @@ const MyProjectOverView = () => {
                     lg={6}
                     xl={6}
                 >
-                    <FilesCard data={filedData} />
+                    <FilesCard data={fileList} />
                 </Grid>
             </Grid>
         </div>

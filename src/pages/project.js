@@ -11,11 +11,10 @@ import VerticalBarChart from '~component/dashboard/charts/vertical-bar-chart';
 import HorizonLineChart from '~component/dashboard/charts/horizon-line-chart';
 import MuiIconCard from '~component/core/mui-icon-card';
 import { useDispatch, useSelector } from 'react-redux';
-
 // dispatch
-import { fetchProjectStatus } from '../features/projects/projects-slice';
 import { fetchMyTopBudgets } from '../features/budget/budget-slice';
 import { contact, fetchMyContactsPosition } from '../features/contact/contact-slice';
+import chartService from '../services/chart-service';
 
 
 const lineChartData = [
@@ -97,6 +96,7 @@ const circleData = [
     { name: 'Other', value: 200 },
 ];
 
+// 이거다.
 const verticalBarChartData = {
     wrapData: [
         {
@@ -137,16 +137,52 @@ const verticalBarChartData = {
 const Project = () => {
 
     const dispatch = useDispatch();
+    const [chart, serChart] = React.useState({
+        budgetChart : {
+            
+        },
+        projectChart : {
+            
+        },
+        connectGraph : {
 
-    const contactMemberPosition = useSelector(state => state.contacts);
-    const myTopBudgets = useSelector(state => state.budget);
-    const myProjectsStatus = useSelector(state => state.projects);
+        },
+    });
+    React.useEffect(() => {
+        async function getChartData() {
+            let res = {};
+            let budgetChart = await chartService.getBudgetGraph();
+            res = {
+                ...res,
+                ['budgetChart']: {
+                    ['wrapData']: budgetChart.data
+                }
+            }
+            let projectChart = await chartService.getProjectgraph();
+            res = {
+                ...res,
+                ['projectChart']: projectChart.data
+            }
+            let connectGraph = await chartService.getConnectgraph();
+            res = {
+                ...res,
+                ['connectGraph']: connectGraph.data
+            }
+            console.log("res ")
+            console.log(res);
+            return res;
+        }
+        const merge = getChartData();
+        merge.then((result) => {
+            serChart({
+                ...chart,
+                ...result
+            })
+        })
 
-    useEffect(() => {
-        dispatch(fetchMyContactsPosition());
-        dispatch(fetchMyTopBudgets());
-        dispatch(fetchProjectStatus());
-    },[dispatch])
+    }, []);
+
+
 
 
     return (
@@ -158,7 +194,7 @@ const Project = () => {
                 {/* Total */}
                 <Grid container spacing={2} mb={3}>
 
-                    {/* Total */}
+                    {/* Total Users */}
                     <Grid item
                         xs={12}
                         sm={8.4}
@@ -178,7 +214,7 @@ const Project = () => {
                         lg={3.6}
                         xl={3.6}
                     >
-                        <VerticalBarChart object={verticalBarChartData} />
+                        <VerticalBarChart object={chart.budgetChart} />
 
                     </Grid>
 

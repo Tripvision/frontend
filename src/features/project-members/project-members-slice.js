@@ -1,11 +1,73 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import teamActiveService from '~services/team-active-service';
+import { teamService, deleteProjectMember } from '~services/team-service';
 
-export const fetchProjectMembers = createAsyncThunk(
+export const fetchProjectMembersThunk = createAsyncThunk(
     'projectMembers/fetch',
     async (projectId, thunkAPI) => {
         try {
-            const response = await teamActiveService.getTeamActiveList(projectId);
+            const response = await teamService.getProjectMembers(projectId);
+            return response.data;
+        } catch (err) {
+            let error = err;
+            if (!error.response) {
+                throw err;
+            }
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+export const updateProjectMemberThunk = createAsyncThunk(
+    'projectMembers/update',
+    async (request, thunkAPI) => {
+        try {
+            console.log("update member")
+            console.log(request.selectionModel);
+            console.log(request.projectId)
+            console.log(request['0'])
+            const { projectId} = request;
+            const member = request['0'];
+            const response = await teamService.updateProjectMember(projectId, member);
+            return response.data;
+        } catch (err) {
+            let error = err;
+            if (!error.response) {
+                throw err;
+            }
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+export const deleteProjectMemberThunk = createAsyncThunk(
+    'projectMembers/delete',
+    async (request, thunkAPI) => {
+        try {
+            const { projectId, memberId } = request;
+            console.log(projectId + "  a" + memberId)
+            const response = await teamService.deleteProjectMember(projectId, memberId);
+            return response.data;
+        } catch (err) {
+            let error = err;
+            if (!error.response) {
+                throw err;
+            }
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+export const InviteProjectMemberThunk = createAsyncThunk(
+    'projectMembers/invite',
+    async (request, thunkAPI) => {
+        try {
+            const { projectId, memberEmail } = request[0];
+            const mergeAuthority = [{
+                email: memberEmail,
+                authority: "GUEST",
+            }]
+            const response = await teamService.inviteProjectMember(projectId, mergeAuthority);
             return response.data;
         } catch (err) {
             let error = err;
@@ -21,70 +83,10 @@ export const fetchProjectMembers = createAsyncThunk(
 
 const initialState = {
     entities: [
-        {
-            id: '1',
-            avatar: 'Sindy',
-            name: 'Lee Sang Min',
-            address: '대구광역시 동구 큰고개로 35-2',
-            email: 'ehdqn119@gmail.com',
-            isAdmin: 'true',
-            phone: '010-9830-5559',
-            lastUpdated: 'Tue Nov 22 2022',
-        },
-        {
-            id: '2',
-            avatar: 'Yura',
-            name: 'Lee Sang Hyup',
-            address: '서울특별시 은마',
-            email: 'ehdqn118@naver.com',
-            isAdmin: 'false',
-            phone: '010-2433-3579',
-            lastUpdated: 'Mon Nov 22 2022',
-        },
-        {
-            id: '3',
-            avatar: 'Aliah Lane',
-            name: 'Go seung Bum',
-            address: '대구광역시 동구 큰고개로 35-2',
-            email: 'ehdqn119@gmail.com',
-            isAdmin: false,
-            phone: '010-9830-5559',
-            lastUpdated: 'Mon Nov 22 2022',
-        },
-        {
-            id: '4',
-            avatar: 'Sindy',
-            name: 'Lee Yu ra',
-            address: '대구광역시 동구 큰고개로 35-2',
-            email: 'ehdqn119@gmail.com',
-            isAdmin: false,
-            phone: '010-9830-5559',
-            lastUpdated: 'Mon Nov 22 2022',
-        },
-        {
-            id: '5',
-            avatar: 'Yura',
-            name: 'Sin su cheol',
-            address: '대구광역시 동구 큰고개로 35-2',
-            email: 'ehdqn119@gmail.com',
-            isAdmin: true,
-            phone: '010-9830-5559',
-            lastUpdated: 'Mon Nov 22 2022',
-        },
-        {
-            id: '6',
-            avatar: 'Yura',
-            name: 'Lee da won',
-            address: '대구광역시 동구 큰고개로 35-2',
-            email: 'ehdqn119@gmail.com',
-            isAdmin: false,
-            phone: '010-9830-5559',
-            lastUpdated: 'Mon Nov 22 2022',
-        },
     ],
     loading: 'idle',
     error: null,
-    checked : false,
+    checked: false,
 }
 
 
@@ -93,7 +95,34 @@ export const projectMemberSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
+        [fetchProjectMembersThunk.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        [fetchProjectMembersThunk.fulfilled]: (state, action) => {
+            state.loading = 'idle'
+            state.entities = action.payload;
+        },
 
+        [deleteProjectMemberThunk.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        [deleteProjectMemberThunk.fulfilled]: (state, action) => {
+            state.loading = 'idle'
+            return initialState;
+        },
+
+        [InviteProjectMemberThunk.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        [InviteProjectMemberThunk.fulfilled]: (state, action) => {
+
+        },
     },
 })
 

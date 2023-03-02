@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 import { API_BASE_URL, ACCESS_TOKEN  } from '~constants/index.js';
-import { addAuthHeader } from '~services/auth-service';
 
 // get 
 export const getProjectSetting = (id) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects/' + id + '/setting' ,{
+  return axios.get(API_BASE_URL + '/v1/projects/' + id ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
@@ -25,10 +24,11 @@ export const createSetting = (setting) => {
 
 
 // put
-export const updateSetting = (setting) => {
+export const updateSetting = (request) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  const {id , state} = setting;
-  return axios.put(API_BASE_URL + '/projects/' + id + '/setting/' + state.id , state ,{
+  const {id , setting} = request;
+  console.warn(id)
+  return axios.put(API_BASE_URL + '/v1/projects/' + id , setting  ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
@@ -36,9 +36,9 @@ export const updateSetting = (setting) => {
 }
 
 // delete
-export const deleteSetting = (id,data) => {
+export const deleteSetting = (id) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.put(API_BASE_URL + '/projects/' + id + '/setting/' + data.id ,{
+  return axios.delete(API_BASE_URL + '/v1/projects/' + id ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }

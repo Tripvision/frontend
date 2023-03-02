@@ -6,57 +6,79 @@ import { addAuthHeader } from '~services/auth-service';
 
 export const getMyCurrentProject = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects/cuurent', { headers: {
-    'Authorization': `Bearer ${accessToken}`
-  } });
+  return axios.get(API_BASE_URL + '/v1/projects/situation', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
 export const getMyProjectFinanceTotal = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/finances/total', { headers: {
-    'Authorization': `Bearer ${accessToken}`
-  } });
+  return axios.get(API_BASE_URL + '/finances/total', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
 export const getMyProjectOurClient = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/clients', { headers: {
-    'Authorization': `Bearer ${accessToken}`
-  } });
+  return axios.get(API_BASE_URL + '/clients', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
 export const getMyProjectsStatus = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects/status', { headers: {
-    'Authorization': `Bearer ${accessToken}`
-  } });
+  return axios.get(API_BASE_URL + '/projects/status', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
 
-
-
-export const getMyProjects = () => {
+export const getMyProjectList = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return axios.get(API_BASE_URL + '/projects', { headers: {
-    'Authorization': `Bearer ${accessToken}`
-  } });
+  return axios.get(API_BASE_URL + '/v1/projects', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
-// 기본 프로젝트 데이터 바인딩
-
-
-
-export const getMyProject = (id) => {
-  return axios.get(API_BASE_URL + '/projects/' + id, { headers: addAuthHeader() });
-};
-
-
-
-export const getMyCompleteProject = () => {
-  return axios.get(API_BASE_URL + '/projects/complete', { headers: addAuthHeader() });
+export const getMyProjectOverView = (projectId) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/projects/' + projectId + '/overview', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
 };
 
 
+// project Count
+export const getProjectCount = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/projects/count', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+}
+
+// getProductivity
+export const getProductivity = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/projects/completed', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+}
 
 
 // post
@@ -79,7 +101,7 @@ export const updateProject = (id) => {
       id: id,
     },
   };
-  return axios.put(API_BASE_URL + '/projects/' + id, config );
+  return axios.put(API_BASE_URL + '/projects/' + id, config);
 }
 
 // delete
@@ -91,19 +113,12 @@ export const deleteProject = (projectId) => {
   return axios.delete(API_BASE_URL + '/projects/' + projectId, { headers: addAuthHeader() });
 }
 
-export const projectService = {
-  getMyProjects,
-  getMyProject,
+const projectService = {
   getMyCurrentProject,
-  getMyCompleteProject,
   getMyProjectFinanceTotal,
   getMyProjectsStatus,
 
-  createProject,
 
-  updateProject,
-  deleteProject,
-  deleteAllProject,
 };
 
 export default projectService;
