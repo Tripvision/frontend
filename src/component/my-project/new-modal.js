@@ -67,7 +67,7 @@ export default function NewModal({ open, setOpen }) {
         ],
     };
 
-    
+
 
     // 전체 useState
     const [task, setTask] = React.useState({});
@@ -139,17 +139,20 @@ export default function NewModal({ open, setOpen }) {
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
         }
-        formData.append('data', JSON.stringify(task));
+        const json = JSON.stringify(task);
+        formData.append("request", json);
+        formData.append("request", new Blob([JSON.stringify(variables)], {type: "application/json"}))
+
+        console.log(formData.get("request"))
+        console.log(formData.get("files"))
+
         // for (let value of formData.values()) {
-        //   console.log(value);
+            
+        //   if(typeof value === 'object') {
+        //   }
         // }
-        const newTask = {
-            ...task,
-            fileList : files.map(file => file)
-        }
-        console.log(newTask);
-        dispatch(createTaskByProjectId(newTask))
-        
+        dispatch(createTaskByProjectId(formData))
+
     };
 
     const handlePopoverOpen = event => {
