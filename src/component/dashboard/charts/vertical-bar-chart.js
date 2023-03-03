@@ -5,37 +5,89 @@ import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
+import chartService from '~services/chart-service';
 
-const VerticalBarChart = ({ object }) => {
+const VerticalBarChart = () => {
+    const data =  [
+        {
+            "name": "Google",
+            "value": 800
+        },
+        {
+            "name": "Youtube",
+            "value": 400
+        },
+        {
+            "name": "Instagram",
+            "value": 550
+        },
+        {
+            "name": "Pinterest",
+            "value": 300
+        },
+        {
+            "name": "Facebook",
+            "value": 700
+        },
+        {
+            "name": "Twitter",
+            "value": 370
+        },
+        {
+            "name": "Tumblr",
+            "value": 550
+        }
+    ]
 
-    const { wrapData } = object;
-
-    const [activeIndex,setActiveIndex] = useState(0);
-
-    const changeIndex = (data,index) => {
+    const [budgetChart, setBudgetChart] = React.useState([]);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const changeIndex = (data, index) => {
         setActiveIndex(
             index
         )
     }
-    
 
+    React.useEffect(() => {
+        async function getProjectGraph() {
+            let budgetChart = await chartService.getBudgetGraph();
+            return budgetChart;
+        }
+        const merge = getProjectGraph();
+        merge.then((result) => {
+            setBudgetChart(
+                result.data
+            )
+        })
+    }, [])
+
+    // React.useEffect(() => {
+    //     console.log(budgetChart)
+    // });
 
 
     return (
         <Card>
-            <Container sx={{ mt:2 , mb: 1 }}><Typography variant='body1'> Traffic by WebSite </Typography></Container>
+            <Container sx={{ mt: 2, mb: 1 }}><Typography variant='body1'> Top 7 Budget </Typography></Container>
             <ResponsiveContainer width='100%' height='100%' aspect={1}>
-                <BarChart layout='vertical' width='100%' height='100%' data={wrapData} barSize={10}>
+                <BarChart layout='vertical' width='100%' height='100%' data={data} barSize={30}>
                     <XAxis type="number" hide='true' />
                     <Tooltip hide='true' />
-                    <YAxis dataKey="name" type="category"
+                    <YAxis dataKey="projectName" type="category"
                         tickLine={false}
                         axisLine={{ stroke: '' }}
-                        tick={{fontSize: 10}}
+                        tick={{ fontSize: 10 }}
                     />
                     <Bar dataKey="value" radius={[0, 5, 5, 0]} onClick={changeIndex}>
-                        {wrapData.map((entry, index) => (
-                            <Cell cursor="pointer" fill={index === activeIndex ? '#C6C7F8' : '#565957'} key={`cell-${index}`} />
+                        {data.map((entry, index) => (
+                            entry.value === null ?
+                                <>
+                                    <span> Empty Typo</span>
+                                    <Cell cursor="pointer" fill={index === activeIndex ? '#C6C7F8' : '#565957'} key={`cell-${index}`} />
+                                </>
+                                :
+                                <>
+                                    <Cell cursor="pointer" fill={index === activeIndex ? '#C6C7F8' : '#565957'} key={`cell-${index}`} />
+                                </>
                         ))}
                     </Bar>
                 </BarChart>

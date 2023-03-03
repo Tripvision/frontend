@@ -8,13 +8,14 @@ import Grid from '@mui/material/Grid';
 import HorizonarChart from '~component/dashboard/charts/horizonar-chart';
 import FullCircleChart from '~component/dashboard/charts/full-circle-chart';
 import VerticalBarChart from '~component/dashboard/charts/vertical-bar-chart';
-import HorizonLineChart from '~component/dashboard/charts/horizon-line-chart';
+import HorizonLineChxart from '~component/dashboard/charts/horizon-line-chart';
 import MuiIconCard from '~component/core/mui-icon-card';
 import { useDispatch, useSelector } from 'react-redux';
 // dispatch
 import { fetchMyTopBudgets } from '../features/budget/budget-slice';
 import { contact, fetchMyContactsPosition } from '../features/contact/contact-slice';
 import chartService from '../services/chart-service';
+import { isEmptyArr } from '~utils/object-utils';
 
 
 const lineChartData = [
@@ -62,75 +63,6 @@ const lineChartData = [
     },
 ];
 
-const HorizonBarChartdata = [
-    {
-        "name": "Linux",
-        "uv": 3000000,
-    },
-    {
-        "name": "Mac",
-        "uv": 5200000,
-    },
-    {
-        "name": "iOS",
-        "uv": 3000000,
-    },
-    {
-        "name": "Windows",
-        "uv": 7200000,
-    },
-    {
-        "name": "Android",
-        "uv": 2200000,
-    },
-    {
-        "name": "Ohter",
-        "uv": 5800000,
-    },
-]
-
-const circleData = [
-    { name: 'United States', value: 386 },
-    { name: 'Canada', value: 225 },
-    { name: 'Mexico', value: 308 },
-    { name: 'Other', value: 200 },
-];
-
-// 이거다.
-const verticalBarChartData = {
-    wrapData: [
-        {
-            "name": "Google",
-            "value": 800
-        },
-        {
-            "name": "Youtube",
-            "value": 400
-        },
-        {
-            "name": "Instagram",
-            "value": 550
-        },
-        {
-            "name": "Pinterest",
-            "value": 300
-        },
-        {
-            "name": "Facebook",
-            "value": 700
-        },
-        {
-            "name": "Twitter",
-            "value": 370
-        },
-        {
-            "name": "Tumblr",
-            "value": 550
-        }
-    ],
-    activeIndex: 0,
-};
-
 
 
 
@@ -138,47 +70,47 @@ const Project = () => {
 
     const dispatch = useDispatch();
     const [chart, serChart] = React.useState({
-        budgetChart : {
-            
+        budgetChart: {
+            wrapData: [
+
+            ]
         },
-        projectChart : {
-            
+        projectChart: {
+
         },
-        connectGraph : {
+        connectGraph: {
 
         },
     });
     React.useEffect(() => {
-        async function getChartData() {
-            let res = {};
-            let budgetChart = await chartService.getBudgetGraph();
-            res = {
-                ...res,
-                ['budgetChart']: {
-                    ['wrapData']: budgetChart.data
-                }
-            }
-            let projectChart = await chartService.getProjectgraph();
-            res = {
-                ...res,
-                ['projectChart']: projectChart.data
-            }
-            let connectGraph = await chartService.getConnectgraph();
-            res = {
-                ...res,
-                ['connectGraph']: connectGraph.data
-            }
-            console.log("res ")
-            console.log(res);
-            return res;
-        }
-        const merge = getChartData();
-        merge.then((result) => {
-            serChart({
-                ...chart,
-                ...result
-            })
-        })
+        // async function getChartData() {
+        //     let res = {};
+        //     let budgetChart = await chartService.getBudgetGraph();
+        //     res = {
+        //         ...res,
+        //         ['budgetChart']: {
+        //             ['wrapData']: budgetChart.data
+        //         }
+        //     }
+        //     let projectChart = await chartService.getProjectgraph();
+        //     res = {
+        //         ...res,
+        //         ['projectChart']: projectChart.data
+        //     }
+        //     let connectGraph = await chartService.getConnectgraph();
+        //     res = {
+        //         ...res,
+        //         ['connectGraph']: connectGraph.data
+        //     }
+        //     return res;
+        // }
+        // const merge = getChartData();
+        // merge.then((result) => {
+        //     serChart({
+        //         ...chart,
+        //         ...result
+        //     })
+        // })
 
     }, []);
 
@@ -202,7 +134,7 @@ const Project = () => {
                         lg={8.4}
                         xl={8.4}
                     >
-                        <HorizonLineChart data={lineChartData} />
+                        {/* <HorizonLineChart data={chart.projectChart} /> */}
 
                     </Grid>
 
@@ -214,7 +146,7 @@ const Project = () => {
                         lg={3.6}
                         xl={3.6}
                     >
-                        <VerticalBarChart object={chart.budgetChart} />
+                        <VerticalBarChart />
 
                     </Grid>
 
@@ -231,7 +163,8 @@ const Project = () => {
                         lg={6}
                         xl={6}
                     >
-                        <HorizonarChart data={HorizonBarChartdata} />
+                        <HorizonarChart />
+
                     </Grid>
 
 
@@ -244,7 +177,7 @@ const Project = () => {
                         lg={6}
                         xl={6}
                     >
-                        <FullCircleChart data={circleData} />
+                        <FullCircleChart/>
 
                     </Grid>
 

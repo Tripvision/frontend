@@ -141,7 +141,7 @@ export default function NewModal({ open, setOpen }) {
         }
         const json = JSON.stringify(task);
         formData.append("request", json);
-        formData.append("request", new Blob([JSON.stringify(variables)], {type: "application/json"}))
+        formData.append("request", new Blob([JSON.stringify(json)], {type: "application/json"}))
 
         console.log(formData.get("request"))
         console.log(formData.get("files"))

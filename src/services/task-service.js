@@ -40,6 +40,12 @@ export const getTask = (id, taskId) => {
 // post
 export const createTask = (projectId, task) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  const request = {
+    ...task
+  }
+  const fileList = {
+    ...task.fileList
+  }
   return axios.post(API_BASE_URL + '/v1/projects/' + projectId + "/tasks", task ,{
     headers: {
       "Content-Type": "multipart/form-data",

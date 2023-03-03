@@ -51,10 +51,11 @@ export const fetchTaskByProjectId = createAsyncThunk(
 
 export const createTaskByProjectId = createAsyncThunk(
   'tasks/create',
-  async (task, thunkAPI) => {
-    const { projectId } = task;
+  async (formData, thunkAPI) => {
+    const task = formData.get("request")
+    const taskParse = JSON.parse(task);
     try {
-      const response = await createTask(projectId, task);
+      const response = await createTask(taskParse.projectId, formData);
       return response.data;
     } catch (err) {
       let error = err;

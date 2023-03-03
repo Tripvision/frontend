@@ -22,12 +22,8 @@ export const updateProjectMemberThunk = createAsyncThunk(
     'projectMembers/update',
     async (request, thunkAPI) => {
         try {
-            console.log("update member")
-            console.log(request.selectionModel);
-            console.log(request.projectId)
-            console.log(request['0'])
-            const { projectId} = request;
-            const member = request['0'];
+            console.log(request)
+            const { projectId,  member} = request
             const response = await teamService.updateProjectMember(projectId, member);
             return response.data;
         } catch (err) {
@@ -123,6 +119,18 @@ export const projectMemberSlice = createSlice({
         [InviteProjectMemberThunk.fulfilled]: (state, action) => {
 
         },
+
+        [updateProjectMemberThunk.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        [updateProjectMemberThunk.fulfilled]: (state, action) => {
+            console.log("update Project Member Thunk")
+            console.log(action.payload);
+        },
+
+        
     },
 })
 

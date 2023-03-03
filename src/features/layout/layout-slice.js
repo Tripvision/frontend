@@ -4,12 +4,12 @@ const initialState = {
   left: {
     id: '1',
     display: 'block',
-    size: 3,
+    size: 2,
   },
   center: {
     id: '2',
     display: 'block',
-    size: 9,
+    size: 10,
   },
   right: {
     id: '3',
@@ -70,11 +70,11 @@ export const layoutSlice = createSlice({
               // change display none
               ...state.left,
               display: 'block',
-              size: 3,
+              size: 2,
             },
             center: {
               ...state.center,
-              size: 9,
+              size: 10,
             },
             right: {
               ...state.right,
@@ -88,11 +88,11 @@ export const layoutSlice = createSlice({
               // change display none
               ...state.left,
               display: 'block',
-              size: 3,
+              size: 2,
             },
             center: {
               ...state.center,
-              size : 6,
+              size : 7,
             },
             right: {
               ...state.right,
@@ -168,11 +168,11 @@ export const layoutSlice = createSlice({
             left: {
               // change display none
               ...state.left,
-              size: 3,
+              size: 2,
             },
             center: {
               ...state.center,
-              size : 6,
+              size : 7,
             },
             right: {
               ...state.right,

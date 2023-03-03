@@ -31,6 +31,8 @@ import { isEmptyArr, isEmptyObj } from '../../utils/object-utils';
 import { DeleteTeamByProjectId, UpdateTeamByProjectId } from '~features/team/team-slice';
 
 
+
+
 // Refactor : Avatar 정보 Redux 에서 가져오기 memberRows
 const RenderAvatar = (props) => {
     const { hasFocus, value } = props;
@@ -156,7 +158,6 @@ const Members = () => {
         projectId: id
 
     });
-    const [value, setValue] = React.useState({});
     const handleProcessRowUpdate = (newRow, oldRow) => {
         setSelectionModel({
             ...selectionModel,
@@ -183,29 +184,31 @@ const Members = () => {
         dispatch(fetchProjectMembersThunk(id));
     }, [dispatch])
 
-    React.useEffect(() => {
-        // console.log(selectionModel);
-    })
+    // React.useEffect(() => {
+    //     console.log(selectionModel);
+    // }, [selectionModel])
 
     const handleUpdate = () => {
+        console.log(selectionModel)
         dispatch(updateProjectMemberThunk(
             selectionModel
             // projectId: selectionModel.projectId, member: selectionModel['0']
-        ))  
+        ))
     }
-
 
     const RenderUpdateButton = (props) => {
         const { hasFocus, value, field } = props;
-        console.log(selectionModel);
         return (
             <Button color="primary"
                 variant="rounded"
                 alt="Not Found"
-                onClick={handleUpdate}
+                onClick={() => { dispatch(updateProjectMemberThunk({ projectId: selectionModel.projectId, member: selectionModel['0'] })) }}
             >{field}</Button>
         )
     }
+
+
+
 
     const RenderDeleteButton = (props, id) => {
         const { hasFocus, value, field } = props;
@@ -237,7 +240,22 @@ const Members = () => {
                 field: '수정',
                 headerName: '',
                 width: 80,
-                renderCell: RenderUpdateButton
+                renderCell: (params) => (
+                    <Button
+                        color="primary"
+                        variant="rounded"
+                        alt="Not Found"
+                        onClick={() => { 
+                            let member = {
+                                memberId : params.row.memberId,
+                                memberAuthority : params.row.memberProjectRole
+                            }
+                            dispatch(updateProjectMemberThunk({ projectId: selectionModel.projectId, member: member }))
+                         }}
+                    > 
+                    수정
+                    </Button >
+                )
             },
             {
                 field: '삭제',

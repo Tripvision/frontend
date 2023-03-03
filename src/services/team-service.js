@@ -14,6 +14,7 @@ export const getProjectMembers = id => {
 export const updateProjectMember = (projectId, member) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
   console.log(member);
+  
   return axios.put(API_BASE_URL + '/v1/projects/' + projectId + "/projectmembers/" + member.memberId, member ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
