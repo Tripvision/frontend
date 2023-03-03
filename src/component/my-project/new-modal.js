@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useDispatch } from 'react-redux';
 
-
+import { isEmptyArr } from '~utils/object-utils';   
 import EditMenu from '~component/core/edit-menu';
 import Comment from '~component/core/commnet.js';
 import { useParams } from 'react-router-dom';
@@ -59,12 +59,7 @@ export default function NewModal({ open, setOpen }) {
         content: '',
         status: '',
         author: '',
-        fileList: [
-            {
-                id: '',
-                name: '',
-            }
-        ],
+        fileList: [],
     };
 
 
@@ -136,21 +131,33 @@ export default function NewModal({ open, setOpen }) {
         e.persist();
 
         let formData = new FormData();
+        let tempArr = ['0'];
+        console.log(isEmptyArr(files))
+        if (isEmptyArr(files)) {
+            console.log("빈 배열 입니다.")
+            formData.append("fileList", tempArr)
+            console.log(formData.get("fileList"));
+        }
+        
         for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+            formData.append('fileList', files[i]);
         }
         const json = JSON.stringify(task);
         formData.append("request", json);
-        formData.append("request", new Blob([JSON.stringify(json)], {type: "application/json"}))
+        
+        
+        const temp = formData.get("fileList");
+        console.log(typeof temp);
 
+        
         console.log(formData.get("request"))
-        console.log(formData.get("files"))
 
         // for (let value of formData.values()) {
             
         //   if(typeof value === 'object') {
         //   }
         // }
+        
         dispatch(createTaskByProjectId(formData))
 
     };
@@ -178,7 +185,6 @@ export default function NewModal({ open, setOpen }) {
             memberList,
         } = sampleTask;
         setTask({ projectId, id, tags, title, content, status });
-        setFiles(fileList);
         //    setCommentList(commentsList);
         //    setMemberList(memberList);
     }, []);
@@ -308,7 +314,9 @@ export default function NewModal({ open, setOpen }) {
                                 </Box>
                                 {/* 업로드 할 파일리스트 출력 */}
                                 <Box sx={{ marginLeft: 'auto' }}>
-                                    <Button disabled={disabled} onClick={handleFileUpload}>
+                                    <Button disabled={disabled}
+                                    onClick={handleFileUpload}
+                                     >
                                         Upload
                                     </Button>
                                     <input

@@ -54,6 +54,14 @@ export const createTaskByProjectId = createAsyncThunk(
   async (formData, thunkAPI) => {
     const task = formData.get("request")
     const taskParse = JSON.parse(task);
+
+    const json = JSON.stringify(taskParse);
+    const blob = new Blob([json], { type: "application/json" });
+    formData.delete("request");
+    formData.append("request", blob);
+
+    console.warn(formData.get('request'));
+    console.warn(formData.get('fileList'));
     try {
       const response = await createTask(taskParse.projectId, formData);
       return response.data;
