@@ -28,22 +28,17 @@ export function MyProjectTarget() {
 
     const { id } = useParams();
 
-    //const statusTaskList = taskService.getTaskListStatus(id);
-    const yetTaskList = useSelector(state => state.tasks.statusList.yet);
-    const progressTaskList = useSelector(state => state.tasks.statusList.progress);
-    const completedTaskList = useSelector(state => state.tasks.statusList.completed);
+    const yetTaskList = useSelector(state => state.tasks.statusList.YET);
+    const progressTaskList = useSelector(state => state.tasks.statusList.PROGRESS);
+    const completedTaskList = useSelector(state => state.tasks.statusList.COMPLETED);
 
     useEffect(() => {
-        
         dispatch(fetchTaskListByProjectId(id));
-        console.log(yetTaskList);
-        console.log(progressTaskList);
-        console.log(completedTaskList);
     }, []);
 
     return (
         <Container fixed >
-            {/* <Grid container spacing={3}>
+            <Grid container spacing={3}>
                 <Grid item
                     xs={12}
                     sm={6}
@@ -56,9 +51,15 @@ export function MyProjectTarget() {
                     <Stack spacing={3}>
                         {
                             yetTaskList.map(task => (
+                                task.taskId === null ? 
+                                <>
+                                </>
+                                :
                                 <TaskCard
+                                    key={task.taskId}
                                     data={task}
                                 />
+                                
                             ))
                         }
                     </Stack>
@@ -74,7 +75,12 @@ export function MyProjectTarget() {
                     <Stack spacing={2}>
                         {
                             progressTaskList.map(task => (
+                                task.taskId === null ? 
+                                <>
+                                </>
+                                :
                                 <TaskCard
+                                    key={task.taskId}
                                     data={task}
                                 />
                             ))
@@ -92,14 +98,19 @@ export function MyProjectTarget() {
                     <Stack spacing={2}>
                         {
                             completedTaskList.map(task => (
+                                task.taskId === null ? 
+                                <>
+                                </>
+                                :
                                 <TaskCard
+                                    key={task.taskId}
                                     data={task}
                                 />
                             ))
                         }
                     </Stack>
                 </Grid>
-            </Grid> */}
+            </Grid>
         </Container>
     )
 }

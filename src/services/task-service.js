@@ -32,9 +32,16 @@ export const getTaskListByProjectId = (projectId) => {
   })
 };
 
+// get
 export const getTask = (id, taskId) => {
-  return axios.get(API_BASE_URL + '/v1/projects/' + id + '/tasks/' + taskId, { headers: addAuthHeader() });
-};
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  console.warn(taskId)
+  return axios.get(API_BASE_URL + '/v1/projects/' + id + "/tasks/" + taskId ,{
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+}
 
 
 // post

@@ -11,26 +11,22 @@ import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
-
 import EditMenu from '~component/core/edit-menu';
 import Comment from '~component/core/commnet.js';
-// // N+1 Task <--> file <--> comment
-// List<Task> taskList = taskRepository.findbyId(projectId);
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchTaskByProjectId } from '~features/tasks/tasks-slice';
+import { isEmptyArr, isEmptyObj } from '~utils/object-utils';
 
-// // 1번 태스크에 해당하는 file List 를 가져온다. where task.id = 1;
-// // 2번 태스크에 해당하는 file List 를 가져온다. where task.id = 1;
+export default function BasicModal({ open, setOpen, taskId }) {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const findTask = useSelector(state => state.tasks.task);
 
-// // Task 조회할 때 Project Id 로 조회.
-// // -> task 를
-// Task task = taskRepository.findbyId(taskId);
-// // 1번 태스크에 해당하는 file List 를 가져온다. where task.id = 1;
-// // 1번 태스크에 해당하는 comment List 를 가져온다. where task.id = 1;
-// // 애를 그냥 리턴시켜주면 값이 나오나? 연관관계에 있는 값  ( commentList, FileList )
-// // fetch join 써야된다.
-// //
+  React.useEffect(() => {
+    dispatch(fetchTaskByProjectId({ id, taskId }))
+  }, []);
 
-// 처음에 로딩 될 때 권한을 비교해서 권한을 노출 시켜줄 수 있도록 합시다.
-export default function BasicModal({ open, setOpen }) {
   const style = {
     position: 'absolute',
     top: '55%',
@@ -45,102 +41,42 @@ export default function BasicModal({ open, setOpen }) {
     p: 4,
   };
 
-  const sampleTask = {
-    projectId: '1',
-    id: '1',
-    tags: 'UI Design',
-    title: 'Meeting with customer',
-    content: 'First, a disclaimer - the entire process Writing...',
-    status: 'In Progress',
-    author: 'Lee Sang Min',
-    fileList: [
-      {
-        id: '1',
-        name: 'www.naver.com',
-      },
-      {
-        id: '2',
-        name: 'www.google.com',
-      },
-      {
-        id: '3',
-        name: 'www.hangame.com',
-      },
-    ],
-    commentsList: [
-      {
-        id: '1',
-        name: 'Lee Sang Min',
-        content: 'good man',
-        profileImage:
-          'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-      {
-        id: '2',
-        name: 'Lee Sang Hyup',
-        content: '이거 틀린거 같은데요?',
-        profileImage:
-          'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-      {
-        id: '3',
-        name: 'Go Seung Bum',
-        content: '아닙니다 올바른 표현인거 같은데요?',
-        profileImage:
-          'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-    ],
-    memberList: [
-      {
-        id: '1',
-        name: '이상민',
-        role: 'owner',
-        profileImage:
-          'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-      {
-        id: '2',
-        name: '정의훈',
-        profileImage:
-          'https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-      {
-        id: '3',
-        name: '김소은',
-        profileImage:
-          'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-    ],
-  };
-
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-  // const [task, setTask] = React.useState(sampleTask);
 
   // 전체 useState
-  const [task, setTask] = React.useState({});
+  const [task, setTask] = React.useState({
+    ...findTask
+  });
   // 댓글 등록 State
   const [comment, setComment] = React.useState({
-    projectId: '1',
-    id: '',
-    writer: 'Lee Sang Hyup',
+    projectId: id,
+    taskId: taskId,
+    writer: '',
     content: '',
     profileImage:
-      'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      '',
   });
-  const [commentList, setCommentList] = React.useState([]);
+  const [commentList, setCommentList] = React.useState([
+    findTask.commentList
+  ]);
   const [memberList, setMemberList] = React.useState([]);
-  const [files, setFiles] = React.useState([]);
+  const [files, setFiles] = React.useState([...findTask.fileList]);
   const [disabled, setDisabled] = React.useState(true);
-  const [popOver, setPopOver] = React.useState([sampleTask.memberList]);
+  const [popOver, setPopOver] = React.useState(findTask.findMemberName);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const fileInput = React.createRef();
 
+  // React.useEffect(() => {
+  //   console.log(files);
+  // }, [files]);
+
   React.useEffect(() => {
+    // console.log(task);
     console.log(files);
-  }, [files]);
+    //console.log(commentList);
+    //console.log(isEmptyArr(commentList));
+  })
+
 
   const handleNewCommentChange = e => {
     const { name, value } = e.target;
@@ -196,32 +132,13 @@ export default function BasicModal({ open, setOpen }) {
   };
 
   const handlePopoverOpen = event => {
-    const id = Number(event.currentTarget.id) - 1;
-    const findMemberName = sampleTask.memberList.find(
-      (element, index, arr) => index === id
-    );
-    setPopOver(findMemberName.name);
+    // const id = Number(event.currentTarget.id) - 1;
+    // const findMemberName = sampleTask.memberList.find(
+    //   (element, index, arr) => index === id
+    // );
+    // setPopOver(findMemberName.name);
     setAnchorEl(event.currentTarget);
   };
-
-  React.useEffect(() => {
-    // 통신 로직
-    const {
-      projectId,
-      id,
-      tags,
-      title,
-      content,
-      status,
-      fileList,
-      commentsList,
-      memberList,
-    } = sampleTask;
-    setTask({ projectId, id, tags, title, content, status });
-    setCommentList(commentsList);
-    setFiles(fileList);
-    setMemberList(memberList);
-  }, []);
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
@@ -253,19 +170,16 @@ export default function BasicModal({ open, setOpen }) {
           <Box sx={{ display: 'flex', marginLeft: 'auto' }}>
             <Box sx={{ marginLeft: 'auto' }}>
               <Stack direction='row' spacing={2}>
-                {memberList.map(m => (
-                  <Box key={m.id} sx={{ display: 'flex' }}>
-                    <Avatar
-                      id={m.id}
-                      aria-owns={popOpen ? 'mouse-over-popover' : undefined}
-                      aria-haspopup='true'
-                      onMouseEnter={handlePopoverOpen}
-                      onMouseLeave={handlePopoverClose}
-                      alt='Remy Sharp'
-                      src={m.profileImage}
-                    />
-                  </Box>
-                ))}
+                <Box sx={{ display: 'flex' }}>
+                  <Avatar
+                    aria-owns={popOpen ? 'mouse-over-popover' : undefined}
+                    aria-haspopup='true'
+                    onMouseEnter={handlePopoverOpen}
+                    onMouseLeave={handlePopoverClose}
+                    alt='Remy Sharp'
+                  // src={m.profileImage}
+                  />
+                </Box>
                 <Box>
                   <EditMenu handleDisabled={handleDisabled} />
                 </Box>
@@ -283,9 +197,9 @@ export default function BasicModal({ open, setOpen }) {
                 <TextField
                   required
                   id='outlined-required'
-                  label={Object.keys(task)[2]}
-                  name='tags'
-                  value={task.tags || ''}
+                  label={Object.keys(task)['taskTags']}
+                  name='taskTags'
+                  value={task.taskTags || ''}
                   fullWidth
                   variant='standard'
                   disabled={disabled}
@@ -296,9 +210,9 @@ export default function BasicModal({ open, setOpen }) {
                 <TextField
                   required
                   id='outlined-required'
-                  label={Object.keys(task)[3]}
-                  name='title'
-                  value={task.title || ''}
+                  label={Object.keys(task)['taskTitle']}
+                  name='taskTitle'
+                  value={task.taskTitle || ''}
                   fullWidth
                   variant='standard'
                   disabled={disabled}
@@ -309,9 +223,9 @@ export default function BasicModal({ open, setOpen }) {
                 <TextField
                   required
                   id='outlined-required'
-                  label={Object.keys(task)[4]}
-                  name='content'
-                  value={task.content || ''}
+                  label={Object.keys(task)['taskContent']}
+                  name='taskContent'
+                  value={task.taskContent || ''}
                   fullWidth
                   variant='standard'
                   disabled={disabled}
@@ -324,10 +238,10 @@ export default function BasicModal({ open, setOpen }) {
                 <TextField
                   required
                   id='outlined-required'
-                  label={Object.keys(task)[5]}
-                  name='status'
+                  label={Object.keys(task)['taskStatus']}
+                  name='taskStatus'
                   variant='standard'
-                  value={task.status || ''}
+                  value={task.taskStatus || ''}
                   onChange={handleTaskChange}
                   fullWidth
                   disabled={disabled}
@@ -336,6 +250,7 @@ export default function BasicModal({ open, setOpen }) {
               {/* 파일 리스트로 추가 시켜주는 기능 업로드 */}
               <Box sx={{ display: 'flex', width: '100%' }}>
                 <Box
+                  className="fileList"
                   sx={{
                     marginRight: 'auto',
                     display: 'flex',
@@ -344,9 +259,9 @@ export default function BasicModal({ open, setOpen }) {
                   }}
                 >
                   {files.map(f => (
-                    <Box key={f.id} sx={{ width: '100%', display: 'flex' }}>
+                    <Box sx={{ width: '100%', display: 'flex' }}>
                       <AttachFileIcon />
-                      <Typography>{f.name}</Typography>
+                      <Typography>{f.fileName}</Typography>
                     </Box>
                   ))}
                 </Box>
@@ -363,6 +278,7 @@ export default function BasicModal({ open, setOpen }) {
                     multiple={true}
                     id='fileUpload'
                   />
+                  
                 </Box>
               </Box>
               <Box sx={{ marginLeft: 'auto !important' }}>
@@ -380,15 +296,20 @@ export default function BasicModal({ open, setOpen }) {
             spacing={4}
             sx={{ width: '100%' }}
           >
-            {commentList.map(m => (
-              <Comment
-                key={m.id}
-                com={m}
-                popOpen={popOpen}
-                handlePopoverOpen={handlePopoverOpen}
-                handlePopoverClose={handlePopoverClose}
-              />
-            ))}
+            {
+              isEmptyArr(commentList) === false
+                ?
+                commentList.map(m => (
+                  <Comment
+                    key={m.id}
+                    com={m}
+                    popOpen={popOpen}
+                    handlePopoverOpen={handlePopoverOpen}
+                    handlePopoverClose={handlePopoverClose}
+                  />
+                ))
+                : <>  </>
+            }
           </Stack>
           {/* New Comment */}
           <Box sx={{ width: '100%' }}>

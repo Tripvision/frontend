@@ -115,7 +115,7 @@ const App = () => {
               <Route path="/projects" element={<ProjectsOverView />} />
               <Route path="/projects/overview" element={<ProjectsOverView />} />
 
-              <Route path="/tasks" element={<MyMemberTask />} />
+              {/* <Route path="/tasks" element={<MyMemberTask />} /> */}
 
 
               <Route path='/projects/:id/' element={<VisualTab />}>
