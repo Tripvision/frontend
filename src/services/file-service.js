@@ -1,16 +1,24 @@
 import axios from "axios";
 import { addAuthHeader as authHeader } from "~services/auth-service";
-import { API_BASE_URL } from '~constants/index.js'
-
+import { ACCESS_TOKEN, API_BASE_URL } from '~constants/index.js'
 // get
 const getProjectFileList = (id) => {
-  return axios.get(API_BASE_URL + "/projects/" + id + "/files", { headers : authHeader() });
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.get(API_BASE_URL + '/v1/projects/' + id + "/files", {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
+
+
 
 // get
 const getProjectFile = (id, fileId) => {
     return axios.get(API_BASE_URL + "/projects/" + id + "/files/" + fileId, { headers : authHeader() });
-};
+
+
+  };
 
 
 // create
@@ -39,8 +47,13 @@ const updateProjectFile = (projectId,  {files} ) => {
 };
 // delete
 
-const deleteProjectFile = (projectId, fileId) => {
-  return axios.delete(API_BASE_URL + "/projects/" + projectId + "/files/" + fileId, { headers: authHeader() });
+const deleteProjectFile = (projectId, taskId) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.delete(API_BASE_URL + '/v1/projects/' + projectId + "/tasks/" + taskId, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 };
 
 const fileService = {

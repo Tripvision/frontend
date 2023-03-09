@@ -35,7 +35,6 @@ export const getTaskListByProjectId = (projectId) => {
 // get
 export const getTask = (id, taskId) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  console.warn(taskId)
   return axios.get(API_BASE_URL + '/v1/projects/' + id + "/tasks/" + taskId ,{
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -55,17 +54,17 @@ export const createTask = (projectId, task) => {
   })
 }
 
-// put
-export const updateTask = (projectId, { task }) => {
-  let { taskId } = task
-  let config = {
-    headers: addAuthHeader(),
-    params: {
-      id: taskId,
-    },
-  };
-  return axios.put(API_BASE_URL + '/v1/projects/' + projectId + '/tasks/' + taskId, config);
+// get
+export const updateTask = (id, task,taskId) => {
+  console.log(taskId)
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.put(API_BASE_URL + '/v1/projects/' + id + "/tasks/" + taskId, task, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
 }
+
 
 // delete
 export const deleteTask = (projectId, taskId) => {

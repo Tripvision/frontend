@@ -39,7 +39,7 @@ function getStyles(name, position, theme) {
     };
 }
 
-export default function PositionSelectBox({ user, setUser }) {
+export default function OnePositionSelectBox({ user, setUser }) {
     const theme = useTheme();
     const [position, setPosition] = React.useState([]);
 
@@ -53,7 +53,7 @@ export default function PositionSelectBox({ user, setUser }) {
         );
         const newUser = {
             ...user,
-            subPositionArr: value === 'string' ? value.split(',') : value,
+            positionArr: value === 'string' ? value.split(',') : value,
         }
         setUser(newUser)
     }
@@ -61,11 +61,10 @@ export default function PositionSelectBox({ user, setUser }) {
     return (
         <div>
             <FormControl sx={{ m: 1, width: 300 }}>
-                <InputLabel id="demo-multiple-chip-label">Sub Position</InputLabel>
+                <InputLabel id="demo-multiple-chip-label">Position</InputLabel>
                 <Select
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
-                    multiple
                     value={position}
                     onChange={handleChange}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}

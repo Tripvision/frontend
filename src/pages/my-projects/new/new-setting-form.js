@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef, useMemo } from 'react';
+import React, { useEffect, useState , useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -28,6 +28,9 @@ import StatusRadio from '../../../component/project/status-radio';
 
 export default function NewSettingForm() {
 
+    
+    console.log("Parent render")
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -44,12 +47,11 @@ export default function NewSettingForm() {
     },[])
     
 
-    const saveImgFile = () => {
+    const saveImgFile = useCallback(() => {
         const file = imgRef.current.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
-    };
-
+    })
     const submit = () => {
         const result = {
             ...state,

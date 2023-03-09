@@ -11,24 +11,19 @@ import { Container } from '@mui/system';
 import PositionSelectBox from '~component/core/position-select-box';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
+import OnePositionSelectBox from '~component/core/one-position-select-box';
+import { updateMyProfile } from '~features/auth/auth-slice';
 // pages
 
 const MyProfile = () => {
 
     const dispatch = useDispatch();
     const loaduser = useSelector(state => state.auth.userInfo);
-
     const imgRef = useRef();
     const [user, setUser] = useState({
         ...loaduser,
     });
-    // const user = useSelector(state => state.auth.users);
-
-    useEffect(() => {
-        // 유저 값 가져오기
-        // dispatch(fetchMe());
-    }, []);
-
+    
     useEffect(() => {
         console.log(user);
     })
@@ -54,11 +49,8 @@ const MyProfile = () => {
 
     const handleSubmit = _ => {
         console.log(user);
-        // dispatch 여부
+        dispatch(updateMyProfile(user))
     }
-
-    
-
 
     return (
         <Container sx={{ mt: 3, height: '100%' }}>
@@ -150,6 +142,12 @@ const MyProfile = () => {
                                     label='registrationDate'
                                     value={user.registrationDate || ''}
                                 // value
+                                />
+                            </Box>
+                            <Box>
+                                <OnePositionSelectBox
+                                    user={user}
+                                    setUser={setUser}
                                 />
                             </Box>
                             <Box>

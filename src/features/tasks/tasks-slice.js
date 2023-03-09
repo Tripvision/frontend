@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux';
 import { getTaskListByMemberId, getTask, createTask, updateTask, deleteTask, getTaskListByProjectId } from '~services/task-service';
 
 export const fetchTaskListByMemberId = createAsyncThunk(
@@ -35,7 +36,7 @@ export const fetchTaskListByProjectId = createAsyncThunk(
 
 export const fetchTaskByProjectId = createAsyncThunk(
   'projects/task/fetch',
-  async ({id, taskId}, thunkAPI) => {
+  async ({ id, taskId }, thunkAPI) => {
     try {
       const response = await getTask(id, taskId);
       return response.data;
@@ -78,9 +79,10 @@ export const createTaskByProjectId = createAsyncThunk(
 
 export const UpdateTaskByProjectId = createAsyncThunk(
   'tasks/update',
-  async (id, thunkAPI) => {
+  async ({id,task,taskId}, thunkAPI) => {
     try {
-      const response = await updateTask();
+      console.log(task);
+      const response = await updateTask(id,task,taskId);
       return response.data;
     } catch (err) {
       let error = err;
@@ -94,9 +96,9 @@ export const UpdateTaskByProjectId = createAsyncThunk(
 
 export const DeleteTaskByProjectId = createAsyncThunk(
   'tasks/delete',
-  async (id, thunkAPI) => {
+  async ({id,taskId,files}, thunkAPI) => {
     try {
-      const response = await deleteTask();
+      const deleteResponse = await deleteTask();
       return id;
     } catch (err) {
       let error = err;
@@ -109,11 +111,17 @@ export const DeleteTaskByProjectId = createAsyncThunk(
 );
 
 const initialState = {
-  task: [],
+  task: {
+    commentList : [],
+    fileList : [],
+  },
+  entities : [
+
+  ],
   statusList: {
-    COMPLETED : [],
-    PROGRESS : [],
-    YET : [],
+    COMPLETED: [],
+    PROGRESS: [],
+    YET: [],
   },
   loading: 'idle',
   error: null,
@@ -155,7 +163,7 @@ export const tasksSlice = createSlice({
     [fetchTaskByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
       state.task = action.payload
-    },  
+    },
     [fetchTaskByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle'
@@ -178,9 +186,7 @@ export const tasksSlice = createSlice({
     // 여기는 수정해야 합니다.
     [UpdateTaskByProjectId.fulfilled]: (state, action) => {
       state.loading = 'idle'
-      const newProject = action.payload;
-      return state.project.map((item) => item.id === action.payload.id ?
-        { ...item, newProject } : item)
+      state.task = action.payload;
     },
     [UpdateTaskByProjectId.rejected]: (state, action) => {
       if (state.loading === 'pending') {

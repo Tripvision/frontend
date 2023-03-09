@@ -9,12 +9,12 @@ import Box from '@mui/material/Box'
 
 
 // Refactor : value 값 Redux 에서 받아와서 바인딩 해주기 
-export default function LineProgressBar() {
-
-    const [value, setValue] = useState(22300);
-    const MAX = 36000;
+export default function LineProgressBar({currentValue, maxValue}) {
+    const [value, setValue] = useState(currentValue);
+    const MAX = maxValue;
     const MIN = 0;
     const normalise = (nowValue) => ((nowValue - MIN) * 100) / (MAX - MIN);
+
 
     return (
         <Box mb={3} > 

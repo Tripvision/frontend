@@ -30,6 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { fetchBudgetByProjectId, createBudgetByProjectId, UpdateBudgetByProjectId } from '~features/budget/budget-slice';
 import { DeleteBudgetByProjectId } from '../../features/budget/budget-slice';
+import { isEmptyObj } from '~utils/object-utils';
 
 
 // Refactor : props 전체를 받아오는 행위
@@ -64,6 +65,8 @@ const MyProjectBudget = () => {
 
     useEffect(() => {
         dispatch(fetchBudgetByProjectId(id));
+        console.log(budget)
+        console.log(isEmptyObj(budget));
     }, [dispatch])
 
     const submit = () => {
@@ -90,6 +93,8 @@ const MyProjectBudget = () => {
         dispatch(DeleteBudgetByProjectId(id));
     }
 
+    
+
 
 
     let isValidForm =
@@ -98,7 +103,11 @@ const MyProjectBudget = () => {
 
     return (
         <Container>
-            <LineProgressBar />
+            {
+                isEmptyObj(budget) === false ?
+                    <LineProgressBar currentValue={budget.value} maxValue={budget.max} />
+                    : <></>
+            }
             <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                 <Stack spacing={4}>
 
@@ -161,7 +170,29 @@ const MyProjectBudget = () => {
                                 fullWidth
                                 name='max'
                                 value={state.max || ''}
-                                onChange={handleChange} 
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.type ? true : false}
+                                helperText={errors.type}
+                                variant='standard'
+                                margin='dense'
+                                InputProps={{ disableUnderline: true }}
+                            />
+                        </CardContent>
+                    </Card>
+
+                    <Card
+                        sx={{ borderRadius: '12px' }}
+                    >
+                        <CardContent>
+                            <Typography> current value </Typography>
+                            <TextField
+                                required
+                                type='text'
+                                fullWidth
+                                name='value'
+                                value={state.value || ''}
+                                onChange={handleChange}
                                 onBlur={handleBlur}
                                 error={errors.type ? true : false}
                                 helperText={errors.type}

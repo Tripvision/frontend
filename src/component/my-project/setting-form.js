@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -24,6 +24,7 @@ import StatusRadio from '../project/status-radio';
 import { isEmptyObj } from '../../utils/object-utils';
 
 export function SettingForm() {
+    const imgRef = useRef();
     const { id } = useParams();
     let navigate = useNavigate();
     const dispatch = useDispatch();
@@ -38,18 +39,29 @@ export function SettingForm() {
         },
         []
     );
+    const saveImgFile = useCallback(() => {
+        const file = imgRef.current.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+    })
 
     useEffect(() => {
         dispatch(fetchSettingsByProjectId(id));
     }, [dispatch])
 
     const submit = () => {
+        console.log(state);
         const result = {
             ...state,
             ['projectNotificationType']: [...checkedItems]
         }
-        console.log(result);
-        dispatch(UpdateSettingsByProjectId({ id: id, setting: result }));
+
+        const json = JSON.stringify(result);
+        let formData = new FormData();
+        formData.append('fileList', state.projectLogoUrl);
+        formData.append("request", json);
+
+        dispatch(UpdateSettingsByProjectId({ id: id, formData }));
     };
 
     const hadleDelete = () => {
@@ -63,6 +75,7 @@ export function SettingForm() {
             callback: submit,
             validator,
             checkBox: true,
+            saveImgFile: saveImgFile,
         });
 
     let isValidForm =
@@ -74,13 +87,15 @@ export function SettingForm() {
         <Box
             sx={{ mt: 3 }}
         >
-            <span> 아니 왜 </span>
             {isEmptyObj(setting) === false ?
                 <Box component='form' onSubmit={handleSubmit} sx={{ width: '100%' }}>
                     <Stack spacing={4}>
                         <Card>
                             <CardContent>
                                 <Typography> Project Logo </Typography>
+                                <Avatar sx={{ width: '150px', height: '100px' }} src={state.projectLogoUrl ? state.projectLogoUrl : `/images/icon/user.png`}
+                                    alt="projectLogoUrl"
+                                />
                                 <label className="signup-profileImg-label" htmlFor="projectLogoUrl">프로젝트 로고 추가</label>
                                 <Box sx={{ display: 'none' }}>
                                     <TextField
@@ -93,6 +108,7 @@ export function SettingForm() {
                                         InputProps={{ disableUnderline: true }}
                                         hidden
                                         fullWidth
+                                        ref={imgRef}
                                         // value={state.logo}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
@@ -216,8 +232,6 @@ export function SettingForm() {
 
                                     Delete Project
                                 </Button>
-                                x
-
                             </Box>
                             <Box
                                 sx={{
@@ -233,7 +247,7 @@ export function SettingForm() {
                                 </Button>
                                 <Button
                                     onClick={handleSubmit}
-                                    // disabled={!isValidForm && isSubmited}
+
                                     variant='contained'
                                     color='primary'
                                 >

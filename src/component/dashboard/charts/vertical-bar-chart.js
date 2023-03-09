@@ -8,36 +8,36 @@ import Card from '@mui/material/Card';
 import chartService from '~services/chart-service';
 
 const VerticalBarChart = () => {
-    const data =  [
-        {
-            "name": "Google",
-            "value": 800
-        },
-        {
-            "name": "Youtube",
-            "value": 400
-        },
-        {
-            "name": "Instagram",
-            "value": 550
-        },
-        {
-            "name": "Pinterest",
-            "value": 300
-        },
-        {
-            "name": "Facebook",
-            "value": 700
-        },
-        {
-            "name": "Twitter",
-            "value": 370
-        },
-        {
-            "name": "Tumblr",
-            "value": 550
-        }
-    ]
+    // const data =  [
+    //     {
+    //         "name": "Google",
+    //         "value": 800
+    //     },
+    //     {
+    //         "name": "Youtube",
+    //         "value": 400
+    //     },
+    //     {
+    //         "name": "Instagram",
+    //         "value": 550
+    //     },
+    //     {
+    //         "name": "Pinterest",
+    //         "value": 300
+    //     },
+    //     {
+    //         "name": "Facebook",
+    //         "value": 700
+    //     },
+    //     {
+    //         "name": "Twitter",
+    //         "value": 370
+    //     },
+    //     {
+    //         "name": "Tumblr",
+    //         "value": 550
+    //     }
+    // ]
 
     const [budgetChart, setBudgetChart] = React.useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -55,21 +55,37 @@ const VerticalBarChart = () => {
         const merge = getProjectGraph();
         merge.then((result) => {
             setBudgetChart(
-                result.data
+                result.data.map(budget => {
+                    if(budget.value === null) {
+                        return {
+                          ...budget,
+                          ['value'] : 0
+                        }
+                      }
+                      else return budget;
+                })
             )
         })
+        // setBudgetChart(budgetChart.map(budget => {
+        //     if(budget.value === null) {
+        //         return {
+        //           ...budget,
+        //           ['value'] : 0
+        //         }
+        //       }
+        //       else return budget;
+        // }))
     }, [])
 
-    // React.useEffect(() => {
-    //     console.log(budgetChart)
-    // });
-
+    React.useEffect(() => {
+        console.log(budgetChart)
+    })
 
     return (
         <Card>
             <Container sx={{ mt: 2, mb: 1 }}><Typography variant='body1'> Top 7 Budget </Typography></Container>
             <ResponsiveContainer width='100%' height='100%' aspect={1}>
-                <BarChart layout='vertical' width='100%' height='100%' data={data} barSize={30}>
+                <BarChart layout='vertical' width='100%' height='100%' data={budgetChart} barSize={15}>
                     <XAxis type="number" hide='true' />
                     <Tooltip hide='true' />
                     <YAxis dataKey="projectName" type="category"
@@ -78,7 +94,7 @@ const VerticalBarChart = () => {
                         tick={{ fontSize: 10 }}
                     />
                     <Bar dataKey="value" radius={[0, 5, 5, 0]} onClick={changeIndex}>
-                        {data.map((entry, index) => (
+                        {budgetChart.map((entry, index) => (
                             entry.value === null ?
                                 <>
                                     <span> Empty Typo</span>

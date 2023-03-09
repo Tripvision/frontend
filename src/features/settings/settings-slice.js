@@ -37,9 +37,16 @@ export const createSettingsByMemberId = createAsyncThunk(
 
 export const UpdateSettingsByProjectId = createAsyncThunk(
   'project/setting/update',
-  async ( request , thunkAPI) => {
+  async ({id,formData}, thunkAPI) => {
     try {
-      const response = await (updateSetting(request));
+      const project = formData.get("request")
+      const projectParse = JSON.parse(project);
+
+      const json = JSON.stringify(projectParse);
+      const blob = new Blob([json], { type: "application/json" });
+      formData.delete("request");
+      formData.append("request", blob);
+      const response = await updateSetting(id,formData)
       return response.data;
     } catch (err) {
       let error = err;
@@ -69,7 +76,7 @@ export const DeleteSettingsByProjectId = createAsyncThunk(
 
 
 const initialState = {
-  setting : {
+  setting: {
 
   },
   loading: 'idle',

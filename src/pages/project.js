@@ -82,40 +82,6 @@ const Project = () => {
 
         },
     });
-    React.useEffect(() => {
-        // async function getChartData() {
-        //     let res = {};
-        //     let budgetChart = await chartService.getBudgetGraph();
-        //     res = {
-        //         ...res,
-        //         ['budgetChart']: {
-        //             ['wrapData']: budgetChart.data
-        //         }
-        //     }
-        //     let projectChart = await chartService.getProjectgraph();
-        //     res = {
-        //         ...res,
-        //         ['projectChart']: projectChart.data
-        //     }
-        //     let connectGraph = await chartService.getConnectgraph();
-        //     res = {
-        //         ...res,
-        //         ['connectGraph']: connectGraph.data
-        //     }
-        //     return res;
-        // }
-        // const merge = getChartData();
-        // merge.then((result) => {
-        //     serChart({
-        //         ...chart,
-        //         ...result
-        //     })
-        // })
-
-    }, []);
-
-
-
 
     return (
         <div>

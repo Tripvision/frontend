@@ -132,9 +132,7 @@ export default function NewModal({ open, setOpen }) {
 
         let formData = new FormData();
         let tempArr = ['0'];
-        console.log(isEmptyArr(files))
         if (isEmptyArr(files)) {
-            console.log("빈 배열 입니다.")
             formData.append("fileList", tempArr)
             console.log(formData.get("fileList"));
         }
@@ -144,20 +142,6 @@ export default function NewModal({ open, setOpen }) {
         }
         const json = JSON.stringify(task);
         formData.append("request", json);
-        
-        
-        const temp = formData.get("fileList");
-        console.log(typeof temp);
-
-        
-        console.log(formData.get("request"))
-
-        // for (let value of formData.values()) {
-            
-        //   if(typeof value === 'object') {
-        //   }
-        // }
-        
         dispatch(createTaskByProjectId(formData))
 
     };

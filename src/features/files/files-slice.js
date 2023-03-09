@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux';
 import fileService from '~services/file-service';
 
 export const fetchfileListByProjectId = createAsyncThunk(
   'fileList/fetch',
-  async (projectId, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
-      const response = await fileService.getProjectFileList(projectId);
+      const response = await fileService.getProjectFileList(id);
       return response.data;
     } catch (err) {
       let error = err;
@@ -35,9 +36,9 @@ export const fetchFileByProjectId = createAsyncThunk(
 
 export const createFileByProjectId = createAsyncThunk(
   'files/create',
-  async (_, thunkAPI) => {
+  async ({id,taskId,files}, thunkAPI) => {
     try {
-      const response = await fileService.createProjectFile();
+      const response = await fileService.createProjectFile(id,taskId,files);
       return response.data;
     } catch (err) {
       let error = err;
@@ -66,11 +67,16 @@ export const UpdateFileByProjectId = createAsyncThunk(
   }
 );
 
-export const DeleteFileByProjectId = createAsyncThunk(
+export const DeleteFileByTaskId = createAsyncThunk(
   'files/delete',
-  async (id, thunkAPI) => {
+  async ({id,taskId,files}, thunkAPI) => {
     try {
-      const response = await fileService.deleteProjectFile();
+      console.log(id)
+      console.log(taskId)
+      console.log(files)
+      const response = await fileService.deleteProjectFile(id,taskId);
+      const dispatch = useDispatch();
+      dispatch(createFileByProjectId({id,taskId,files}))
       return id;
     } catch (err) {
       let error = err;
@@ -150,6 +156,14 @@ export const filesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
+    [fetchfileListByProjectId.pending]: (state, action) => {
+      if (state.loading === 'idle') {
+          state.loading = 'pending'
+      }
+  },
+  [fetchfileListByProjectId.fulfilled]: (state, action) => {
+    state.files = action.payload.content;
+  },
   },
 })
 

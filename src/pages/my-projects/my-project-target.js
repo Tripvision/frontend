@@ -46,7 +46,7 @@ export function MyProjectTarget() {
                     lg={4}
                     xl={4}
                 >
-                    <Box sx={{ display: 'flex' }}><Typography mr={1} >Yet to Start</Typography><Typography color="text.secondary">6</Typography></Box>
+                    <Box sx={{ display: 'flex' }}><Typography mr={1} >Yet to Start</Typography><Typography color="text.secondary">{yetTaskList.length}</Typography></Box>
                     <Divider sx={{ borderColor: '#A1E3CB', borderBottomWidth: 5, mb: 3, borderRadius: 3 }}></Divider>
                     <Stack spacing={3}>
                         {
@@ -70,7 +70,7 @@ export function MyProjectTarget() {
                     md={4}
                     lg={4}
                     xl={4}>
-                    <Box sx={{ display: 'flex' }}><Typography mr={1} >In Progress</Typography><Typography color="text.secondary">6</Typography></Box>
+                    <Box sx={{ display: 'flex' }}><Typography mr={1} >In Progress</Typography><Typography color="text.secondary">{progressTaskList.length}</Typography></Box>
                     <Divider sx={{ borderColor: '#C6C7F8', borderBottomWidth: 5, mb: 3 }}></Divider>
                     <Stack spacing={2}>
                         {
@@ -93,7 +93,7 @@ export function MyProjectTarget() {
                     md={4}
                     lg={4}
                     xl={4}>
-                    <Box sx={{ display: 'flex' }}><Typography mr={1} >Completed</Typography><Typography color="text.secondary">6</Typography></Box>
+                    <Box sx={{ display: 'flex' }}><Typography mr={1} >Completed</Typography><Typography color="text.secondary">{completedTaskList.length}</Typography></Box>
                     <Divider sx={{ borderColor: '#95A4FC', borderBottomWidth: 5, mb: 3 }}></Divider>
                     <Stack spacing={2}>
                         {

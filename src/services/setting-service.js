@@ -24,12 +24,12 @@ export const createSetting = (setting) => {
 
 
 // put
-export const updateSetting = (request) => {
+export const updateSetting = (id,formData) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  const {id , setting} = request;
-  console.warn(id)
-  return axios.put(API_BASE_URL + '/v1/projects/' + id , setting  ,{
+  console.log(formData);
+  return axios.put(API_BASE_URL + '/v1/projects/' + id , formData  ,{
     headers: {
+      "Content-Type": "multipart/form-data",
       'Authorization': `Bearer ${accessToken}`
     }
   })

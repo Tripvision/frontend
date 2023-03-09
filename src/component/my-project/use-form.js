@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 // ******************************
 const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
+  console.log("use Form render");
   const [checkedItems, setCheckedItems] = useState(() => {
     if (checkBox === true) {
       return new Set();
