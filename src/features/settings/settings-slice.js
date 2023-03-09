@@ -20,9 +20,17 @@ export const fetchSettingsByProjectId = createAsyncThunk(
 
 export const createSettingsByMemberId = createAsyncThunk(
   'project/setting/create',
-  async (setting, thunkAPI) => {
+  async (formData , thunkAPI) => {
+    const project = formData.get("request")
+    const projectParse = JSON.parse(project);
+    const json = JSON.stringify(projectParse);
+    const blob = new Blob([json], { type: "application/json" });
+    formData.delete("request");
+    formData.append("request", blob);
+    console.log(formData.get("logoFile"));
+
     try {
-      const response = await (createSetting(setting));
+      const response = await createSetting(formData);
       return response.data;
     } catch (err) {
       let error = err;
@@ -37,7 +45,7 @@ export const createSettingsByMemberId = createAsyncThunk(
 
 export const UpdateSettingsByProjectId = createAsyncThunk(
   'project/setting/update',
-  async ({id,formData}, thunkAPI) => {
+  async ({ id, formData }, thunkAPI) => {
     try {
       const project = formData.get("request")
       const projectParse = JSON.parse(project);
@@ -46,7 +54,7 @@ export const UpdateSettingsByProjectId = createAsyncThunk(
       const blob = new Blob([json], { type: "application/json" });
       formData.delete("request");
       formData.append("request", blob);
-      const response = await updateSetting(id,formData)
+      const response = await updateSetting(id, formData)
       return response.data;
     } catch (err) {
       let error = err;

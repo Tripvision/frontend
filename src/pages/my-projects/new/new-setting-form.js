@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -27,10 +27,7 @@ import { validator } from '~component/my-project/setting-validator';
 import StatusRadio from '../../../component/project/status-radio';
 
 export default function NewSettingForm() {
-
-    
-    console.log("Parent render")
-
+    const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -44,30 +41,37 @@ export default function NewSettingForm() {
             projectDueDate: "",
             projectNotificationType: ""
         }
-    },[])
-    
+    }, [])
 
-    const saveImgFile = useCallback(() => {
+
+    const saveImgFile = () => {
         const file = imgRef.current.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
-    })
+
+    }
+
     const submit = () => {
         const result = {
             ...state,
-            ['projectNotificationType'] : [...checkedItems]   
+            ['projectNotificationType']: [...checkedItems]
         }
-        dispatch(createSettingsByMemberId(result));
+        const json = JSON.stringify(result);
+        let formData = new FormData();
+        console.log(state.projectLogoUrl)
+        formData.append('logoFile', state.projectLogoUrl);
+        formData.append("request", json);
+        dispatch(createSettingsByMemberId(formData));
     };
 
-    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler,
-        state, checkedItems, errors, isSubmited } =
+    const { handleChange, handleSubmit, handleBlur, handleClear, handleStatus, handleCheckedItemHandler, handleFileChange,
+        state, checkedItems, errors, isSubmited, logoFile } =
         useForm({
             initState: setting,
             callback: submit,
             validator,
             checkBox: true,
-            saveImgFile : saveImgFile
+            saveImgFile: saveImgFile
         });
 
     let isValidForm =
@@ -77,8 +81,9 @@ export default function NewSettingForm() {
 
     const imgRef = useRef();
 
-    // 이미지 업로드 input의 onChange
-
+    React.useEffect(() => {
+        console.log(state);
+    })
 
     return (
         <Box
@@ -89,8 +94,7 @@ export default function NewSettingForm() {
                     <Stack spacing={4}>
                         <Card>
                             <CardContent>
-                                <Typography> Project Logo </Typography>
-                                <Avatar sx={{ width : '150px', height : '100px' }} src={state.projectLogoUrl ? state.projectLogoUrl : `/images/icon/user.png`}
+                                <Avatar sx={{ width: '150px', height: '100px' }} src={logoFile ? logoFile : `/images/icon/user.png`}
                                     alt="projectLogoUrl"
                                 />
                                 <label className="signup-profileImg-label" htmlFor="projectLogoUrl">프로젝트 로고 추가</label>
@@ -106,23 +110,13 @@ export default function NewSettingForm() {
                                         hidden
                                         fullWidth
                                         // value={state.logo}
-                                        onChange={handleChange}
+                                        onChange={handleFileChange}
                                         onBlur={handleBlur}
                                         error={errors.logo ? true : false}
                                         variant='standard'
                                         ref={imgRef}
                                     />
                                 </Box>
-                                {
-                                    state.logo && <Box>
-                                        <Avatar
-                                            sx={{ width: 200, height: 150 }}
-                                            src={state.logo}
-                                            alt='preview-img'
-
-                                        />
-                                    </Box>
-                                }
                                 <Typography> Allow Types : png, jpg, jpeg. </Typography>
                             </CardContent>
                         </Card>

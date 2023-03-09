@@ -12,9 +12,9 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     setState({
       ...initState
     })
-  },[initState]);
-
-  const [state, setState] = useState({...initState});
+  }, [initState]);
+  const [logoFile, setLogoFile] = useState()
+  const [state, setState] = useState({ ...initState });
   const [errors, setErrors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
 
@@ -28,7 +28,7 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   // ******************************
   const handleChange = e => {
     const { name, value } = e.target;
-    if(name === 'projectLogoUrl') {
+    if (name === 'projectLogoUrl') {
       encodeFileToBase64(e.target)
       saveImgFile()
     }
@@ -47,14 +47,14 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   const handleStatus = (e) => {
     setState({
       ...state,
-      status : e.target.value
+      status: e.target.value
     })
   }
 
   const handleSwitch = (e) => {
     setState({
       ...state,
-      [e.target.name] : e.target.checked
+      [e.target.name]: e.target.checked
     })
   }
 
@@ -68,6 +68,20 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     }
   };
 
+  const handleFileChange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setLogoFile(reader.result);
+    };
+    setState({
+      ...state,
+      ['projectLogoUrl']: e.target.files[0]
+    });
+
+  };
+
 
   const encodeFileToBase64 = (target) => {
     const reader = new FileReader();
@@ -77,7 +91,7 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
       reader.onload = () => {
         setState({
           ...state,
-          [target.name] : URL.createObjectURL(file),
+          [target.name]: URL.createObjectURL(file),
           //[target.name] : reader.result,
         });
         resolve();
@@ -117,10 +131,12 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     handleStatus,
     handleCheckedItemHandler,
     handleSwitch,
+    handleFileChange,
     state,
     checkedItems,
     errors,
     isSubmited,
+    logoFile,
   };
 };
 

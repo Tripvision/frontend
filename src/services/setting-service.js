@@ -17,6 +17,7 @@ export const createSetting = (setting) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
   return axios.post(API_BASE_URL + '/v1/projects', setting ,{
     headers: {
+      "Content-Type": "multipart/form-data",
       'Authorization': `Bearer ${accessToken}`
     }
   })
