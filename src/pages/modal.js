@@ -14,18 +14,67 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import EditMenu from '~component/core/edit-menu';
 import Comment from '~component/core/commnet.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchTaskByProjectId } from '~features/tasks/tasks-slice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchTaskByProjectId, UpdateTaskByProjectId } from '~features/tasks/tasks-slice';
 import { isEmptyArr, isEmptyObj } from '~utils/object-utils';
+import { DeleteFileByTaskId } from '~features/files/files-slice';
 
 export default function BasicModal({ open, setOpen, taskId }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const findTask = useSelector(state => state.tasks.task);
 
+  // 전체 useState
+  const [task, setTask] = React.useState({
+    commentList: [],
+    fileList: [],
+  });
+  // 댓글 등록 State
+  const [comment, setComment] = React.useState({
+    projectId: id,
+    taskId: taskId,
+    writer: '',
+    content: '',
+    profileImage:
+      '',
+  });
+  const [commentList, setCommentList] = React.useState([]);
+  const [memberList, setMemberList] = React.useState([]);
+  const [files, setFiles] = React.useState([]);
+  const [disabled, setDisabled] = React.useState(true);
+  const [popOver, setPopOver] = React.useState(findTask.findMemberName);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const fileInput = React.createRef();
+
   React.useEffect(() => {
     dispatch(fetchTaskByProjectId({ id, taskId }))
-  }, []);
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    console.log(findTask);
+    setTask({
+      ...findTask
+    })
+  }, [findTask]);
+
+  React.useEffect(() => {
+    console.log(task);
+  })
+
+  React.useEffect(() => {
+    if (isEmptyArr(task.fileList) === false && task.fileList !== undefined) {
+      setFiles(task.fileList.filter(() => true));
+    }
+  }, [task])
+
+  React.useEffect(() => {
+    if (isEmptyArr(task.commentList) === false && task.commentList !== undefined ) {
+      console.log(isEmptyArr(commentList));
+      setCommentList(task.commentList.filter(() => true));
+    }
+  }, [task])
 
   const style = {
     position: 'absolute',
@@ -42,42 +91,6 @@ export default function BasicModal({ open, setOpen, taskId }) {
   };
 
 
-  // 전체 useState
-  const [task, setTask] = React.useState({
-    ...findTask
-  });
-  // 댓글 등록 State
-  const [comment, setComment] = React.useState({
-    projectId: id,
-    taskId: taskId,
-    writer: '',
-    content: '',
-    profileImage:
-      '',
-  });
-  const [commentList, setCommentList] = React.useState([
-    findTask.commentList
-  ]);
-  const [memberList, setMemberList] = React.useState([]);
-  const [files, setFiles] = React.useState([...findTask.fileList]);
-  const [disabled, setDisabled] = React.useState(true);
-  const [popOver, setPopOver] = React.useState(findTask.findMemberName);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const fileInput = React.createRef();
-
-  // React.useEffect(() => {
-  //   console.log(files);
-  // }, [files]);
-
-  React.useEffect(() => {
-    // console.log(task);
-    console.log(files);
-    //console.log(commentList);
-    //console.log(isEmptyArr(commentList));
-  })
-
-
   const handleNewCommentChange = e => {
     const { name, value } = e.target;
     setComment({
@@ -88,7 +101,6 @@ export default function BasicModal({ open, setOpen, taskId }) {
 
   const handleCommentSubmit = e => {
     // submit 보내기
-    console.log(comment);
   };
 
   const handleFileUpload = e => {
@@ -120,16 +132,19 @@ export default function BasicModal({ open, setOpen, taskId }) {
   const onSubmit = async e => {
     e.preventDefault();
     e.persist();
-
-    let formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-    }
-    formData.append('data', JSON.stringify(task));
-    // for (let value of formData.values()) {
-    //   console.log(value);
+    dispatch(UpdateTaskByProjectId({ id, task, taskId }))
+    navigate(-1)
+    
+    // let formData = new FormData();
+    // for (let i = 0; i < files.length; i++) {
+    //   formData.append('files', files[i]);
     // }
+    // formData.append('data', JSON.stringify(task));
   };
+
+  const handleUpload = e => {
+    dispatch(DeleteFileByTaskId({ id, taskId, files }))
+  }
 
   const handlePopoverOpen = event => {
     // const id = Number(event.currentTarget.id) - 1;
@@ -270,6 +285,9 @@ export default function BasicModal({ open, setOpen, taskId }) {
                   <Button disabled={disabled} onClick={handleFileUpload}>
                     Upload
                   </Button>
+                  <Button disabled={disabled} onClick={handleUpload}>
+                    Save File
+                  </Button>
                   <input
                     type='file'
                     ref={fileInput}
@@ -278,12 +296,12 @@ export default function BasicModal({ open, setOpen, taskId }) {
                     multiple={true}
                     id='fileUpload'
                   />
-                  
+
                 </Box>
               </Box>
               <Box sx={{ marginLeft: 'auto !important' }}>
                 <Button onClick={() => setOpen(false)}>cancel</Button>
-                <Button onClick={onSubmit}>save Changes</Button>
+                <Button onClick={onSubmit}>Save Task</Button>
               </Box>
             </Stack>
           </Box>
@@ -296,7 +314,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
             spacing={4}
             sx={{ width: '100%' }}
           >
-            {
+            {/* {
               isEmptyArr(commentList) === false
                 ?
                 commentList.map(m => (
@@ -309,7 +327,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
                   />
                 ))
                 : <>  </>
-            }
+            } */}
           </Stack>
           {/* New Comment */}
           <Box sx={{ width: '100%' }}>

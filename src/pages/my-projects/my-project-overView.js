@@ -58,6 +58,7 @@ const filedData = [
 export const FilesCard = (props) => {
     const [show, setShow] = useState(false);
     const { data } = props;
+    
     return (
         <>
             {

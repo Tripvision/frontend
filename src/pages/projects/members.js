@@ -184,18 +184,6 @@ const Members = () => {
         dispatch(fetchProjectMembersThunk(id));
     }, [dispatch])
 
-    // React.useEffect(() => {
-    //     console.log(selectionModel);
-    // }, [selectionModel])
-
-    const handleUpdate = () => {
-        console.log(selectionModel)
-        dispatch(updateProjectMemberThunk(
-            selectionModel
-            // projectId: selectionModel.projectId, member: selectionModel['0']
-        ))
-    }
-
     const RenderUpdateButton = (props) => {
         const { hasFocus, value, field } = props;
         return (

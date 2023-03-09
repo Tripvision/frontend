@@ -47,6 +47,13 @@ const myProfile = () => {
   } });
 }
 
+const updateProfile = (member) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN)
+  return axios.post(API_BASE_URL + '/v1/members', member, { headers: {
+    'Authorization': `Bearer ${accessToken}`
+  } });
+}
+
 const logout = () => {
   localStorage.removeItem("accessToken");
 };
@@ -57,6 +64,7 @@ const authService = {
   login,
   logout,
   myProfile,
+  updateProfile,
 };
 
 export default authService;
