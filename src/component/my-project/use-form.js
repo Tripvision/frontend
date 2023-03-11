@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 // ******************************
 const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
-  console.log("use Form render");
   const [checkedItems, setCheckedItems] = useState(() => {
     if (checkBox === true) {
       return new Set();
@@ -10,10 +9,10 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   });
   useEffect(() => {
     setState({
-      ...initState
-    })
+      ...initState,
+    });
   }, [initState]);
-  const [logoFile, setLogoFile] = useState()
+  const [logoFile, setLogoFile] = useState(initState.projectLogoUrl);
   const [state, setState] = useState({ ...initState });
   const [errors, setErrors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
@@ -21,42 +20,42 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   // ******************************
   useEffect(() => {
     const isValidErrors = () =>
-      Object.values(errors).filter(error => typeof error !== "undefined")
+      Object.values(errors).filter((error) => typeof error !== "undefined")
         .length > 0;
     if (isSubmited && !isValidErrors()) callback();
   }, [errors]);
   // ******************************
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'projectLogoUrl') {
-      encodeFileToBase64(e.target)
-      saveImgFile()
+    if (name === "projectLogoUrl") {
+      encodeFileToBase64(e.target);
+      saveImgFile();
     }
     // Due Date 세팅하기
     setState(() => ({
       ...state,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleClear = () => {
-    setState({})
+    setState({});
     setCheckedItems([]);
-  }
+  };
 
   const handleStatus = (e) => {
     setState({
       ...state,
-      status: e.target.value
-    })
-  }
+      status: e.target.value,
+    });
+  };
 
   const handleSwitch = (e) => {
     setState({
       ...state,
-      [e.target.name]: e.target.checked
-    })
-  }
+      [e.target.name]: e.target.checked,
+    });
+  };
 
   const handleCheckedItemHandler = (name, checked) => {
     if (checked) {
@@ -68,7 +67,7 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     }
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -77,16 +76,14 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
     };
     setState({
       ...state,
-      ['projectLogoUrl']: e.target.files[0]
+      ["projectLogoUrl"]: e.target.files[0],
     });
-
   };
-
 
   const encodeFileToBase64 = (target) => {
     const reader = new FileReader();
     reader.readAsDataURL(target.files[0]);
-    let file = target.files[0]
+    let file = target.files[0];
     return new Promise((resolve) => {
       reader.onload = () => {
         setState({
@@ -101,24 +98,24 @@ const useForm = ({ initState, callback, validator, checkBox, saveImgFile }) => {
   };
 
   // ******************************
-  const handleBlur = e => {
+  const handleBlur = (e) => {
     const { name: fieldName } = e.target;
     const faildFiels = validator(state, fieldName);
     setErrors(() => ({
       ...errors,
-      [fieldName]: Object.values(faildFiels)[0]
+      [fieldName]: Object.values(faildFiels)[0],
     }));
   };
 
   // ******************************
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     setIsSubmited(false);
     e.preventDefault();
     const { name: fieldName } = e.target;
     const faildFiels = validator(state, fieldName);
     setErrors(() => ({
       ...errors,
-      [fieldName]: Object.values(faildFiels)[0]
+      [fieldName]: Object.values(faildFiels)[0],
     }));
     setIsSubmited(true);
   };
