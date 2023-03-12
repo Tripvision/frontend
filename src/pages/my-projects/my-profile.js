@@ -150,10 +150,10 @@ const MyProfile = () => {
                 />
               </Box>
               <Box>
-                <OnePositionSelectBox user={user} setUser={setUser} />
+                {user && <OnePositionSelectBox user={user} setUser={setUser} /> }
               </Box>
               <Box>
-                {user && <PositionSelectBox user={user} setUser={setUser} />}
+                <PositionSelectBox user={user} setUser={setUser} />
               </Box>
             </Stack>
           </form>

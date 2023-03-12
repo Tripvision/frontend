@@ -133,7 +133,7 @@ export default function NewModal({ open, setOpen }) {
         let formData = new FormData();
         let tempArr = ['0'];
         if (isEmptyArr(files)) {
-            formData.append("fileList", tempArr)
+            // formData.append("fileList", tempArr)
             console.log(formData.get("fileList"));
         }
         

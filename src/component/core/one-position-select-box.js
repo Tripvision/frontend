@@ -21,26 +21,36 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "BACK_END",
-  "FRONT_END",
-  "SERVER_DEVELOPER",
-  "DESIGNER",
-  // "publisher",
-  "PROJECTMANAGER",
-  "TESTER",
-];
 
-function getStyles(name, position, theme) {
-  return {
-    fontWeight:
-      position.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+
 
 export default function OnePositionSelectBox({ user, setUser }) {
+
+  function getStyles(name, position, theme) {
+    if (position === undefined) {
+      return {
+        fontWeight:
+            theme.typography.fontWeightMedium,
+      };
+    }
+    return {
+      fontWeight:
+        position.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+
+  const names = [
+    "BACK_END",
+    "FRONT_END",
+    "SERVER_DEVELOPER",
+    "DESIGNER",
+    // "publisher",
+    "PROJECTMANAGER",
+    "TESTER",
+  ];
+
   const theme = useTheme();
   const [position, setPosition] = React.useState([]);
 
@@ -75,20 +85,24 @@ export default function OnePositionSelectBox({ user, setUser }) {
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              <Typography>{selected}</Typography>
+              <Chip key={selected} label={selected} />
             </Box>
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, position, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
+          {
+            user &&
+            names.map((name) => (
+              <MenuItem
+                key={name}
+                value={name}
+                style={getStyles(name, position, theme)}
+              >
+                {name}
+              </MenuItem>
+            ))
+
+          }
         </Select>
       </FormControl>
     </div>

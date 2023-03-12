@@ -19,6 +19,10 @@ export default function Comment({
     setDisabled(!disabled);
   };
 
+  React.useEffect(() => {
+    console.warn(comment);
+  })
+
   const handleCommentChange = e => {
     const { name, value } = e.target;
     setComment({
@@ -40,16 +44,15 @@ export default function Comment({
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         alt='Remy Sharp'
-        src={comment.profileImage}
+        src={comment.avatarUrl}
         sx={{ mr: 2 }}
       />
       <TextField
         InputProps={{ disableUnderline: true }}
         required
-        id={comment.id}
-        name='content'
+        name='commentContent'
         variant='standard'
-        value={comment.content || ''}
+        value={com.commentContent || ''}
         onChange={handleCommentChange}
         fullWidth
         disabled={disabled}

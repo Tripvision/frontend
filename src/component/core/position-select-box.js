@@ -7,7 +7,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import UserSearch from "./user-search";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -25,12 +24,17 @@ const names = [
   "FRONT_END",
   "SERVER_DEVELOPER",
   "DESIGNER",
-  // "publisher",
   "PROJECTMANAGER",
   "TESTER",
 ];
 
 function getStyles(name, position, theme) {
+  if (position === null) {
+    return {
+      fontWeight:
+          theme.typography.fontWeightMedium,
+    };
+  }
   return {
     fontWeight:
       position.indexOf(name) === -1
@@ -59,31 +63,33 @@ export default function PositionSelectBox({ user, setUser }) {
   };
 
   React.useEffect(() => {
-    setPosition(user.subPosition);
+    setPosition(...user.subPosition);
     console.log(user);
   }, [user]);
 
+  React.useEffect(() => {
+    console.log(position)
+  })
+
   return (
     <div>
-      {user.subPosition && (
+      {user &&
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="demo-multiple-chip-label">Sub Position</InputLabel>
           <Select
             labelId="demo-multiple-chip-label"
             id="demo-multiple-chip"
             multiple
-            value={[]}
+            value={user.subPosition || []}
             onChange={handleChange}
             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                <span>{JSON.stringify(selected)}</span>
-
-                {/* {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))} */}
-              </Box>
-            )}
+            // renderValue={(selected) => (
+            //   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            //     {selected.map((value) => (
+            //     <Chip key={value} label={value} />
+            //   ))}
+            //   </Box>
+            // )}
             MenuProps={MenuProps}
           >
             {names.map((name) => (
@@ -97,7 +103,7 @@ export default function PositionSelectBox({ user, setUser }) {
             ))}
           </Select>
         </FormControl>
-      )}
+      }
     </div>
   );
 }

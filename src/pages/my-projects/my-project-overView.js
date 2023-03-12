@@ -121,7 +121,7 @@ export const FilesCard = (props) => {
                       />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={item.fileName}
+                      primary={item.name}
                       secondary={
                         <Box>
                           <Typography
@@ -155,7 +155,7 @@ export const FilesCard = (props) => {
                         onClick={() => {
                           downloadFile(
                             item.fileUploaderImageUrl,
-                            item.fileName
+                            item.name
                           );
                         }}
                       >

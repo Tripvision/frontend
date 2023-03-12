@@ -23,6 +23,8 @@ import projectMemberReducer from '~features/project-members/project-members-slic
 import teamReducer from '~features/team/team-slice';
 import teamActivitiesReducer from '~features/team-activities/team-activities-slice';
 
+import commentReducer from '~features/comment/comment-slice';
+
 
 const persistConfig = {
   key: "root",
@@ -49,6 +51,7 @@ export const rootReducer = combineReducers({
   teamActivities : teamActivitiesReducer,
   routes : routerReducer,
   projectMember : projectMemberReducer,
+  comments : commentReducer,
 })
 
 

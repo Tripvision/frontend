@@ -25,12 +25,14 @@ import {
   deleteAndUpdateByTaskId,
   DeleteFileByTaskId,
 } from "~features/files/files-slice";
+import { fetchCommentListByTaskId, postCommentByTaskId } from "~features/comment/comment-slice";
 
 export default function BasicModal({ open, setOpen, taskId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const findTask = useSelector((state) => state.tasks.task);
+  const findCommentList = useSelector((state) => state.comments.commentList);
 
   // 전체 useState
   const [task, setTask] = React.useState({
@@ -39,11 +41,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
   });
   // 댓글 등록 State
   const [comment, setComment] = React.useState({
-    projectId: id,
-    taskId: taskId,
-    writer: "",
-    content: "",
-    profileImage: "",
+    commentContent: '',
   });
   const [commentList, setCommentList] = React.useState([]);
   const [memberList, setMemberList] = React.useState([]);
@@ -56,6 +54,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
 
   React.useEffect(() => {
     dispatch(fetchTaskByProjectId({ id, taskId }));
+    dispatch(fetchCommentListByTaskId({ id, taskId }));
   }, [dispatch]);
 
   React.useEffect(() => {
@@ -66,9 +65,12 @@ export default function BasicModal({ open, setOpen, taskId }) {
   }, [findTask]);
 
   React.useEffect(() => {
-    console.log(task);
-    console.log(files);
-  });
+    console.log(findCommentList);
+    console.warn(findCommentList.length);
+    setCommentList({
+      ...findCommentList,
+    });
+  }, [findCommentList]);
 
   React.useEffect(() => {
     if (isEmptyArr(task.fileList) === false && task.fileList !== undefined) {
@@ -76,15 +78,15 @@ export default function BasicModal({ open, setOpen, taskId }) {
     }
   }, [task]);
 
-  React.useEffect(() => {
-    if (
-      isEmptyArr(task.commentList) === false &&
-      task.commentList !== undefined
-    ) {
-      console.log(isEmptyArr(commentList));
-      setCommentList(task.commentList.filter(() => true));
-    }
-  }, [task]);
+  // React.useEffect(() => {
+  //   if (
+  //     isEmptyArr(task.commentList) === false &&
+  //     task.commentList !== undefined
+  //   ) {
+  //     console.log(isEmptyArr(commentList));
+  //     setCommentList(task.commentList.filter(() => true));
+  //   }
+  // }, [task]);
 
   const style = {
     position: "absolute",
@@ -109,7 +111,8 @@ export default function BasicModal({ open, setOpen, taskId }) {
   };
 
   const handleCommentSubmit = (e) => {
-    // submit 보내기
+    console.log(id,taskId);
+    dispatch(postCommentByTaskId({id,taskId, comment}))
   };
 
   const handleFileUpload = (e) => {
@@ -139,6 +142,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
 
   // 전체 전송 Logic
   const onSubmit = async (e) => {
+    console.log(task)
     e.preventDefault();
     e.persist();
     dispatch(UpdateTaskByProjectId({ id, task, taskId }));
@@ -212,7 +216,8 @@ export default function BasicModal({ open, setOpen, taskId }) {
                     onMouseEnter={handlePopoverOpen}
                     onMouseLeave={handlePopoverClose}
                     alt="Remy Sharp"
-                    //src={m.profileImage}
+                    src={task.memberAvatarUrl
+                    }
                   />
                 </Box>
                 <Box>
@@ -328,26 +333,25 @@ export default function BasicModal({ open, setOpen, taskId }) {
 
           {/* 댓글 수정하기 */}
           <Stack
+            id="commentList"
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
             spacing={4}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", height: '200px' }}
           >
-            {/* {
-              isEmptyArr(commentList) === false
-                ?
-                commentList.map(m => (
-                  <Comment
-                    key={m.id}
-                    com={m}
-                    popOpen={popOpen}
-                    handlePopoverOpen={handlePopoverOpen}
-                    handlePopoverClose={handlePopoverClose}
-                  />
-                ))
-                : <>  </>
-            } */}
+            {
+              findCommentList?.length !== 0 &&
+              findCommentList.map(m => (
+                <Comment
+                  key={m.id}
+                  com={m}
+                  popOpen={popOpen}
+                  handlePopoverOpen={handlePopoverOpen}
+                  handlePopoverClose={handlePopoverClose}
+                />
+              ))
+            }
           </Stack>
           {/* New Comment */}
           <Box sx={{ width: "100%" }}>
@@ -356,9 +360,9 @@ export default function BasicModal({ open, setOpen, taskId }) {
                 // InputProps={{ disableUnderline: true }}
                 required
                 id="outlined-required"
-                name="content"
+                name="commentContent"
                 variant="standard"
-                value={comment.content}
+                value={comment.commentContent}
                 onChange={handleNewCommentChange}
                 fullWidth
                 sx={{ mr: 2 }}

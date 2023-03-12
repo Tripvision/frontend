@@ -2,8 +2,10 @@ import React from 'react';
 import moment from "moment";
 
 // Material ui 
-import { DataGrid, GridToolbar
-,    GridCellEditStopReasons } from '@mui/x-data-grid';
+import {
+    DataGrid, GridToolbar
+    , GridCellEditStopReasons
+} from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -15,20 +17,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchfileListByProjectId } from '~features/files/files-slice';
 import { useParams } from 'react-router-dom';
 import { isEmptyArr } from '~utils/object-utils';
+import { maxWidth } from '@mui/system';
 
 
 // Refactor : fileRows 
 function getFileImgName(params) {
-    const a = <img src={`/data-grid/${params.row.type}.svg`} width='16px' height='16px' variant="rounded" alt="Not Found" />
+    console.log(params);
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <IconButton sx={{
-                backgroundColor: '#E5ECF6',
-
-            }}>
-                {a}
-            </IconButton>
-            <Typography> {params.row.name} </Typography>
+            {/* <Typography> {params.row.fileExt}{" "} </Typography> */}
+            <Typography> {params.row.fileName} </Typography>
         </Box>
     )
 }
@@ -36,11 +34,9 @@ function getFileImgName(params) {
 
 const fileColumn = [
     { field: 'id', hide: true },
-    { field: 'fileName', headerName: 'Name' },
-    { field: 'fileSize', headerName: 'Size' },
-    { field: 'fileUploader', headerName: 'Uploader' },
-    { field: 'fileThumbnail', headerName: 'Thumbnail', renderCell: getFileImgName, flex: 1 },
-    { field: 'taskTitle', headerName: 'Title' },
+    { field: 'File Name', headerName: 'File Name', renderCell : getFileImgName, flex: 1, maxWidth : '150px'},
+    { field: 'fileSize', headerName: 'File Size' },
+    { field: 'fileUploader', headerName: 'Uploader'  },
     // {
     //     field: 'uploadTime',
     //     headerName: 'Upload Time',
@@ -64,7 +60,7 @@ export default function Files() {
 
     React.useEffect(() => {
         console.log(selectionModel)
-    },[selectionModel]);
+    }, [selectionModel]);
 
     const handleProcessRowUpdate = (newRow, oldRow) => {
         setSelectionModel({
@@ -89,34 +85,34 @@ export default function Files() {
 
     return (
         <div className='App'>
-             {
+            {
                 isEmptyArr(fileList) === false ?
-            <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    columns={fileColumn}
-                    rows={fileList}
-                    components={{ Toolbar: GridToolbar }}
+                    <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid
+                            columns={fileColumn}
+                            rows={fileList}
+                            components={{ Toolbar: GridToolbar }}
 
-                    componentsProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                            quickFilterProps: { debounceMs: 500 },
-                        },
-                    }}
+                            componentsProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: { debounceMs: 500 },
+                                },
+                            }}
 
-                    checkboxSelection
-                    onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                    experimentalFeatures={{ newEditingApi: true }}
-                    onCellEditStop={(params, event) => {
-                        if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                            event.defaultMuiPrevented = true;
-                        }
-                    }}
-                    processRowUpdate={handleProcessRowUpdate}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                            experimentalFeatures={{ newEditingApi: true }}
+                            onCellEditStop={(params, event) => {
+                                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                                    event.defaultMuiPrevented = true;
+                                }
+                            }}
+                            processRowUpdate={handleProcessRowUpdate}
 
-                />
-            </div>
-            : <> </>
+                        />
+                    </div>
+                    : <> </>
             }
         </div>
     );

@@ -99,7 +99,7 @@ const OverViewCard = (props) => {
                 }}
               >
                 <Avatar
-                  src=""
+                  src={data.projectOverViewHeadDto.projectLogoUrl}
                   alt="d"
                   sx={{ marginLeft: "auto", width: 42, height: 42 }}
                 />

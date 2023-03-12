@@ -16,19 +16,15 @@ const RouteBreadcrumbs = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-  })
-
-
   return (
     <Box className="breadcrumbs" sx={{ display: 'flex', alignItems: 'center' }}>
-      {breadcrumbs.map(({ breadcrumb, match }, index) => (
+      {/* {breadcrumbs.map(({ breadcrumb, match }, index) => (
         <Box className="bc" key={match.pathname}>
           <Box component={Link} to={match.pathname || ""}>
-            <Typography color='textPrimary' >{breadcrumb} {index < breadcrumbs.length - 1 && " >" + " "}</Typography>
+            { breadcrumb &&<Typography color='textPrimary' >{breadcrumb} {index < breadcrumbs.length - 1 && " >" + " "}</Typography> } 
             </Box>
         </Box>
-      ))}
+      ))} */}
     </Box>
   );
 };

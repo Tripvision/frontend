@@ -220,7 +220,6 @@ const ProjectsOverView = () => {
   const projectList = useSelector((state) => state.projects.projects);
   const metaData = useSelector((state) => state.projects.meta);
 
-  // 객체 변환용 state
   const [colorList, setColorList] = React.useState([]);
   const [metaList, setMetaList] = React.useState([]);
 
