@@ -70,19 +70,6 @@ const Project = () => {
         {/* Today */}
         <MuiIconCard />
 
-        {/* Total */}
-        <Grid container spacing={2} mb={3}>
-          {/* Total Users */}
-          <Grid item xs={12} sm={8.4} md={8.4} lg={8.4} xl={8.4}>
-            {/* <HorizonLineChart data={chart.projectChart} /> */}
-          </Grid>
-
-          {/* Traffic by Website (가로 막대 차트) */}
-          <Grid item xs={12} sm={3.6} md={3.6} lg={3.6} xl={3.6}>
-            <VerticalBarChart />
-          </Grid>
-        </Grid>
-
         <Grid container spacing={2} mb={3}>
           {/* Traffic by device (BarChart ) */}
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -92,6 +79,19 @@ const Project = () => {
           {/* Traffic by location (원형 차트) */}
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <FullCircleChart />
+          </Grid>
+        </Grid>
+
+        {/* Total */}
+        <Grid container spacing={2} mb={3}>
+          {/* Total Users */}
+          {/* <Grid item xs={12} sm={8.4} md={8.4} lg={8.4} xl={8.4}> */}
+          {/* <HorizonLineChart data={chart.projectChart} /> */}
+          {/* </Grid> */}
+
+          {/* Traffic by Website (가로 막대 차트) */}
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <VerticalBarChart />
           </Grid>
         </Grid>
 
