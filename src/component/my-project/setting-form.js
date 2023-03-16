@@ -46,6 +46,10 @@ export function SettingForm() {
     reader.readAsDataURL(file);
   });
 
+  React.useEffect(() => {
+    console.log(state);
+  });
+
   useEffect(() => {
     dispatch(fetchSettingsByProjectId(id));
   }, [dispatch]);
@@ -123,7 +127,6 @@ export function SettingForm() {
                     hidden
                     fullWidth
                     ref={imgRef}
-                    // value={state.logo}
                     onChange={handleFileChange}
                     onBlur={handleBlur}
                     error={errors.logo ? true : false}

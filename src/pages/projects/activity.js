@@ -26,6 +26,7 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeamActiveListByProjectId } from "~features/team-activities/team-activities-slice";
+import { useParams } from "react-router-dom";
 
 function isOverflown(element) {
   return (
@@ -160,9 +161,10 @@ function getUserNameImg(params) {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Avatar
-        src={`/avatar/${params.row.userAvatar}.svg`}
+        src={params.row.userAvatarUrl}
         variant="rounded"
         alt="Not Found"
+        sx={{ mr: 1 }}
       />
       <Typography> {params.row.userName} </Typography>
     </Box>
@@ -171,28 +173,26 @@ function getUserNameImg(params) {
 
 const memberColumn = [
   { field: "id", hide: true },
-  { field: "type", headerName: "Type", hide: true },
-  { field: "fileImg", headerName: "File Img", hide: true },
-  { field: "fileName", headerName: "File Name", hide: true },
-  {
-    field: "fileNameImg",
-    headerName: "File",
-    renderCell: getFileImgName,
-    flex: 1,
-  },
-  { field: "userName", headerName: "User Name", hide: true },
-  { field: "userAvatar", headerName: "User Avatar", hide: true },
+  { field: "activityName", headerName: "Name", flex: 1 },
+  // {
+  //   field: "fileNameImg",
+  //   headerName: "File",
+  //   renderCell: getFileImgName,
+  //   flex: 1,
+  // },
+  // { field: "userName", headerName: "User Name", hide: true },
+  // { field: "userAvatar", headerName: "User Avatar", hide: true },
   {
     field: "userAvatarName",
     headerName: "User",
     renderCell: getUserNameImg,
     flex: 1,
   },
-  { field: "fileSize", headerName: "File Size" },
+  { field: "type", headerName: "Type", flex: 1 },
   {
-    field: "uploadTime",
+    field: "activityDate",
     headerName: "Upload Time",
-    width: 100,
+    flex: 1,
     valueFormatter: (params) =>
       moment(params.value).format("DD/MM/YYYY hh:mm A"),
   },
@@ -200,11 +200,12 @@ const memberColumn = [
 
 const Activity = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const activityList = useSelector((state) => state.teamActivities.entities);
 
-  // React.useEffect(() => {
-  //     dispatch(fetchTeamActiveListByProjectId(1))
-  // },[]);
+  React.useEffect(() => {
+    dispatch(fetchTeamActiveListByProjectId(id));
+  }, [dispatch]);
 
   return (
     <div style={{ height: 700, width: "100%" }}>

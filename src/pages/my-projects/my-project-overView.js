@@ -60,17 +60,10 @@ const filedData = [
 export const FilesCard = (props) => {
   const [show, setShow] = useState(false);
   const { data } = props;
-
-  React.useEffect(() => {
-    console.log(data);
-  });
-
   const downloadFile = React.useCallback((url, fileName) => {
-    console.log(url);
     axios
       .get(url, { responseType: "blob" })
       .then((res) => {
-        console.log(res);
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -153,10 +146,7 @@ export const FilesCard = (props) => {
                     <Box>
                       <Typography
                         onClick={() => {
-                          downloadFile(
-                            item.fileUploaderImageUrl,
-                            item.name
-                          );
+                          downloadFile(item.fileUploaderImageUrl, item.name);
                         }}
                       >
                         {" "}
@@ -220,7 +210,7 @@ export function CalenderCard(props) {
               <Box></Box>
             </Box>
             <Box>
-              {data.map((item) => (
+              {/* {data.map((item) => (
                 <Box>
                   <List sx={{ width: "100%", maxWidth: 360 }}>
                     <ListItem alignItems="flex-start">
@@ -253,7 +243,7 @@ export function CalenderCard(props) {
                     </ListItem>
                   </List>
                 </Box>
-              ))}
+              ))} */}
             </Box>
           </CardContent>
         </Card>

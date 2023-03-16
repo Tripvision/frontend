@@ -145,7 +145,7 @@ const FullCircleChart = () => {
   });
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: "15px" }}>
       <Typography variant="body1">Traffic by Location</Typography>
       <ResponsiveContainer width="100%" aspect={1.5}>
         <PieChart>

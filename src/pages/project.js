@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
+// Material ui
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Button from "@mui/material/Button";
 // Component
 import HorizonarChart from "~component/dashboard/charts/horizonar-chart";
 import FullCircleChart from "~component/dashboard/charts/full-circle-chart";
@@ -17,6 +22,8 @@ import {
 } from "../features/contact/contact-slice";
 import chartService from "../services/chart-service";
 import { isEmptyArr } from "~utils/object-utils";
+import { useNavigate } from "react-router-dom";
+import UserSearch from "~component/core/user-search";
 
 const lineChartData = [
   {
@@ -64,9 +71,17 @@ const lineChartData = [
 ];
 
 const Project = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <Container>
+        <Box sx={{ display: "flex", width: "100%" }}>
+          <Box sx={{ marginLeft: "auto", display: "flex" }}>
+            <Button onClick={() => navigate("/projects/new")} variant="text">
+              Add Project
+            </Button>
+          </Box>
+        </Box>
         {/* Today */}
         <MuiIconCard />
 

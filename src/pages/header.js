@@ -162,7 +162,11 @@ const Header = () => {
     <div className="Header">
       <Box>
         <Box component="div" sx={{ flexGrow: 1 }}>
-          <AppBar color="background" position="static">
+          <AppBar
+            color="background"
+            position="static"
+            sx={{ backgroundImage: "none" }}
+          >
             {/* 클릭 시 왼쪽 바 hide and on  */}
             <Toolbar sx={{ backgroundImage: "none" }}>
               <IconButton

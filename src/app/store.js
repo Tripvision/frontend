@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 
 import {
@@ -8,23 +8,21 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
+} from "redux-persist";
 
-import { errorToast } from '~component/core/toasts';
-import persistedReducer from './rootReducer';
+import { errorToast, successToast } from "~component/core/toasts";
+import persistedReducer from "./rootReducer";
 
 export const store = configureStore({
-  reducer : persistedReducer,
-  middleware: getDefaultMiddleware =>
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-    .concat(errorToast)
-    .concat(logger),
-  devTools: process.env.NODE_ENV !== 'production',
-
-})
-
-
+      .concat(errorToast)
+      .concat(successToast)
+      .concat(logger),
+  devTools: process.env.NODE_ENV !== "production",
+});

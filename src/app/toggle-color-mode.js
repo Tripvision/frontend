@@ -181,8 +181,18 @@ export function ToggleColorMode() {
           ...(mode === "light"
             ? {
                 // palette values for light mode
+
+                alwaysBlack: {
+                  main: "#1C1C1C",
+                },
                 background: {
                   main: "#fff",
+                },
+                cardNavy: {
+                  main: "#E3F5FF",
+                },
+                cardGray: {
+                  main: "#E5ECF6",
                 },
                 lightDarkText: {
                   main: "rgba(0, 0, 0, 0.4)",
@@ -190,8 +200,17 @@ export function ToggleColorMode() {
               }
             : // palette values for dark mode
               {
+                alwaysBlack: {
+                  main: "#1C1C1C",
+                },
                 background: {
                   main: "#121212",
+                },
+                cardNavy: {
+                  main: "#E3F5FF",
+                },
+                cardGray: {
+                  main: "#E5ECF6",
                 },
                 lightDarkText: {
                   main: "rgba(255, 255, 255, 0.4)",

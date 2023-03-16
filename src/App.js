@@ -39,6 +39,9 @@ import MyConnectMembers from "~pages/my-projects/my-connect-members";
 import MyProfile from "~pages/my-projects/my-profile";
 import MyAccount from "~pages/my-projects/my-account";
 import NewMyProjectSettings from "~pages/my-projects/new/new-my-project-setting";
+import MyProductivity from "~pages/my-projects/my-productivity";
+import MyTotalTaskCard from "~component/dashboard/counts/my-total-task-card";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const user = useSelector((state) => state.auth);
@@ -48,6 +51,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Box
         display={{
           xs: "block",
@@ -99,7 +103,7 @@ const App = () => {
           {/* Routing Line */}
           <Box mt={3} sx={{ ml: 3, mr: 3 }}>
             <Routes>
-              <Route path="/" element={<MyProfile />} />
+              <Route path="/" element={<Project />} />
               <Route path="/my" element={<MyProfile />} />
               <Route path="/my/profile" element={<MyProfile />} />
               <Route path="/my/account" element={<MyAccount />} />
@@ -112,9 +116,12 @@ const App = () => {
               </Route> */}
 
               <Route path="/projects/dash-board" element={<Project />} />
-              <Route path="/total/tasks" element={<MyTotalTasks />} />
+
+              <Route path="/total" element={<MyTotalTaskCard />} />
+              <Route path="/total/tasks" element={<MyTotalTaskCard />} />
+
               <Route path="/connect-memers" element={<MyConnectMembers />} />
-              <Route path="/productivity" element={<MyProjectActivity />} />
+              <Route path="/productivity" element={<MyProductivity />} />
 
               <Route
                 path="/oauth2/redirect"
@@ -125,7 +132,7 @@ const App = () => {
               <Route path="/projects" element={<ProjectsOverView />} />
               <Route path="/projects/overview" element={<ProjectsOverView />} />
 
-              {/* <Route path="/tasks" element={<MyMemberTask />} /> */}
+              <Route path="/tasks" element={<MyMemberTask />} />
 
               <Route path="/projects/:id/" element={<VisualTab />}>
                 <Route path="" element={<MyProjectOverView />} />

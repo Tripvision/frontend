@@ -14,7 +14,7 @@ import BasicModal from "~pages/modal";
 import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 
-const TaskCard = ({ data }) => {
+const TotalTaskCard = ({ data }) => {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
@@ -34,22 +34,18 @@ const TaskCard = ({ data }) => {
   return (
     <Card sx={{ minWidth: "280px", height: "100%" }}>
       <CardContent>
-        {open === true ? (
-          <BasicModal open={open} setOpen={setOpen} taskId={data.taskId} />
-        ) : (
-          <></>
-        )}
         <Box sx={{ display: "flex", width: "100%" }}>
-          <Chip
-            sx={{ marginRight: "auto", borderRadius: "5px", mb: 1.5 }}
-            color="secondary"
-            label={data.taskTags}
-            size="small"
-          />
-          <Button sx={{ marginLeft: "auto" }} onClick={handleOpen}>
-            {" "}
-            SHOW{" "}
-          </Button>
+          <Box sx={{ marginRight: "auto", width: "100%" }}>
+            <Chip
+              sx={{ marginRight: "auto", borderRadius: "5px", mb: 1.5 }}
+              color="secondary"
+              label={data.taskTags}
+              size="small"
+            />
+          </Box>
+          <Box sx={{ marginLeft: "auto" }}>
+            <Typography variant="body2"> {data.taskStatus} </Typography>
+          </Box>
         </Box>
         <Typography noWrap={true}>{data.taskTitle}</Typography>
         <Typography
@@ -119,4 +115,4 @@ const TaskCard = ({ data }) => {
   );
 };
 
-export default TaskCard;
+export default TotalTaskCard;

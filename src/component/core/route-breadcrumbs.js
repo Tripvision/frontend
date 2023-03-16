@@ -17,8 +17,8 @@ const RouteBreadcrumbs = () => {
         <Box className="bc" key={match.pathname}>
           <Box component={Link} to={match.pathname || ""}>
             {breadcrumb && (
-              <Typography color="textPrimary">
-                {breadcrumb} {index < breadcrumbs.length - 1 && " >" + " "}
+              <Typography sx={{ mr: 1 }} color="textPrimary">
+                {breadcrumb} {index < breadcrumbs.length - 1 && " > "}
               </Typography>
             )}
           </Box>

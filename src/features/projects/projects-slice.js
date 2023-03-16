@@ -13,6 +13,7 @@ import {
   getMyProjectOurClient,
   getMyProjectList,
   getMyProjectOverView,
+  getMyProductList,
 } from "~services/project-service";
 import { updateProject } from "../../services/project-service";
 import { createProject } from "~services/project-service";
@@ -24,6 +25,23 @@ export const fetchProjectListByUserId = createAsyncThunk(
     try {
       console.log("projectList pending ");
       const response = await getMyProjectList();
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      let error = err;
+      if (!error.response) {
+        throw err;
+      }
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchMyProductivity = createAsyncThunk(
+  "my/productivity/",
+  async (_, thunkAPI) => {
+    try {
+      const response = await getMyProductList();
       console.log(response.data);
       return response.data;
     } catch (err) {
@@ -124,6 +142,7 @@ const initialState = {
     memberList: [],
     projectOverViewHeadDto: {},
   },
+  productList: [],
   meta: {},
 };
 
@@ -211,6 +230,18 @@ export const projectsSlice = createSlice({
       return state.project.filter((project) => project.id !== action.payload);
     },
     [DeleteProjectByUserId.rejected]: (state, action) => {
+      if (state.loading === "pending") {
+        state.loading = "idle";
+        state.error = action.error;
+      }
+    },
+
+    // productivity
+    [fetchMyProductivity.fulfilled]: (state, action) => {
+      state.loading = "idle";
+      state.productList = action.payload;
+    },
+    [fetchMyProductivity.rejected]: (state, action) => {
       if (state.loading === "pending") {
         state.loading = "idle";
         state.error = action.error;

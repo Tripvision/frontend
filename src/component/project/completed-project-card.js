@@ -20,9 +20,9 @@ import {
   fetchProjectListByUserId,
   fetchMyProjectSituation,
   statusColor,
+  fetchMyProductivity,
 } from "~features/projects/projects-slice";
 import { isEmptyArr, isEmptyObj } from "~utils/object-utils";
-import { useTheme } from "@mui/material/styles";
 
 const stateColor = [
   {
@@ -54,7 +54,8 @@ const stateColor = [
 
 const TitleCard = (props) => {
   const { data } = props;
-  const theme = useTheme();
+
+  console.log(data);
 
   return (
     <>
@@ -72,43 +73,16 @@ const TitleCard = (props) => {
             </CardContent>
           </Card>
         </>
-      ) : data[3] % 2 !== 0 ? (
-        <>
-          <Card sx={{ backgroundColor: "cardGray.main", borderRadius: "16px" }}>
-            <CardContent>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography
-                  sx={{ mb: 1.5 }}
-                  variant="h5"
-                  color="alwaysBlack.main"
-                >
-                  {data[0]}
-                </Typography>
-                <img alt="" src={data[2]} width={24} height={24} />
-              </Box>
-              <Typography variant="h6" color="alwaysBlack.main">
-                {data[1]}
-              </Typography>
-            </CardContent>
-          </Card>
-        </>
       ) : (
-        // TODO 1. 여기 반복문으로 색깔 렌더링 해줘야 합니다.
-        <Card sx={{ backgroundColor: "cardNavy.main", borderRadius: "16px" }}>
+        <Card sx={{ borderRadius: "16px" }}>
           <CardContent>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography
-                sx={{ mb: 1.5 }}
-                variant="h5"
-                color="alwaysBlack.main"
-              >
+              <Typography sx={{ mb: 1.5 }} variant="h5">
                 {data[0]}
               </Typography>
               <img alt="" src={data[2]} width={24} height={24} />
             </Box>
-            <Typography variant="h6" color="alwaysBlack.main">
-              {data[1]}
-            </Typography>
+            <Typography variant="h6">{data[1]}</Typography>
           </CardContent>
         </Card>
       )}
@@ -174,26 +148,20 @@ const BasicCard = (props) => {
               mb: 2,
             }}
           >
-            {data.memberList.map((member) => (
-              <>
-                <Avatar
-                  sx={{ width: 25, height: 25 }}
-                  src={member.memberAvatarUrl}
-                />
-              </>
-            ))}
-
-            {Object.keys(data).includes("textColor") === true ? (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {/* <CircleIcon
-                  sx={{ mr: 1, width: "12px", height: "12px" }}
-                  color={data.textColor}
-                /> */}
-                <Typography variant="body2" color={data.textColor}>
-                  {data.projectStatus}
-                </Typography>
-              </Box>
-            ) : null}
+            {data.memberList.length !== 0 &&
+              data.memberList.map((member) => (
+                <>
+                  <Avatar
+                    sx={{ width: 25, height: 25 }}
+                    src={member.memberAvatarUrl}
+                  />
+                </>
+              ))}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="body2" color="green">
+                {data.projectStatus}
+              </Typography>
+            </Box>
           </Box>
 
           <Box sx={{ mb: 1 }} color={data.lineColor}>
@@ -213,27 +181,18 @@ const BasicCard = (props) => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="body2" sx={{ mr: 1 }}>
-                {data.completeTaskCount}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mr: 1 }}
-                color="lightDarkText.main"
-              >
-                /
-              </Typography>
-              <Typography variant="body2" sx={{ mr: 1 }}>
-                {data.totalTaskCount}
-              </Typography>
-              <Typography variant="body2" color="lightDarkText.main">
-                {" "}
-                Total Tasks
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="body2">{data.taskPercent}% </Typography>
+            <Box sx={{ display: "flex", width: "100%" }}>
+              <Box>
+                <Typography variant="body2" color="lightDarkText.main">
+                  {" "}
+                  Total Tasks
+                </Typography>
+              </Box>
+              <Box sx={{ marginLeft: "auto" }}>
+                <Typography variant="body2" sx={{ mr: 1 }}>
+                  {data.completeTaskCount}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </CardContent>
@@ -242,78 +201,27 @@ const BasicCard = (props) => {
   );
 };
 
-const ProjectsOverView = () => {
+const CompletedProjectCard = () => {
   const dispatch = useDispatch();
-  const projectList = useSelector((state) => state.projects.projects);
-  const metaData = useSelector((state) => state.projects.meta);
-
-  const [colorList, setColorList] = React.useState([]);
-  const [metaList, setMetaList] = React.useState([]);
+  const productList = useSelector((state) => state.projects.productList);
 
   useEffect(() => {
-    dispatch(fetchProjectListByUserId());
-    dispatch(fetchMyProjectSituation());
+    dispatch(fetchMyProductivity());
   }, [dispatch]);
 
   React.useEffect(() => {
-    const result = projectList.map((project) => {
-      const result = stateColor.find(
-        (color) => color.key === project.projectStatus
-      );
-      return {
-        ...result,
-        ...project,
-      };
-    });
-    setColorList(result);
-  }, [projectList]);
-
-  React.useEffect(() => {
-    const obj = {};
-    Object.assign(obj, metaData);
-
-    obj["Current Projects"] = obj.currentProjectsCount;
-    obj["Project Finance"] = obj.projectFinance;
-    obj.MyMembers = obj.projectMembersCount;
-
-    delete obj.currentProjectsCount;
-    delete obj.projectFinance;
-    delete obj.projectMembersCount;
-
-    console.log(obj);
-    const arr = Object.entries(obj);
-    arr.map((ar, index) => ar.push(`/card/projects-card${index + 1}.svg`));
-
-    arr.map((ar, index) => ar.push(index));
-
-    setMetaList(arr);
-  }, [metaData]);
-
-  React.useEffect(() => {
-    // console.log(projectList);
-    // console.log(metaData);
-    // console.log(colorList);
+    console.log(productList);
   });
 
   return (
     <div>
       <Typography sx={{ mt: 3 }} variant="h5">
-        My Projects
+        My Product List
       </Typography>
-      <Grid container spacing={3} mt={3}>
-        {metaList &&
-          metaList.map((meta, index) => (
-            <>
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                <TitleCard data={meta} />
-              </Grid>
-            </>
-          ))}
-      </Grid>
-      {colorList && (
+      {productList.length !== 0 && (
         <>
           <Grid container spacing={3} mt={3}>
-            {colorList.map((colorList) => (
+            {productList.map((product) => (
               <Grid
                 item
                 xs={12}
@@ -321,9 +229,9 @@ const ProjectsOverView = () => {
                 md={4}
                 lg={4}
                 xl={4}
-                index={colorList.projectId}
+                index={product.projectId}
               >
-                <BasicCard data={colorList} />
+                <BasicCard data={product} />
               </Grid>
             ))}
           </Grid>
@@ -333,4 +241,4 @@ const ProjectsOverView = () => {
   );
 };
 
-export default ProjectsOverView;
+export default CompletedProjectCard;

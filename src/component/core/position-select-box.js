@@ -29,10 +29,9 @@ const names = [
 ];
 
 function getStyles(name, position, theme) {
-  if (position === null) {
+  if (position === null || position === undefined) {
     return {
-      fontWeight:
-          theme.typography.fontWeightMedium,
+      fontWeight: theme.typography.fontWeightMedium,
     };
   }
   return {
@@ -63,33 +62,34 @@ export default function PositionSelectBox({ user, setUser }) {
   };
 
   React.useEffect(() => {
-    setPosition(...user.subPosition);
-    console.log(user);
+    if (user.subPosition === null) {
+      setPosition([]);
+    } else {
+      const arr = user.subPosition.split(",");
+      console.log(arr);
+      setPosition(arr);
+    }
   }, [user]);
-
-  React.useEffect(() => {
-    console.log(position)
-  })
 
   return (
     <div>
-      {user &&
+      {position && (
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="demo-multiple-chip-label">Sub Position</InputLabel>
           <Select
             labelId="demo-multiple-chip-label"
             id="demo-multiple-chip"
             multiple
-            value={user.subPosition || []}
+            value={position || []}
             onChange={handleChange}
             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-            // renderValue={(selected) => (
-            //   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            //     {selected.map((value) => (
-            //     <Chip key={value} label={value} />
-            //   ))}
-            //   </Box>
-            // )}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
             MenuProps={MenuProps}
           >
             {names.map((name) => (
@@ -103,7 +103,7 @@ export default function PositionSelectBox({ user, setUser }) {
             ))}
           </Select>
         </FormControl>
-      }
+      )}
     </div>
   );
 }

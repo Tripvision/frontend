@@ -88,6 +88,7 @@ const initialState = {
   loading: "idle",
   currentTeamId: undefined,
   error: null,
+  isSuccess: false,
 };
 
 export const settingsSlice = createSlice({
@@ -109,6 +110,7 @@ export const settingsSlice = createSlice({
     [createSettingsByMemberId.fulfilled]: (state, action) => {
       state.loading = "idle";
       state.setting = action.payload;
+      state.isSuccess = true;
     },
     [createSettingsByMemberId.rejected]: (state, action) => {
       if (state.loading === "pending") {

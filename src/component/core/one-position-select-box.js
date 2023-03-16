@@ -21,16 +21,12 @@ const MenuProps = {
   },
 };
 
-
-
-
 export default function OnePositionSelectBox({ user, setUser }) {
-
   function getStyles(name, position, theme) {
+    console.log(position);
     if (position === undefined) {
       return {
-        fontWeight:
-            theme.typography.fontWeightMedium,
+        fontWeight: theme.typography.fontWeightMedium,
       };
     }
     return {
@@ -90,8 +86,7 @@ export default function OnePositionSelectBox({ user, setUser }) {
           )}
           MenuProps={MenuProps}
         >
-          {
-            user &&
+          {user &&
             names.map((name) => (
               <MenuItem
                 key={name}
@@ -100,9 +95,7 @@ export default function OnePositionSelectBox({ user, setUser }) {
               >
                 {name}
               </MenuItem>
-            ))
-
-          }
+            ))}
         </Select>
       </FormControl>
     </div>

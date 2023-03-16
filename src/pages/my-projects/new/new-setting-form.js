@@ -33,6 +33,7 @@ import StatusRadio from "../../../component/project/status-radio";
 export default function NewSettingForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isSuccess = useSelector((state) => state.settings.isSuccess);
 
   const setting = useMemo(() => {
     return {
@@ -64,6 +65,12 @@ export default function NewSettingForm() {
     formData.append("request", json);
     dispatch(createSettingsByMemberId(formData));
   };
+
+  React.useEffect(() => {
+    if (isSuccess === true) {
+      navigate("/projects");
+    }
+  }, [dispatch]);
 
   const {
     handleChange,

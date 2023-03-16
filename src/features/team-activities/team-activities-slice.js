@@ -17,44 +17,15 @@ export const fetchTeamActiveListByProjectId = createAsyncThunk(
   }
 );
 
-export const createTeamActiveByProjectId = createAsyncThunk(
-  "activities/create",
-  async (_, thunkAPI) => {
+export const deleteTeamActive = createAsyncThunk(
+  "activities/delete",
+  async ({ projectId, activityId }, thunkAPI) => {
     try {
-      const response = await teamActiveService.createTeamActive();
-      return response.data;
-    } catch (err) {
-      let error = err;
-      if (!error.response) {
-        throw err;
-      }
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const updateTeamActiveByProjectId = createAsyncThunk(
-  "tasks/fetch",
-  async (_, thunkAPI) => {
-    try {
-      const response = await teamActiveService.updateTeamActive;
-      return response.data;
-    } catch (err) {
-      let error = err;
-      if (!error.response) {
-        throw err;
-      }
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const deleteTeamActiveByProjectId = createAsyncThunk(
-  "tasks/fetch",
-  async (_, thunkAPI) => {
-    try {
-      const response = await teamActiveService.deleteTeamActive();
-      return response.data;
+      const response = await teamActiveService.deleteTeamActive(
+        projectId,
+        activityId
+      );
+      return activityId;
     } catch (err) {
       let error = err;
       if (!error.response) {
@@ -67,66 +38,66 @@ export const deleteTeamActiveByProjectId = createAsyncThunk(
 
 const initialState = {
   entities: [
-    {
-      id: "1",
-      type: "jpg",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Yura",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
-    {
-      id: "2",
-      type: "zip",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Sindy",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
-    {
-      id: "3",
-      type: "jpg",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Sindy",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
-    {
-      id: "4",
-      type: "jpg",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Sindy",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
-    {
-      id: "5",
-      type: "jpg",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Aliah Lane",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
-    {
-      id: "6",
-      type: "jpg",
-      fileImg: "cocd",
-      fileName: "Project tech requirements.pdf",
-      userName: "Lee Sang Min",
-      userAvatar: "Aliah Lane",
-      fileSize: "5.6",
-      uploadTime: "Mon Nov 22 2022",
-    },
+    // {
+    //   id: "1",
+    //   type: "jpg",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Yura",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
+    // {
+    //   id: "2",
+    //   type: "zip",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Sindy",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
+    // {
+    //   id: "3",
+    //   type: "jpg",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Sindy",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
+    // {
+    //   id: "4",
+    //   type: "jpg",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Sindy",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
+    // {
+    //   id: "5",
+    //   type: "jpg",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Aliah Lane",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
+    // {
+    //   id: "6",
+    //   type: "jpg",
+    //   fileImg: "cocd",
+    //   fileName: "Project tech requirements.pdf",
+    //   userName: "Lee Sang Min",
+    //   userAvatar: "Aliah Lane",
+    //   fileSize: "5.6",
+    //   uploadTime: "Mon Nov 22 2022",
+    // },
   ],
   currentTeamId: undefined,
   loading: "idle",
@@ -137,7 +108,30 @@ export const teamActivitiesSlice = createSlice({
   name: "teamActivities",
   initialState,
   reducers: {},
-  extraReducers: {},
+  extraReducers: {
+    [fetchTeamActiveListByProjectId.fulfilled]: (state, action) => {
+      state.loading = "idle";
+      state.entities = action.payload.content;
+    },
+    [fetchTeamActiveListByProjectId.rejected]: (state, action) => {
+      if (state.loading === "pending") {
+        state.loading = "idle";
+        state.error = action.error;
+      }
+    },
+
+    [deleteTeamActive.fulfilled]: (state, action) => {
+      state.loading = "idle";
+      const activityId = action.payload;
+      return state.entities.filter((i) => i.activityId !== activityId);
+    },
+    [deleteTeamActive.rejected]: (state, action) => {
+      if (state.loading === "pending") {
+        state.loading = "idle";
+        state.error = action.error;
+      }
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function

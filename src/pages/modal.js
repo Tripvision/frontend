@@ -29,6 +29,7 @@ import {
   fetchCommentListByTaskId,
   postCommentByTaskId,
 } from "~features/comment/comment-slice";
+import TaskStatusSelectBox from "~component/core/task-status-select-box";
 
 export default function BasicModal({ open, setOpen, taskId }) {
   const dispatch = useDispatch();
@@ -61,15 +62,12 @@ export default function BasicModal({ open, setOpen, taskId }) {
   }, [dispatch]);
 
   React.useEffect(() => {
-    console.log(findTask);
     setTask({
       ...findTask,
     });
   }, [findTask]);
 
   React.useEffect(() => {
-    console.log(findCommentList);
-    console.warn(findCommentList.length);
     setCommentList({
       ...findCommentList,
     });
@@ -104,7 +102,6 @@ export default function BasicModal({ open, setOpen, taskId }) {
   };
 
   const handleCommentSubmit = (e) => {
-    console.log(id, taskId);
     dispatch(postCommentByTaskId({ id, taskId, comment }));
   };
 
@@ -135,7 +132,6 @@ export default function BasicModal({ open, setOpen, taskId }) {
 
   // 전체 전송 Logic
   const onSubmit = async (e) => {
-    console.log(task);
     e.preventDefault();
     e.persist();
     dispatch(UpdateTaskByProjectId({ id, task, taskId }));
@@ -149,15 +145,12 @@ export default function BasicModal({ open, setOpen, taskId }) {
   };
   const handleUpload = (e) => {
     let formData = new FormData();
-    console.log(files);
     for (let i = 0; i < files.length; i++) {
       formData.append("fileList", files[i]);
     }
     if (isEmptyArr(files) === true) {
-      console.log("아무것도 등록하지 않은 상태");
       //dispatch(createFileByProjectId({id, task, taskId}));
     } else {
-      console.log("이전 파일이 있는 상태 입니다");
       dispatch(deleteAndUpdateByTaskId({ id, taskId, formData }));
     }
   };
@@ -199,7 +192,10 @@ export default function BasicModal({ open, setOpen, taskId }) {
           spacing={4}
           sx={style}
         >
-          <Box sx={{ display: "flex", marginLeft: "auto" }}>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box>
+              <TaskStatusSelectBox task={task} setTask={setTask} />
+            </Box>
             <Box sx={{ marginLeft: "auto" }}>
               <Stack direction="row" spacing={2}>
                 <Box sx={{ display: "flex" }}>
@@ -266,7 +262,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
                   maxRows={5}
                 />
               </Box>
-              <Box sx={{ width: "100%" }}>
+              {/* <Box sx={{ width: "100%" }}>
                 <TextField
                   required
                   id="outlined-required"
@@ -278,7 +274,7 @@ export default function BasicModal({ open, setOpen, taskId }) {
                   fullWidth
                   disabled={disabled}
                 />
-              </Box>
+              </Box> */}
 
               <Box sx={{ marginLeft: "auto !important" }}>
                 <Button onClick={() => setOpen(false)}>cancel</Button>

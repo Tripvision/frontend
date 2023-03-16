@@ -12,6 +12,15 @@ export const getTaskListByMemberId = (memberId) => {
   });
 };
 
+export const getMyTaskList = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  return axios.get(API_BASE_URL + "/v1/tasks", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+};
+
 // 태스크 상태별로 가져오기
 // My-project-target ( figma )
 export const getTaskListStatus = (projectId) => {

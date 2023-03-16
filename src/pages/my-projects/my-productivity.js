@@ -1,13 +1,14 @@
-import Typography from '@mui/material/Typography';
-import React from 'react';
+import Typography from "@mui/material/Typography";
+import React from "react";
+import CompletedProjectCard from "~component/project/completed-project-card";
 // pages
 
 const MyProductivity = () => {
-    return (
-        <div>
-            <Typography>123</Typography>
-        </div>
-    );
+  return (
+    <div>
+      <CompletedProjectCard />
+    </div>
+  );
 };
 
 export default MyProductivity;

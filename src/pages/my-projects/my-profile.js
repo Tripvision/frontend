@@ -30,6 +30,7 @@ const MyProfile = () => {
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
+    console.log(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -47,8 +48,16 @@ const MyProfile = () => {
   };
 
   const handleSubmit = (_) => {
-    console.log(user);
-    dispatch(updateMyProfile(user));
+    let formData = new FormData();
+    formData.append("profileImage", user.avatarUrl);
+    const result = {
+      ...user,
+      ["avatarUrl"]: "",
+    };
+    const json = JSON.stringify(result);
+    formData.append("request", json);
+
+    dispatch(updateMyProfile(formData));
   };
 
   return (
@@ -73,16 +82,23 @@ const MyProfile = () => {
                   }
                   alt={user.name}
                 />
-                <label className="signup-profileImg-label" htmlFor="profileImg">
+                <label className="signup-profileImg-label" htmlFor="avatarUrl">
                   프로필 이미지
                 </label>
                 <Box sx={{ display: "none" }}>
-                  <input
+                  <TextField
+                    id="avatarUrl"
+                    name="avatarUrl"
                     type="file"
+                    className="image_box"
                     accept="image/*"
-                    id="profileImg"
-                    onChange={saveImgFile}
+                    inputProps={{ accept: "image/*" }}
+                    InputProps={{ disableUnderline: true }}
+                    hidden
+                    fullWidth
                     ref={imgRef}
+                    onChange={saveImgFile}
+                    variant="standard"
                   />
                 </Box>
               </Box>
@@ -109,7 +125,7 @@ const MyProfile = () => {
                   // value
                 />
               </Box>
-              <Box>
+              {/* <Box>
                 <TextField
                   required
                   name="phoneNumber"
@@ -118,7 +134,7 @@ const MyProfile = () => {
                   value={user.phoneNumber || ""}
                   // value
                 />
-              </Box>
+              </Box> */}
               <Box>
                 <TextField
                   required
@@ -153,7 +169,7 @@ const MyProfile = () => {
                 {user && <OnePositionSelectBox user={user} setUser={setUser} />}
               </Box>
               <Box>
-                {/* <PositionSelectBox user={user} setUser={setUser} /> */}
+                <PositionSelectBox user={user} setUser={setUser} />
               </Box>
             </Stack>
           </form>
