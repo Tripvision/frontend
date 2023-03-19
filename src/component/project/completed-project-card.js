@@ -144,19 +144,20 @@ const BasicCard = (props) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              width: "100%",
               mt: 2,
               mb: 2,
             }}
           >
-            {data.memberList.length !== 0 &&
-              data.memberList.map((member) => (
-                <>
+            <Box sx={{ marginRight: "auto", display: "flex" }}>
+              {data.memberList.length !== 0 &&
+                data.memberList.map((member) => (
                   <Avatar
-                    sx={{ width: 25, height: 25 }}
+                    sx={{ width: 25, height: 25, mr: 1 }}
                     src={member.memberAvatarUrl}
                   />
-                </>
-              ))}
+                ))}
+            </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography variant="body2" color="green">
                 {data.projectStatus}
@@ -208,10 +209,6 @@ const CompletedProjectCard = () => {
   useEffect(() => {
     dispatch(fetchMyProductivity());
   }, [dispatch]);
-
-  React.useEffect(() => {
-    console.log(productList);
-  });
 
   return (
     <div>

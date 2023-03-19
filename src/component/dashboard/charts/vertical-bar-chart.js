@@ -82,10 +82,6 @@ const VerticalBarChart = () => {
     // }))
   }, []);
 
-  React.useEffect(() => {
-    console.log(budgetChart);
-  });
-
   return (
     <Card sx={{ borderRadius: "15px" }}>
       <Container sx={{ mt: 2, mb: 1 }}>

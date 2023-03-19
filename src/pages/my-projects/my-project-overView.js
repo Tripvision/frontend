@@ -168,29 +168,6 @@ export const filesCard = () => {
   return <></>;
 };
 
-// const data = [
-//     {
-//         title: 'Edited the details of Project X',
-//         time: '5am ago',
-//     },
-//     {
-//         title: 'Changed the status of Project X',
-//         time: '1:32 AM',
-//     },
-//     {
-//         title: 'Submitted a bug',
-//         time: 'Yesterday 12:39 AM',
-//     },
-//     {
-//         title: 'Modified a date in Page X',
-//         time: 'Last Thursday 3:34 AM',
-//     },
-//     {
-//         title: 'Deleted a page in Project X',
-//         time: 'Aug 11',
-//     },
-// ];
-
 export function CalenderCard(props) {
   const { data } = props;
 

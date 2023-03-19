@@ -20,7 +20,10 @@ import { IosSwitch } from "~component/core/ios-switch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { createSettingsByMemberId } from "~features/settings/settings-slice";
+import {
+  changeSuccess,
+  createSettingsByMemberId,
+} from "~features/settings/settings-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import useForm from "~component/my-project/use-form";
@@ -47,6 +50,10 @@ export default function NewSettingForm() {
     };
   }, []);
 
+  React.useEffect(() => {
+    console.log(state);
+  });
+
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
@@ -68,9 +75,10 @@ export default function NewSettingForm() {
 
   React.useEffect(() => {
     if (isSuccess === true) {
+      dispatch(changeSuccess());
       navigate("/projects");
     }
-  }, [dispatch]);
+  }, [dispatch, isSuccess]);
 
   const {
     handleChange,

@@ -34,7 +34,7 @@ export const updateMyProfile = createAsyncThunk(
       const blob = new Blob([json], { type: "application/json" });
       formData.delete("request");
       formData.append("request", blob);
-      const response = await authService.updateProfile(member);
+      const response = await authService.updateProfile(formData);
       console.log(response.data);
       return response.data;
     } catch (error) {

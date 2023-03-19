@@ -65,11 +65,10 @@ export default function PositionSelectBox({ user, setUser }) {
     if (user.subPosition === null) {
       setPosition([]);
     } else {
-      const arr = user.subPosition.split(",");
-      console.log(arr);
-      setPosition(arr);
+      // const position = user.subPosition.split(",");
+      setPosition(user.subPosition);
     }
-  }, [user]);
+  }, []);
 
   return (
     <div>

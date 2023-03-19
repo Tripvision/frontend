@@ -94,7 +94,11 @@ const initialState = {
 export const settingsSlice = createSlice({
   name: "settingsSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    changeSuccess: (state, action) => {
+      state.isSuccess = !state.isSuccess;
+    },
+  },
   extraReducers: {
     [fetchSettingsByProjectId.fulfilled]: (state, action) => {
       state.loading = "idle";
@@ -148,6 +152,8 @@ export const settingsSlice = createSlice({
 
 // useSelector state
 export const selectSettings = (state) => state.settings;
+
+export const { changeSuccess } = settingsSlice.actions;
 
 // export reducer
 export default settingsSlice.reducer;

@@ -22,21 +22,22 @@ const MyProfile = () => {
   const [user, setUser] = useState({
     ...loaduser,
   });
+  const [profileImage, setProfileImage] = useState(loaduser.avatarUrl);
 
   useEffect(() => {
     console.log(user);
   });
 
   // 이미지 업로드 input의 onChange
-  const saveImgFile = () => {
-    const file = imgRef.current.files[0];
-    console.log(file);
+  const saveImgFile = (e) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
+      setProfileImage(reader.result);
       setUser({
         ...user,
-        avatarUrl: reader.result,
+        avatarUrl: e.target.files[0],
       });
     };
   };
@@ -49,7 +50,7 @@ const MyProfile = () => {
 
   const handleSubmit = (_) => {
     let formData = new FormData();
-    formData.append("profileImage", user.avatarUrl);
+    formData.append("multipartFile", user.avatarUrl);
     const result = {
       ...user,
       ["avatarUrl"]: "",
@@ -77,9 +78,7 @@ const MyProfile = () => {
               <Box>
                 <Avatar
                   sx={{ width: "150px", height: "100px" }}
-                  src={
-                    user.avatarUrl ? user.avatarUrl : `/images/icon/user.png`
-                  }
+                  src={profileImage ? profileImage : `/images/icon/user.png`}
                   alt={user.name}
                 />
                 <label className="signup-profileImg-label" htmlFor="avatarUrl">
@@ -169,7 +168,7 @@ const MyProfile = () => {
                 {user && <OnePositionSelectBox user={user} setUser={setUser} />}
               </Box>
               <Box>
-                <PositionSelectBox user={user} setUser={setUser} />
+                {user && <PositionSelectBox user={user} setUser={setUser} />}
               </Box>
             </Stack>
           </form>

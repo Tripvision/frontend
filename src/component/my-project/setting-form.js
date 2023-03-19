@@ -40,6 +40,7 @@ export function SettingForm() {
     }
     return false;
   }, []);
+
   const saveImgFile = useCallback(() => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();

@@ -87,13 +87,6 @@ const renderActiveShape = (props) => {
 };
 
 const FullCircleChart = () => {
-  const circleData = [
-    { name: "United States", value: 386 },
-    { name: "Canada", value: 225 },
-    { name: "Mexico", value: 308 },
-    { name: "Other", value: 200 },
-  ];
-
   const COLORS = ["#BAEDBD", "#C6C7F8", "#95A4FC", "#B1E3FF"];
   const [positionGraph, setPositionGraph] = React.useState([]);
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -145,33 +138,37 @@ const FullCircleChart = () => {
   });
 
   return (
-    <Card sx={{ borderRadius: "15px" }}>
-      <Typography variant="body1">Traffic by Location</Typography>
-      <ResponsiveContainer width="100%" aspect={1.5}>
-        <PieChart>
-          <Pie
-            activeIndex={activeIndex}
-            activeShape={renderActiveShape}
-            data={positionGraph}
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-            onMouseEnter={changeIndex}
-          />
-          <Pie data={positionGraph} fill="#8884d8" dataKey="value">
+    <>
+      {positionGraph.length !== 0 && (
+        <Card sx={{ borderRadius: "15px", padding: "10px" }}>
+          <Typography variant="body1">My connect Members Position</Typography>
+          <ResponsiveContainer width="100%" aspect={1.5}>
+            <PieChart>
+              <Pie
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+                data={positionGraph}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+                onMouseEnter={changeIndex}
+              />
+              {/* <Pie data={positionGraph} fill="#8884d8" dataKey="value">
             {positionGraph.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
               />
             ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </Card>
+          </Pie> */}
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
+      )}
+    </>
   );
 };
 
