@@ -52,7 +52,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ToastContainer />
-      <Box
+      {/* <Box
         display={{
           xs: "block",
           sm: "block",
@@ -65,7 +65,7 @@ const App = () => {
         }}
       >
         <MuiSpeedDial />
-      </Box>
+      </Box> */}
       <Grid container direction="row" sx={{ flexWrap: "nowrap" }}>
         <Grid
           container
@@ -144,7 +144,6 @@ const App = () => {
                 <Route path="activities" element={<MyProjectActivity />} />
                 <Route path="settings" element={<MyProjectSettings />} />
               </Route>
-
               <Route path="projects/new" element={<NewMyProjectSettings />} />
               {<Route path="*" element={<NotFound />}></Route>}
             </Routes>

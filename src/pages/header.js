@@ -17,6 +17,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import AddchartIcon from "@mui/icons-material/Addchart";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { addPath, removePath } from "~features/route/route-slice";
@@ -123,11 +126,17 @@ const Header = () => {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
+          <Badge color="error">
+            <AddchartIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          DashBoard
+        </p>
       </MenuItem>
 
       <MenuItem>
@@ -136,14 +145,20 @@ const Header = () => {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+          <Badge color="error">
+            <AccountTreeIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p
+          onClick={() => {
+            navigate("/projects");
+          }}
+        >
+          Projects
+        </p>
       </MenuItem>
 
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -153,7 +168,26 @@ const Header = () => {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p
+          onClick={() => {
+            navigate("/my/profile");
+          }}
+        >
+          Profile
+        </p>
+      </MenuItem>
+
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge color="error">
+            <ColorLensIcon />
+          </Badge>
+        </IconButton>
+        <p onClick={colorMode.toggleColorMode}>Change Color Mode</p>
       </MenuItem>
     </Menu>
   );

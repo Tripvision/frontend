@@ -172,16 +172,19 @@ const BasicCard = (props) => {
               alignItems: "center",
               mt: 2,
               mb: 2,
+              width: "100%",
             }}
           >
-            {data.memberList.map((member) => (
-              <>
-                <Avatar
-                  sx={{ width: 25, height: 25 }}
-                  src={member.memberAvatarUrl}
-                />
-              </>
-            ))}
+            <Box sx={{ display: "flex", marginRight: "auto" }}>
+              {data.memberList.map((member) => (
+                <>
+                  <Avatar
+                    sx={{ width: 25, height: 25, mr: 1 }}
+                    src={member.memberAvatarUrl}
+                  />
+                </>
+              ))}
+            </Box>
 
             {Object.keys(data).includes("textColor") === true ? (
               <Box sx={{ display: "flex", alignItems: "center" }}>

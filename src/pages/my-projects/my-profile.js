@@ -76,15 +76,15 @@ const MyProfile = () => {
               spacing={2}
             >
               <Box>
+                <label className="signup-profileImg-label" htmlFor="avatarUrl">
+                  프로필 이미지 수정
+                </label>
                 <Avatar
                   sx={{ width: "150px", height: "100px" }}
                   src={profileImage ? profileImage : `/images/icon/user.png`}
                   alt={user.name}
                 />
-                <label className="signup-profileImg-label" htmlFor="avatarUrl">
-                  프로필 이미지
-                </label>
-                <Box sx={{ display: "none" }}>
+                <Box sx={{ display: "none" }} htmlFor="avatarUrl">
                   <TextField
                     id="avatarUrl"
                     name="avatarUrl"
@@ -144,7 +144,7 @@ const MyProfile = () => {
                   // value
                 />
               </Box>
-              <Box>
+              {/* <Box>
                 <TextField
                   required
                   name="avatarUrl"
@@ -153,7 +153,7 @@ const MyProfile = () => {
                   value={user.avatarUrl || ""}
                   // value
                 />
-              </Box>
+              </Box> */}
               <Box>
                 <TextField
                   required
